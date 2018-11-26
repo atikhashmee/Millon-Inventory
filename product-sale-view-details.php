@@ -91,7 +91,7 @@
             <td class="text-center"><strong>Quantity</strong></td>
             <td class="text-right"><strong>Totals</strong></td>
                 </tr>
-                                                        </thead>
+                   </thead>
                        <tbody>
                           <?php 
                           $invoiceinfo = $db->selectAll('sell','`billchallan`="'.$_GET['invo'].'"')->fetchAll();
