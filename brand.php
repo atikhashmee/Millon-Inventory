@@ -71,7 +71,9 @@ $datas = $db->selectAll("p_brand","brand_id='".$_GET['edit-id']."'")->fetch(PDO:
 
                 $alredythere = $db->joinQuery("SELECT COUNT(*) as existalready FROM `p_brand` WHERE `brand_name`='".$_POST['brandname']."'")->fetch(PDO::FETCH_ASSOC);
                 if ($alredythere['existalready']>0) {
-                   echo "<h3 style='color:red'>This name is already there, try different name</h3>";
+                   ?>
+                        <script> alert("This name is already there try different name") </script>
+                 <?php
                    exit();
                 }
                   
@@ -80,12 +82,18 @@ $datas = $db->selectAll("p_brand","brand_id='".$_GET['edit-id']."'")->fetch(PDO:
                 );
                 if (!empty($_POST['brandname'])) {
                     if ($db->insert("p_brand",$data)) {
-                        echo "<h1 style='color:blue'>Data has been saved</h1>";
+                        ?>
+                        <script> alert("Data has been saved") </script>
+                 <?php
                     } else {
-                      echo "<h1 style='color:red'>Data has not been saved</h1>";
+                      ?>
+                        <script> alert("Data has been not saved") </script>
+                 <?php
                     }
                 }else{
-                    echo "<h1 style='color:red'>Fields are empty</h1>";
+                    ?>
+                        <script> alert("Fields are empty") </script>
+                 <?php
                 }
             }
 
@@ -99,12 +107,18 @@ $datas = $db->selectAll("p_brand","brand_id='".$_GET['edit-id']."'")->fetch(PDO:
                 );
                 if (!empty($_POST['brandname'])) {
                     if ($db->update("p_brand",$data,"brand_id='".$_GET['edit-id']."'")) {
-                        echo "<h1 style='color:blue'>Data has been updated</h1>";
+                        ?>
+                        <script> alert("Data has been Updated") </script>
+                 <?php
                     } else {
-                      echo "<h1 style='color:red'>Data has not been updated</h1>";
+                      ?>
+                        <script> alert("Data has been not Updated") </script>
+                 <?php
                     }
                 }else{
-                    echo "<h1 style='color:red'>Fields are empty</h1>";
+                    ?>
+                        <script> alert("Fields are empty") </script>
+                 <?php
                 }
             }
             

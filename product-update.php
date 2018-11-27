@@ -189,13 +189,19 @@
                  echo "</pre>";*/
                 if (!empty($_POST['productid'])) {
                     if ($db->update("product_info",$data,'pro_id="'.$_GET['edit-id'].'"')) {
-                        echo "<h1 style='color:blue'>Data has been update</h1>";
+                         ?>
+                        <script> alert("Data has been Updated") </script>
+                 <?php
                         echo "<a href='product-view.php'>Go back</a>";
                     } else {
-                      echo "<h1 style='color:red'>Data has not been updated </h1>";
+                       ?>
+                        <script> alert("Data has not been Updated") </script>
+                 <?php
                     }
                 }else{
-                    echo "<h1 style='color:red'>Fields are empty</h1>";
+                     ?>
+                        <script> alert("Fields are empty") </script>
+                 <?php
                 }
             }
             ?>

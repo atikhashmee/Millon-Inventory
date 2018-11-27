@@ -78,6 +78,8 @@
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/icons.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+        <!-- alertify plugin -->
+        <link href="assets/plugins/alertify/css/alertify.css" rel="stylesheet" type="text/css">
        
 
          

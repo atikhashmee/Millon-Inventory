@@ -73,7 +73,9 @@ $datas = $db->selectAll("p_size","pro_size_id='".$_GET['edit-id']."'")->fetch(PD
             if (isset($_POST['savesize'])) {
               $alredythere = $db->joinQuery("SELECT COUNT(*) as existalready FROM `p_size` WHERE `pro_size_name`='".$_POST['size_name']."'")->fetch(PDO::FETCH_ASSOC);
                 if ($alredythere['existalready']>0) {
-                   echo "<h3 style='color:red'>This name is already there, try different name</h3>";
+                  ?>
+                        <script> alert("The name is already there! try different name") </script>
+                 <?php
                    exit();
                 }
             
@@ -83,12 +85,18 @@ $datas = $db->selectAll("p_size","pro_size_id='".$_GET['edit-id']."'")->fetch(PD
                 );
                 if (!empty($_POST['size_name'])) {
                     if ($db->insert("p_size",$data)) {
-                        echo "<h1 style='color:blue'>Data has been saved</h1>";
+                        ?>
+                        <script> alert("Data has been saved") </script>
+                 <?php
                     } else {
-                      echo "<h1 style='color:red'>Data has not been saved</h1>";
+                     ?>
+                        <script> alert("Data has been not saved") </script>
+                 <?php
                     }
                 }else{
-                    echo "<h1 style='color:red'>Fields are empty</h1>";
+                    ?>
+                        <script> alert("Fields are empty ") </script>
+                 <?php
                 }
             }
               
@@ -100,13 +108,19 @@ $datas = $db->selectAll("p_size","pro_size_id='".$_GET['edit-id']."'")->fetch(PD
                   
                 );
                 if (!empty($_POST['size_name'])) {
-                    if ($db->insert("p_size",$data,"pro_size_id='".$_GET['edit-id']."'")) {
-                        echo "<h1 style='color:blue'>Data has been updated</h1>";
+                    if ($db->update("p_size",$data,"pro_size_id='".$_GET['edit-id']."'")) {
+                        ?>
+                        <script> alert("Data has been Updated") </script>
+                 <?php
                     } else {
-                      echo "<h1 style='color:red'>Data has not been updated</h1>";
+                      ?>
+                        <script> alert("Data has been not Updated") </script>
+                 <?php
                     }
                 }else{
-                    echo "<h1 style='color:red'>Fields are empty</h1>";
+                    ?>
+                        <script> alert("Fields are empty") </script>
+                 <?php
                 }
             }
             

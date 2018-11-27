@@ -9,6 +9,8 @@
 
 (function() {
 
+
+
     function $(selector) {
         return document.querySelector(selector);
     }
@@ -19,7 +21,8 @@
     }
 
     function logDemo(selector) {
-        (ga || function() { })("send", "event", "button", "click", "demo", selector);
+        (ga || function() { })
+        ("send", "event", "button", "click", "demo", selector);
     }
 
     function demo(selector, cb) {
@@ -32,6 +35,8 @@
             });
         }
     }
+
+    
 
     var ga = ga || function() {};
 

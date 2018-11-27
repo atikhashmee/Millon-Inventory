@@ -94,13 +94,17 @@ $datas = $db->selectAll("cateogory","cat_id='".$_GET['edit-id']."'")->fetch(PDO:
                   'cat_created_at' => date("Y-m-d") 
                 );
                 if (!empty($_POST['cat_name'])) {
-                    if ($db->insert("cateogory",$data)) {
-                        echo "<h1 style='color:blue'>Data has been saved</h1>";
-                    } else {
-                      echo "<h1 style='color:red'>Data has not been saved</h1>";
+                    if ($db->insert("cateogory",$data)) { ?>
+                        <script> alert("Data has been saved") </script>
+                 <?php    } else {
+                      ?>
+                        <script> alert("Data has not been saved") </script>
+                 <?php
                     }
                 }else{
-                    echo "<h1 style='color:red'>Fields are empty</h1>";
+                    ?>
+                        <script> alert("Fields are empty")</script>
+                 <?php
                 }
             } 
 
@@ -114,12 +118,18 @@ $datas = $db->selectAll("cateogory","cat_id='".$_GET['edit-id']."'")->fetch(PDO:
                 );
                 if (!empty($_POST['cat_name'])) {
                     if ($db->update("cateogory",$data,"cat_id='".$_GET['edit-id']."'")) {
-                        echo "<h1 style='color:blue'>Data has been Udpated</h1>";
+                        ?>
+                        <script> alert("Data has been Updated") </script>
+                 <?php 
                     } else {
-                      echo "<h1 style='color:red'>Data has not been updated</h1>";
+                      ?>
+                        <script> alert("Data has been not Updated") </script>
+                 <?php 
                     }
                 }else{
-                    echo "<h1 style='color:red'>Fields are empty</h1>";
+                     ?>
+                        <script> alert("Fields are empty") </script>
+                 <?php 
                 }
             }
             

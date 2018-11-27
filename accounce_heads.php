@@ -54,11 +54,11 @@ $datas = $db->selectAll("acccount_category","category_id='".$_GET['edit-id']."'"
             </label>
             <input type="hidden" name="dbtypename" value="<?=$datas['type']?>">
             <select class="form-control" name="headtype">
-               <option>Choose option</option>
-               <option>Assets</option>
-               <option>liability</option>
-               <option>Expenses</option>
-               <option>Revenue</option>
+               <option value="">Choose option</option>
+               <option value="Assets">Assets</option>
+               <option value="liability">liability</option>
+               <option value="Expenses">Expenses</option>
+               <option value="Revenue">Revenue</option>
             </select>
          </div>
          <div class="form-group">
@@ -108,12 +108,18 @@ $datas = $db->selectAll("acccount_category","category_id='".$_GET['edit-id']."'"
              );
              if (!empty($_POST['name'])) {
                  if ($db->update("acccount_category",$data,"category_id='".$_GET['edit-id']."'")) {
-                     echo "<h1 style='color:blue'>Data has been updated</h1>";
+                     ?>
+                        <script> alert("Data has been updated") </script>
+                 <?php
                  }else{
-                   echo "<h1 style='color:red'>Data has not been updated</h1>";
+                  ?>
+                        <script> alert("Data has not been updated") </script>
+                 <?php
                  }
              }else{
-                 echo "<h1 style='color:red'>Fields are empty</h1>";
+                 ?>
+                        <script> alert("Fields are empty") </script>
+                 <?php
              }
          } 
 
@@ -127,12 +133,18 @@ $datas = $db->selectAll("acccount_category","category_id='".$_GET['edit-id']."'"
              );
              if (!empty($_POST['name'])) {
                  if ($db->insert("acccount_category",$data)) {
-                     echo "<h1 style='color:blue'>Data has been saved</h1>";
+                    ?>
+                        <script> alert("Data has been saved") </script>
+                 <?php
                  }else{
-                   echo "<h1 style='color:red'>Data has not been saved</h1>";
+                   ?>
+                        <script> alert("Data has not been saved") </script>
+                 <?php
                  }
              }else{
-                 echo "<h1 style='color:red'>Fields are empty</h1>";
+                 ?>
+                        <script> alert("Fields are empty") </script>
+                 <?php
              }
          }
          

@@ -176,7 +176,9 @@
 
                   $alredythere = $db->joinQuery("SELECT COUNT(*) as existalready FROM `product_info` WHERE `pro_id`='".$_POST['productid']."'")->fetch(PDO::FETCH_ASSOC);
                 if ($alredythere['existalready']>0) {
-                   echo "<h3 style='color:red'>This name is already there, try different name</h3>";
+                    ?>
+                        <script> alert("Name is already there try different Product ID") </script>
+                 <?php
                    exit();
                 }
             
@@ -195,12 +197,18 @@
                 );
                 if (!empty($_POST['productid'])) {
                     if ($db->insert("product_info",$data)) {
-                        echo "<h1 style='color:blue'>Data has been saved</h1>";
+                         ?>
+                        <script> alert("Data has been saved") </script>
+                 <?php
                     } else {
-                      echo "<h1 style='color:red'>Data has not been saved</h1>";
+                       ?>
+                        <script> alert("Data has not been saved") </script>
+                 <?php
                     }
                 }else{
-                    echo "<h1 style='color:red'>Fields are empty</h1>";
+                     ?>
+                        <script> alert("Fields are empty") </script>
+                 <?php
                 }
             }
             ?>

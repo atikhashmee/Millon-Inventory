@@ -51,6 +51,7 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
          <div class="form-group">
             <label  for="name">Select a  type <span class="required">*</span>
             </label>
+            <input type="hidden" name="dbtypename" value="<?=$datas['main_cat_id']?>">
             <select class="form-control" name="catid">
                <option value="">Choose option</option>
                <?php 
@@ -175,7 +176,7 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
               
          
               $data = array(
-               'main_cat_id' => $_POST['catid'], 
+               'main_cat_id' => empty($_POST['catid'])?$_POST['dbtypename']:$_POST['catid'], 
                'chart_name' => $_POST['name'],
                'accountno' => $_POST['accountno'],
                'contactperson' => $_POST['contactperson'],
@@ -187,12 +188,18 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
              );
              if (!empty($_POST['name'])) {
                  if ($db->update("charts_accounts",$data,"charts_id='".$_GET['edit-id']."'")) {
-                     echo "<h1 style='color:blue'>Data has been updated</h1>";
+                      ?>
+                        <script> alert("Data has been Updated") </script>
+                 <?php
                  }else{
-                   echo "<h1 style='color:red'>Data has not been updated</h1>";
+                    ?>
+                        <script> alert("Data has not been Updated") </script>
+                 <?php
                  }
              }else{
-                 echo "<h1 style='color:red'>Fields are empty</h1>";
+                  ?>
+                        <script> alert("Fields are empty") </script>
+                 <?php
              }
          }  
          //ssave information
@@ -212,12 +219,18 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
              );
              if (!empty($_POST['name'])) {
                  if ($db->insert("charts_accounts",$data)) {
-                     echo "<h1 style='color:blue'>Data has been saved</h1>";
+                      ?>
+                        <script> alert("Data has been saved") </script>
+                 <?php
                  }else{
-                   echo "<h1 style='color:red'>Data has not been saved</h1>";
+                   ?>
+                        <script> alert("Data has not been saved") </script>
+                 <?php
                  }
              }else{
-                 echo "<h1 style='color:red'>Fields are empty</h1>";
+                  ?>
+                        <script> alert("Fieds are empty") </script>
+                 <?php
              }
          }
          

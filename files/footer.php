@@ -47,6 +47,10 @@
         <!-- Datatable init js -->
         <script src="assets/pages/datatables.init.js"></script>
 
+        <!-- Alertify js -->
+        <script src="assets/plugins/alertify/js/alertify.js"></script>
+        <script src="assets/pages/alertify-init.js"></script>
+
         <!-- App js -->
         <script src="assets/js/app.js"></script>
 

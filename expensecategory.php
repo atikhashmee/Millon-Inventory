@@ -79,12 +79,18 @@ $datas = $db->selectAll("expensecategory","excate_id='".$_GET['edit-id']."'")->f
                 );
                 if (!empty($_POST['catname'])) {
                     if ($db->update("expensecategory",$data,"excate_id='".$_GET['edit-id']."'")) {
-                        echo "<h1 style='color:blue'>Data has been updated</h1>";
+                         ?>
+                        <script> alert("Data has been Updated") </script>
+                 <?php
                     } else {
-                      echo "<h1 style='color:red'>Data has not been updated</h1>";
+                       ?>
+                        <script> alert("Data has not been Updated") </script>
+                 <?php
                     }
                 }else{
-                    echo "<h1 style='color:red'>Fields are empty</h1>";
+                     ?>
+                        <script> alert("Fields are empty") </script>
+                 <?php
                 }
             }
               //save information
@@ -98,12 +104,18 @@ $datas = $db->selectAll("expensecategory","excate_id='".$_GET['edit-id']."'")->f
                 );
                 if (!empty($_POST['catname'])) {
                     if ($db->insert("expensecategory",$data)) {
-                        echo "<h1 style='color:blue'>Data has been saved</h1>";
+                         ?>
+                        <script> alert("Data has been saved") </script>
+                 <?php
                     } else {
-                      echo "<h1 style='color:red'>Data has not been saved</h1>";
+                      ?>
+                        <script> alert("Data has not been saved") </script>
+                 <?php
                     }
                 }else{
-                    echo "<h1 style='color:red'>Fields are empty</h1>";
+                     ?>
+                        <script> alert("Fields are empty") </script>
+                 <?php
                 }
             }
             

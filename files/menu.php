@@ -164,7 +164,7 @@
                                 <a href="home.php"><i class="ti-home"></i>Dashboard</a>
                             </li>
                             <li class="has-submenu">
-                                <a href="addnew_users.php"><i class="ti-home"></i>Person</a>
+                                <a href="addnew_users.php"><i class="fa fa-user-o"></i>Person</a>
                             </li>
 
                             <li class="has-submenu">
