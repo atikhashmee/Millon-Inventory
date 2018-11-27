@@ -4,18 +4,28 @@
       $userdetails =  $db->selectAll('users','u_id="'.$_GET['detail'].'"')->fetch(PDO::FETCH_ASSOC);
  ?>
 <div class="container">
-   <div class="row">
-       <div class="col">
-         <div class="bg-light card card-body" style=" background: #b4c6d8 !important">
-          <h1 style="text-align: center;">Person Details</h1>
-         </div>
-       </div>
-     </div>
+  <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <div class="btn-group pull-right">
+                                <ol class="breadcrumb hide-phone p-0 m-0">
+                                  <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+                                  <li class="breadcrumb-item"><a href="#">Person</a></li>
+                                  <li class="breadcrumb-item active">Users Details</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title">Users Details</h4>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
 
      
      <div class="row">
        <div class="col-md-4"></div>
-       <div class="col-md-4">
+       <div class="col-md-8">
+        <div class="card card-body">
          <table class="table table-bordered">
            <tr>
              <th>Titles</th>
@@ -67,8 +77,9 @@
              <td><?=$userdetails['created_at']?></td>
            </tr>
          </table>
+         </div>
        </div>
-       <div class="col-md-4"></div>
+       
      </div>
 
 

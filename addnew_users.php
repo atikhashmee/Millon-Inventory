@@ -1,22 +1,8 @@
             <?php include 'files/header.php'; ?>
-            <?php include 'files/menu.php'; ?>
-            <style >
-              .header-wrapper{
-                position: relative;
-              }
-              .btn-style{
-                width: 120px;
-                border: 2px solid #fff;
-                border-radius: 100% 0 0 96%;
-                position: absolute;
-                left: -13px;
-                top: 61px;
-            }
-            .animation{
-               transition: .4s ease all;
-              }
-            }
-            </style>
+            <?php include 'files/menu.php';
+              $rbas->setPageName(19)->run();
+             ?>
+           
 
             <?php 
                if (isset($_GET['del-id'])) {
@@ -28,16 +14,43 @@
                ?>
                
             <div class="container">
-                 <div class="row ">
-                   <div class="col">
-                     <div class="bg-light card card-body header-wrapper" style=" background: #b4c6d8 !important">
-                      <button class="btn btn-primary btn-style" onclick="fadeoutFun(this)">Add New</button>
+                 
+                 <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <div class="btn-group pull-right">
+                                <ol class="breadcrumb hide-phone p-0 m-0">
+                                  <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+                                  <li class="breadcrumb-item"><a href="#">Settings</a></li>
+                                  <li class="breadcrumb-item active">Users </li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title">Users</h4>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
+                <div class="row">
+                  <div class="col">
+                     <div class="card card-body card-default">
+          <form action="" method="post">
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-primary btn-style" onclick="fadeoutFun(this)">Add New</button>
+              </div>
+              <div class="col">
 
-                         <h3 style="margin:  0 auto">Person Registration</h3>
-                       <form action="" method="post">
-                            <div style="float: right;">
-                              <div class="form-group">
-                                <label for="">Chose a user type</label>
+              </div>
+              <div class="col">
+               
+              </div>
+              <div class="col">
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                
+                   
                                 <select class="form-control" name="usertypeforsearch">
                                   <option value="">Chose a user type</option>
                                   <option value="1">Customer</option>
@@ -45,15 +58,24 @@
                                   <option value="3">Customer & supplier</option>
                                   <option value="4">Employee</option>
                                 </select>
-                                <button class="btn btn-primary" name="searchuser">Search</button>
+                    
+                               
+                                
                               </div>
-                             
-                            </div>
-                          </form>
-
-                     </div>
-                   </div>
-                 </div>
+                    </div>
+                    <div class="col-md-4">
+                      <button class="btn btn-primary" name="searchuser">Search</button>
+                    </div>
+                  </div>
+               
+                              
+              </div>
+            </div>
+          </form>
+          
+            </div>
+                  </div>
+                </div>
                  
             <div class="row">
              
@@ -134,12 +156,13 @@
 
         ?>
                       </div>
+                      
                       <div class="col" id="formtobefolded">
                         <div class="table-responsive">
                           <?php 
 
                                           $sql =  "SELECT * FROM `users` where user_role <> 0  ORDER BY `u_id` DESC";
-                                          $i =0;
+                                          $i=0;
                                           if (isset($_POST['searchuser'])) {
                                              $sql =" SELECT * FROM `users` where user_role <> 0 AND `user_role`='".$_POST['usertypeforsearch']."'";
 
@@ -149,7 +172,7 @@
                                           $data = $db->joinQuery($sql)->fetchAll();
 
                                         ?>
-                         
+                         <div class="card card-body">
                           <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                               <tr>
@@ -177,15 +200,35 @@
                                 <td><?=$val['opening_balance']?></td>
                                 <td><?=$val['created_at']?></td>
                                 <td> 
+                                  <div class="dropdown">
+  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+    options
+  </button>
+  <div class="dropdown-menu">
+    <?php 
+         if ($rbas->getView()) {
+     echo 
+     '<a class="dropdown-item" 
+     href="user_details.php?detail='.$val['u_id'].'">View</a>';
+         }
+         if ($rbas->getUpdate()) {
+              echo '<a class="dropdown-item" href="edit-users.php?edit='.$val['u_id'].'">Edit</a>';
+         }
+         if ($rbas->getDelete()) { ?>
+             <a class="dropdown-item"
+              href="addnew_users.php?del-id=<?=$val['u_id']?>" onclick="return confirm('Are you sure?')">Delete</a>
+         <?php }
+         if ($rbas->getPrint()) {
+              echo '<a class="dropdown-item" href="#">Print</a>';
+         }
+    ?>
+    
+    
+  </div>
+</div>
 
-                                   <a class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
-                  <a class="dropdown-item btn btn-info" href="user_details.php?detail=<?=$val['u_id']?>">Details</a>
-                  <a class="dropdown-item" href="edit-users.php?edit=<?=$val['u_id']?>">Edit</a>
-                  <a class="dropdown-item" href="addnew_users.php?del-id=<?=$val['u_id']?>" onclick="return confirm('Are you sure?')">Delete</a>
-                </div>
-              </a>
+
+                                
                                   </td>
                               </tr>
                               <?php   }
@@ -193,8 +236,10 @@
                               ?>
                             </tbody>
                           </table>
+                          </div>
                         </div>
                       </div>
+
                     </div>
                     </div>
                     
@@ -220,7 +265,7 @@
 
                            if (tt === "Add New") {
                               const  fomtcol = document.getElementById('formcolum');
-                          fomtcol.className = "col-md-4 animation";
+                          fomtcol.className = "col-md-4";
                           fomtcol.style.display = 'inline-block';
                           var formtofold = document.getElementById('formtobefolded');
                           formtofold.className = "col-md-8";
@@ -228,10 +273,10 @@
                            }else if (tt === "close"){
                               txt.innerHTML = "Add New";
                             const  fomtcol = document.getElementById('formcolum');
-                          fomtcol.className = "col animation";
+                          fomtcol.className = "col";
                           fomtcol.style.display = 'none';
                           var formtofold = document.getElementById('formtobefolded');
-                          formtofold.className = "col animation";
+                          formtofold.className = "col";
                            }
 
                           

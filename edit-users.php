@@ -29,11 +29,22 @@
 }
 </style>
 <div class="container">
-     <div class="row ">
-       <div class="col">
-         <h1>Update User</h1>
-       </div>
-     </div>
+      <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <div class="btn-group pull-right">
+                                <ol class="breadcrumb hide-phone p-0 m-0">
+                                  <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+                                  <li class="breadcrumb-item"><a href="#">Person</a></li>
+                                  <li class="breadcrumb-item active">Users Edit</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title">Users Edit</h4>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
      
 <div class="row">
  
@@ -44,8 +55,9 @@
     <form action="#" method="post">
       <div class="form-group">
         <label for="sel1">Select list:</label>
+        <input type="hidden" name="dbtype" value="<?=$userdata['user_role']?>">
         <select class="form-control" id="usertype" name="usertype" onchange="mynextdata()">
-          <option> Choose option</option>
+          <option value=""> Choose option</option>
           <option value="1">Customer</option>
           <option value="2">Supplier</option>
           <option value="3">Customer & supplier</option>
@@ -55,7 +67,7 @@
       <div class="form-group" id="formshow" style="display: none;">
         <label for="sel1">Select list:</label>
         <select class="form-control" name="emtype">
-          <option> Choose option</option>
+          <option value=""> Choose option</option>
           <option value="acc1">Accounts</option>
           <option value="ss2">Sales Man</option>
         </select>
@@ -90,20 +102,21 @@
 
                               if (isset($_POST['saveusers'])) {
 
-                                   $data = array(
-                                    'user_role' =>$_POST['usertype'], 
-                                    'name' => $_POST['name'], 
-                                    'password' => md5("123456"), 
-                                    'email' => $_POST['email'], 
-                                    'contact_number' => $_POST['number'], 
-                                    'address' => $_POST['address'], 
-                                    'employeetype' => empty($_POST['emtype'])?0:$_POST['emtype'], 
-                                    'opening_balance' => $_POST['openingbalance'], 
-                                    'created_at' => date("Y-m-d") 
-                                  );
-                                  if (!empty($_POST['usertype']) && !empty($_POST['name'])) {
-                                      if ($db->update("users",$data,"u_id='".$_GET['edit']."'")) {
-                                          echo "
+                $data = array(
+'user_role' => empty($_POST['usertype'])?$_POST['dbtype']:$_POST['usertype'], 
+              'name' => $_POST['name'], 
+              'password' => md5("123456"), 
+              'email' => $_POST['email'], 
+              'contact_number' => $_POST['number'], 
+              'address' => $_POST['address'], 
+              'employeetype' => empty($_POST['emtype'])?0:$_POST['emtype'], 
+              'opening_balance' => $_POST['openingbalance'], 
+              'created_at' => date("Y-m-d") 
+          );
+                      if (!empty($_POST['name'])) {
+      if ($db->update("users",$data,"u_id='".$_GET['edit']."'")) {
+                                          
+              echo "
             <h1 style='color:blue'>Data has been updated</h1> <a href='addnew_users.php'>Go to user list</a>";
 
 

@@ -90,7 +90,13 @@
     "priv_id" : 18,
     "priv_name":"Expense-category",
     "subdata" : ["create","view","delete","print"]
+   },
+   {
+    "priv_id" : 19,
+    "priv_name":"Users",
+    "subdata" : ["create","view","delete","print"]
    }
+
 
  
  ]
