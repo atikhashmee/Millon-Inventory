@@ -70,10 +70,10 @@ $rbas->setPageName(5)->run();
   <div class="dropdown-menu">
     <?php 
          if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="#">View</a>';
+              echo '<a class="dropdown-item" href="product-sale-return-view-details.php?invo='.$val['memono'].'">View</a>';
          }
          if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="#">Edit</a>';
+              echo '<a class="dropdown-item" href="product-sale-return-edit.php?invo='.$val['memono'].'">Edit</a>';
          }
          if ($rbas->getDelete()) {
               echo '<a class="dropdown-item" href="#">Delete</a>';

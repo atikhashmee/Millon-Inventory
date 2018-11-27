@@ -16,7 +16,7 @@
 
 
 
-   $salehistory = $db->joinQuery('SELECT DISTINCT`selldate`,`billchallan` FROM `sell` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
+   $salehistory = $db->joinQuery('SELECT DISTINCT`selldate`,`billchallan`,`payment_taka`,`sellby` FROM `sell` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
 
   /* echo "<pre>";
    print_r($salehistory);
@@ -153,8 +153,8 @@
                           $comision = 0;
                           $discount =  0;
 
-
-                            foreach ($invoiceinfo as $inv) {
+                          $i=0;
+                            foreach ($invoiceinfo as $inv) { $i++;
                               $sum += ($inv['price']*$inv['quantity']);
                               $weight = $inv['weight'];
                               $transport = $inv['transport'];
@@ -162,7 +162,7 @@
                               $comision = $inv['comission'];
                               $discount = $inv['discount'];
                               ?>
-                              <tr>
+                              <tr id="trcontent_<?=$i?>">
                                 <td contenteditable="true">
                                   <?=$inv['productid']?>
                                 </td> 
@@ -176,7 +176,7 @@
                                   <?=($inv['price']*$inv['quantity'])?>
                                 </td>
                                 <td class="text-right">
-                                    <button class="btn btn-dark">X</button>
+          <button type="button" onclick="removeitem(<?=$inv['productid']?>,<?=$i?>)" class="btn btn-dark">X</button>
                                 </td>
                               </tr>
                         
@@ -190,14 +190,19 @@
                                                 </div>
 
                                                   <div class="row">
+                                                  
                      <!-- Use accounts sections  -->
-                     <div class="col">
+                     <div class="col-md-6">
                         
                         
                      </div>
                      
-                    
-                     <div class="col">
+                    <form method="post" id="allotherinfo">
+                      <input type="hidden" name="datesell" value="<?=$salehistory['selldate']?>">
+                      <input type="hidden" name="sellby" value="<?=$salehistory['sellby']?>">
+                      <input type="hidden" name="billchallan" value="<?=$salehistory['billchallan']?>">
+                      <input type="hidden" name="nowpayment" value="<?=$salehistory['payment_taka']?>">
+                     <div class="col-md-6">
                         <div class="form-group">
                            <label for="">Total</label>
                            <input type="text" class="form-control" id="subtotalbeforecommsion" name="subtotalbeforecommsion" value="0">
@@ -232,18 +237,14 @@
                            <label for="">Grand Total</label>
                            <input type="text" class="form-control" id="grandtotalaftercommision">
                         </div>
-                        
+                        <button type="button" onclick="savePurchaseinfo()"   class="btn btn-outline-dark">Update and Save </button>
                      </div>
+                     </form>
                       </div>
+
                   </div>
 
 
-        <div style="padding-left:  750px;">
-        
-        <button type="button" onclick="savePurchaseinfo()"   class="btn btn-outline-dark">Update and Save </button>
-        
-                                                   
-                                                </div>
                                             </div>
                                         </div>
 
@@ -261,6 +262,10 @@
 
 <?php include 'files/footer.php'; ?>
 <script>
+
+   
+
+
   function getcomsiondeducted(){  // when the user is using commission for deduction
     var com =  $("#comision").val();
      var totalprice =  $("#subtotalbeforecommsion").val();
@@ -355,7 +360,7 @@
 function ifExist(pid){  //to check the cart , whether a product is exist in the cart or not
    for(var j =0; j<purchaseitem.length; j++){
    if( purchaseitem[j].pname === pid)
-     return 1;
+     return j;
    }
    return 0;
    }
@@ -367,15 +372,17 @@ function ifExist(pid){  //to check the cart , whether a product is exist in the 
   //add existdatas information
   var dg = <?=json_encode($invoiceinfo);?>;
    //console.log(dg);
-   for (var i = 0; i < dg.length; i++) {
+   var i;
+   for ( i=0; i < dg.length; i++) {
        purchaseitem.push(new productobj(dg[i].customerid,dg[i].productid,dg[i].quantity,dg[i].price));
        totalsum += parseInt((dg[i].price*dg[i].quantity));
    }
    $("#subtotalbeforecommsion").val(totalsum);
    
    console.log(purchaseitem);
+   var incr = i;
   function addtocart(){
-   
+   incr++;
    var cutomername = $("#cutomername").val();
    var pcategory = $("#productcat").val();
    var pname = $("#product").val();
@@ -387,7 +394,7 @@ function ifExist(pid){  //to check the cart , whether a product is exist in the 
        $("#productqunatityhidden").val(quantity);
        $("#productpricehideen").val(price);
        purchaseitem.push(new productobj(cutomername,pname,quantity,price)); //pushing every item to the cart so that i can retrive and modified in the cart 
-     $("#mycartlists").append('<tr> <td>'+prod[pname]+'</td> <td class="text-center">'+price+'</td>  <td class="text-center">'+quantity+'</td>    <td class="totatlbalnceshow text-right">'+price*quantity+'</td> <td class="text-right"><button class="btn btn-dark">X</button></td></tr>');
+     $("#mycartlists").append('<tr id="trcontent_'+incr+'"> <td>'+prod[pname]+'</td> <td class="text-center">'+price+'</td>  <td class="text-center">'+quantity+'</td>    <td class="totatlbalnceshow text-right">'+price*quantity+'</td> <td class="text-right"><button type="button" onclick="removeitem('+pname+','+incr+')" class="btn btn-dark">X</button></td></tr>');
        totalsum += parseInt((price*quantity));
      $("#subtotalbeforecommsion").val(totalsum); // value gets updated everytime a new item get added to the cart
    }else {
@@ -411,6 +418,8 @@ function ifExist(pid){  //to check the cart , whether a product is exist in the 
       
         var tex = confirm("Are you sure ?");
        if (tex ===  true) {
+        /*console.log($("#allotherinfo").serialize());
+        console.log(JSON.stringify(purchaseitem));*/
             $.ajax({
             url: 'ajax/addnewsellinfo.php?item='+JSON.stringify(purchaseitem)+"&allinfo="+$("#allotherinfo").serialize(),
             type: 'GET',
@@ -419,8 +428,8 @@ function ifExist(pid){  //to check the cart , whether a product is exist in the 
           .done(function(res) {
             console.log(res);
           //  alert('res');
-            alert("Product has been sold out ");
-            window.location.href="sellproduct.php";
+            alert("Sale History has been updated");
+            window.location.href="product-sale-history.php";
           })
           .fail(function() {
             console.log("error");
@@ -441,5 +450,20 @@ function ifExist(pid){  //to check the cart , whether a product is exist in the 
            //console.log(purchaseitem+"= "+$("#allinfo").serialize())
    
      }
+
+
+     function removeitem(pid,tracid) {
+     
+           var index = ifExist(pid);
+           purchaseitem.splice(index,1);
+           console.log(purchaseitem);
+           var element = document.getElementById('trcontent_'+tracid);
+           element.parentElement.removeChild(element);
+           //alert(index);
+     }
+
+
+
+    
    
 </script>

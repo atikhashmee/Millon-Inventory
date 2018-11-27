@@ -9,12 +9,20 @@
 
 			if (isset($_GET['allinfo'])) {
 
-					 
+			
 
                 if (empty($_GET['billchallan'])) {
                 	echo 'Bill/challan no is not given';
                 	exit();
                 }
+                /* to perform an update operation we are deleting the previous product and inserting newly update product*/
+
+                $dd =  $db->joinQuery("SELECT COUNT(*) as rowexist FROM `sell` WHERE `billchallan`='".$_GET['billchallan']."'")->fetch(PDO::FETCH_ASSOC);
+                if ($dd['rowexist']>0) {
+                     $db->delete('sell',"`billchallan`='".$_GET['billchallan']."'");
+                }
+                /*end of product update*/
+                
 
                  $datass = json_decode($_GET['item']);
 			   if ($_GET['cashcheque']=="yes") {

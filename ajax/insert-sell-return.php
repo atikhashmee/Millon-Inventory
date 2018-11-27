@@ -6,6 +6,12 @@
 			$db = new Db();
 			  session_start();
 			  $datass = json_decode($_GET['dclas']);
+			  //delete before update 
+			  $mydate = $db->joinQuery("SELECT COUNT(*) as rowcount FROM `sell_return` WHERE `memono`='".$datass[0]->memo."'")->fetch(PDO::FETCH_ASSOC);
+			  if ($mydate['rowcount']>0) {
+			 $db->delete("sell_return","memono = '".$datass[0]->memo."'");
+			  }
+			  //end of updating things
    					$cont = 0;
 			   for ($i=0; $i <count($datass); $i++) { 
 			   	
