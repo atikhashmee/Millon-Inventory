@@ -44,7 +44,9 @@
                                
                                echo $rbas->getdatatest();
                                echo "</pre>";*/
-                            
+                               $settingsquery = $db->joinQuery("SELECT * FROM `settings` WHERE `adminid`='".$_SESSION['u_id']."'");
+
+                                $setdata = $settingsquery->fetch(PDO::FETCH_ASSOC);
                             ?>
 
 
@@ -84,7 +86,7 @@
 
          
 
-    <title>Millon || Janata Steel Corporation</title>
+    <title><?=$setdata['webtitle']?></title>
 
     </head>
 

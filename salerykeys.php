@@ -46,8 +46,8 @@ $datas = $db->selectAll("e_salerykeys","salery_key_id='".$_GET['edit-id']."'")->
                <input id="keysname" class="form-control" name="keysname"  required="required" type="text" value="<?=$datas['keysname']?>">
             </div>
             <div class="form-group">
-                  <button type="submit" class="btn btn-danger">Cancel</button>
-                  <button id="updatekeys" name="updatekeys" type="submit" class="btn btn-warning">Update</button>
+                  <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                  <button id="updatekeys" name="updatekeys" type="submit" class="btn btn-outline-warning">Update <i class="fa fa-floppy-o"></i></button>
             </div>
          </form>
   </div>
@@ -60,8 +60,8 @@ $datas = $db->selectAll("e_salerykeys","salery_key_id='".$_GET['edit-id']."'")->
                <input id="keysname" class="form-control" name="keysname"  required="required" type="text">
             </div>
             <div class="form-group">
-                  <button type="submit" class="btn btn-primary">Cancel</button>
-                  <button id="savekeys" name="savekeys" type="submit" class="btn btn-success">Submit</button>
+                  <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                  <button id="savekeys" name="savekeys" type="submit" class="btn btn-outline-primary">Save <i class="fa fa-floppy-o"></i> </button>
             </div>
          </form>
   </div>
@@ -140,20 +140,20 @@ $datas = $db->selectAll("e_salerykeys","salery_key_id='".$_GET['edit-id']."'")->
                   <th scope="row"><?=$i?></th>
                   <td><?=$val['keysname']?></td>
                    <td><div class="dropdown">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    options
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-gear"></i>
   </button>
   <div class="dropdown-menu">
     <?php 
          if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="#">View</a>';
+              echo '<a class="dropdown-item" href="#">View <i class="fa fa-eye"></i></a>';
          }
          if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="salerykeys.php?edit-id='.$val['salery_key_id'].'">Edit</a>';
+              echo '<a class="dropdown-item" href="salerykeys.php?edit-id='.$val['salery_key_id'].'">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) {
               ?>
-              <a class="dropdown-item" href="salerykeys.php?del-id=<?=$val['salery_key_id']?>" onclick="return confirm('Are you sure?')">Delete</a>
+              <a class="dropdown-item" href="salerykeys.php?del-id=<?=$val['salery_key_id']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
       <?php 
          }
          if ($rbas->getPrint()) {

@@ -40,15 +40,14 @@
                             <div class="card-body">
                 <form action="" method="post">
                                 <h4 class="mt-0 header-title">Add New Product</h4>
-                                <p class="text-muted m-b-30 font-14">Here are examples of <code
-                                        class="highlighter-rouge">.form-control</code> applied to each
-                                    textual HTML5 <code class="highlighter-rouge">&lt;input&gt;</code> <code
-                                            class="highlighter-rouge">type</code>.</p>
 
                                 <div class="form-group row">
                                     <label for="example-text-input" class="col-sm-4 col-form-label">Product ID: </label>
-                                    <div class="col-sm-8">
+                                    <div class="col-md-6">
                                         <input id="productid" class="form-control" name="productid"  required="required" type="text">
+                                    </div>
+                                    <div class="col-md-2">
+                                      <button type="button" class="btn btn-outline-info" onclick="generate()"> <i class="fa fa-hashtag"></i> </button>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -65,7 +64,7 @@
                            </select>
                                     </div>
                                     <div class="col-md-2">
-                                      <a href="category.php" class="btn btn-info"><i class="fa fa-plus-circle" style="f    font-size: 19px;
+                                      <a href="category.php" class="btn btn-outline-info"><i class="fa fa-plus-circle" style="f    font-size: 19px;
     color: black;"></i></a>
                                     </div>
                                 </div>
@@ -83,7 +82,7 @@
                            </select>
                                     </div>
                                     <div class="col-md-2">
-                                      <a href="brand.php" class="btn btn-info"><i class="fa fa-plus-circle" style="f    font-size: 19px;
+                                      <a href="brand.php" class="btn btn-outline-info"><i class="fa fa-plus-circle" style="f    font-size: 19px;
     color: black;"></i></a>
                                     </div>
                                 </div>
@@ -101,8 +100,9 @@
                            </select>
                                     </div>
                                     <div class="col-md-2">
-                                      <a href="size.php" class="btn btn-info"><i class="fa fa-plus-circle" style="f    font-size: 19px;
-    color: black;"></i></a>
+                                      <a href="size.php" class="btn btn-outline-info">
+                          <i class="fa fa-plus-circle" style="font-size: 19px;
+                             color: black;"></i></a>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -113,7 +113,8 @@
                                 </div>
                                 <div class="form-group row">
                                     <label for="example-password-input" class="col-sm-4  col-form-label">Unit</label>
-                                    <div class="col-sm-8">
+
+                                    <div class="col-md-6">
                                         <select class="form-control" name="unit">
                               <option value="">Select a unit</option>
                               <?php 
@@ -123,7 +124,11 @@
                               <?php   }
                                  ?>
                            </select>
-                           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add new unit</button>
+                          
+                                    </div>
+                                    <div class="col-md-2">
+                                       <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus-circle" style="font-size: 19px;
+                             color: black;"></i></button>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -154,8 +159,8 @@
                                  <div class="form-group row">
                                   <div class="col-md-4"></div>
                      <div class="col-md-8 col-md-offset-3">
-                        <button type="submit" class="btn btn-primary">Cancel</button>
-                        <button id="saveusers" name="saveproduct" type="submit" class="btn btn-success">Submit</button>
+                        <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                        <button id="saveusers" name="saveproduct" type="submit" class="btn btn-outline-primary">Submit <i class="fa fa-floppy-o"></i> </button>
                      </div>
                   </div>
                                 
@@ -221,6 +226,15 @@
 </div>
 </div>
 <?php include 'files/footer.php'; ?>
+
+<script>
+  function generate()
+  {
+    var d = new Date();
+      document.getElementById('productid').value = "P"+d.getDate()+""+d.getSeconds();
+  }
+</script>
+
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
    <div class="modal-dialog">

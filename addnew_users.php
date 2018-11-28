@@ -32,12 +32,11 @@
             <form action="" method="post">
                <div class="row">
                   <div class="col">
-                     <button type="button" class="btn btn-primary btn-style" onclick="fadeoutFun(this)">Add New</button>
+                     <button type="button" class="btn btn-outline-info" onclick="fadeoutFun(this)">Add New</button>
                   </div>
                   <div class="col">
                   </div>
-                  <div class="col">
-                  </div>
+                  
                   <div class="col">
                      <div class="row">
                         <div class="col">
@@ -52,7 +51,7 @@
                            </div>
                         </div>
                         <div class="col-md-4">
-                           <button class="btn btn-primary" name="searchuser">Search</button>
+                           <button class="btn btn-outline-info" name="searchuser">Search <i class="fa fa-search"></i></button>
                         </div>
                      </div>
                   </div>
@@ -105,7 +104,8 @@
                      <label for="email">Opening Balance:</label>
                      <input class="form-control" id="openingbalance" name="openingbalance"  type="number">
                   </div>
-                  <button class="btn btn-primary" id="saveusers" name="saveusers" type="submit">save</button>
+                  <button type="reset" class="btn btn-outline-danger">Cancel</button>
+                  <button class="btn btn-outline-primary" id="saveusers" name="saveusers" type="submit">Save <i class="fa fa-floppy-o"></i> </button>
                </form>
             </div>
          </div>
@@ -177,26 +177,32 @@
                         <td><?=$val['created_at']?></td>
                         <td>
                            <div class="dropdown">
-                              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                              options
+                              <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+                              <i class="fa fa-gear"></i>
                               </button>
                               <div class="dropdown-menu">
                                  <?php 
-                                    if ($rbas->getView()) {
+                                    if ($rbas->getView()) 
+                                    {
                                     echo 
                                     '<a class="dropdown-item" 
-                                    href="user_details.php?detail='.$val['u_id'].'">View</a>';
+                                    href="user_details.php?detail='.$val['u_id'].'">View <i class="fa fa-eye"></i></a>';
                                     }
-                                    if ($rbas->getUpdate()) {
-                                         echo '<a class="dropdown-item" href="edit-users.php?edit='.$val['u_id'].'">Edit</a>';
+                                    if ($rbas->getUpdate())
+                                    {
+                                         echo '<a class="dropdown-item" href="edit-users.php?edit='.$val['u_id'].'">Edit <i class="fa fa-pencil"></i></a>';
                                     }
-                                    if ($rbas->getDelete()) { ?>
-                                 <a class="dropdown-item"
-                                    href="addnew_users.php?del-id=<?=$val['u_id']?>" onclick="return confirm('Are you sure?')">Delete</a>
-                                 <?php }
-                                    if ($rbas->getPrint()) {
+                                    if ($rbas->getDelete()) 
+                                    { 
+                                         ?>
+                                         <a class="dropdown-item"
+                                    href="addnew_users.php?del-id=<?=$val['u_id']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
+                                 <?php 
+                                    }
+                                    if ($rbas->getPrint())
+                                     {
                                          echo '<a class="dropdown-item" href="#">Print</a>';
-                                    }
+                                     }
                                     ?>
                               </div>
                            </div>

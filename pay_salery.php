@@ -1,11 +1,7 @@
 <?php include 'files/header.php'; ?>
 <?php include 'files/menu.php'; ?>
 <?php 
-   $namearray = array();
-       $names  = $db->selectAll("users")->fetchAll();
-       foreach ($names as  $val) {
-         $namearray[$val['u_id']] = $val['name'];
-       }
+   
    
    
    
@@ -31,43 +27,82 @@
    
    ?>
 <div class="container">
-  <h1><strong>Pay Salery for Employee</strong>
-    <?php echo $namearray[$_GET['eid']];?>
-  </h1>
+  <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <div class="btn-group pull-right">
+                                <ol class="breadcrumb hide-phone p-0 m-0">
+                                  <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+                                  <li class="breadcrumb-item"><a href="#">Settings</a></li>
+                                  <li class="breadcrumb-item active">Employee Salery Option</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title"> Pay Employee Salery </h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
+
+  <div class="card card-body">
   <form class="form-horizontal form-label-left" method="post">
 
     <div class="row">
       <div class="col">
-
-        <div class="form-group">
-          <label for="name"> Date <span class="required">*</span>
-          </label>
-          <input id="paydate" class="form-control" name="paydate" type="date" required>
-        </div>
+         <h5>Employee Salery Comprise</h5>
+          <small> <p>Check the checkbox to update salery rate</p> </small>
+         <table class="table table-bordered">
+           
+         
+        
         <?php 
                $j=0;
                foreach ($usersalerykeys as $setsalekey) { $j++; ?>
-        <div class="form-group">
-          <div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input chebocs" id="customCheck_<?=$j?>"
+                <tr>
+        
+            <td style="text-align: center;">
+              <div class="form-group">
+          <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input chebocs" id="customCheck_<?=$j?>"
               value="<?=$setsalekey['amount']?>" checked="">
-            <label class="custom-control-label" for="customCheck_<?=$j?>">
-              <?=$ssalerykeys[$setsalekey['skeysids']]?>-> <strong class="moneytobesum">
-                <?=$setsalekey['amount']?></strong> </label>
-          </div>
-        </div>
+              <label class="custom-control-label" for="customCheck_<?=$j?>">
+               </label>
+               </div>
+            </div>
+            </td>
+            <td>
+              
+               <?=$ssalerykeys[$setsalekey['skeysids']]?>
+            </td>
+            <td>
+              <strong class="moneytobesum">
+                <?=$setsalekey['amount']?></strong>
+              </td>
+            
+          
+        </tr>
         <?php 		}
                ?>
+               </table>
         <div class="form-group">
-          <div class="col-md-6 col-md-offset-3">
+         
 
-            <button type="button" class="btn btn-success" onclick="updatesum()">update sum</button>
-          </div>
+            <button type="button" class="btn btn-outline-warning" onclick="updatesum()">Update Salery</button>
+          
         </div>
 
 
 
       </div>
       <div class="col">
+        <div class="form-group">
+          <label for="">Employee Name</label>
+          <input type="text" class="form-control" value="<?=$fn->getUserName($_GET['eid'])?>" readonly>
+        </div>
+        <div class="form-group">
+          <label for="name"> Date <span class="required">*</span>
+          </label>
+          <input id="paydate" class="form-control" name="paydate" type="date" required>
+        </div>
         <div class="form-group">
           <label for="">Total</label>
           <input type="text" class="form-control" id="totalsum" readonly>
@@ -81,46 +116,49 @@
           <label for="">Due</label>
           <input type="text" class="form-control" id="due" name="due" min="0">
         </div>
-        <div class="ln_solid"></div>
+        
         <div class="form-group">
-          <div class="col-md-6 col-md-offset-3">
-            <button type="submit" class="btn btn-primary">Cancel</button>
-            <button id="paymentsalery" name="paymentsalery" type="submit" class="btn btn-success">Pay</button>
-          </div>
+          
+            <button type="submit" class="btn btn-outline-danger">Cancel</button>
+            <button id="paymentsalery" name="paymentsalery" type="submit" class="btn btn-outline-primary">Pay Salery</button>
+          
         </div>
       </div>
     </div>
   </form>
+  </div>
   <?php
 
-   		if (isset($_POST['paymentsalery'])) {
-        if (empty($_POST['paydate'])) { //if the date is empty
+   		if (isset($_POST['paymentsalery']))
+       {
+          if (empty($_POST['paydate'])) 
+          { //if the date is empty
             echo "Date can not be empty";
             exit();
-        }
-
+          }
         
-
-
-
-        
-   			$data = array(
+   			 $data = array(
    				'payment_date' => $_POST['paydate'],
    				'amount_pay' =>$_POST['payamount'],
    				'payment_due' => $_POST['due'],
    				'employeeid' => $_GET['eid']
    				 );
-   			if ($db->insert("e_payment_salery",$data)) { ?>
-  <script>
-    alert("<p style='color:blue'>Payment has been successfully done</p>");
-  </script>
-  <?php } else {  ?>
+   		if ($db->insert("e_payment_salery",$data)) 
+         {     ?>
+              <script>
+              alert("Payment has been successfully done");
+              </script>
+              <?php
+        }
+     else
+       {     
+             ?> 
+             <script>
+             alert("Payment has not been successfully done");
+             </script>
+             <?php
 
-   <script>
-    alert("<p style='color:red'>Payment has not been successfully done</p>");
-  </script>
-
- <?php  }
+      }
    		}
 
    ?>
@@ -130,22 +168,24 @@
 <script>
   var amounts = document.getElementsByClassName('moneytobesum');
   var sum = 0;
-  for (var j = 0; j < amounts.length; j++) {
+  for (var j = 0; j < amounts.length; j++) 
+  {
     sum += parseInt(amounts[j].innerHTML);
   }
-  document.getElementById('totalsum').value = sum;
-  document.getElementById('payamount').value = sum;
-
-
-  function updatesum() {
+    document.getElementById('totalsum').value = sum;
+    document.getElementById('payamount').value = sum;
+  function updatesum() 
+  {
     var againsum = 0;
     var ddd = document.getElementsByClassName("chebocs");
-    for (var j = 0; j < ddd.length; j++) {
-      if (ddd[j].checked) {
-        againsum += parseInt(ddd[j].value);
-        //alert(ddd[j].value);
-      }
-    }
+    for (var j = 0; j < ddd.length; j++)
+     {
+        if (ddd[j].checked) 
+        {
+          againsum += parseInt(ddd[j].value);
+          //alert(ddd[j].value);
+        }
+     }
     document.getElementById('totalsum').value = againsum;
     document.getElementById('payamount').value = againsum;
 
@@ -153,7 +193,8 @@
   }
 
 
-  function updatedue() {
+  function updatedue() 
+  {
     var totalsum = document.getElementById('totalsum').value;
     var paid = document.getElementById('payamount').value;
     document.getElementById('due').value = totalsum - paid;

@@ -30,13 +30,27 @@
 
             <div class="card">
                 <div class="card-body">
-
+                 <?php 
+                     include("php/dboperation.php");
+                     $db = new Db();
+                     $settingsquery = $db->joinQuery("SELECT * FROM `settings` WHERE `adminid`='36'");
+                     $setdata = $settingsquery->fetch(PDO::FETCH_ASSOC);
+                 ?>
                     <h3 class="text-center mt-0 m-b-15">
-                        <a href="index.html" class="logo logo-admin"><img src="assets/images/logo-dark.png" height="30" alt="logo"></a>
+                        <a href="index.php" class="logo logo-admin">
+                            <img src="assets/images/logos/<?=$setdata['logo']?>" height="30" alt="logo">  <?=$setdata['webname']?>
+                        </a>
                     </h3>
 
                     <h4 class="text-muted text-center font-18"><b>Sign In</b></h4>
-
+                        <?php 
+                            if (isset($_GET['msg'])) 
+                            {
+                                ?>
+                                <h4 class="text-center font-18 text-danger"><b><?=$_GET['msg']?></b></h4>
+                                <?php 
+                            }
+                        ?>
                     <div class="p-3">
                         <form class="form-horizontal m-t-20" method="post" action="php/login.php">
 

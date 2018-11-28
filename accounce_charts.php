@@ -100,10 +100,10 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
             <input id="opening_balance" class="form-control" name="opening_balance"  required="required" type="text" value="<?=$datas['opening_balance']?>">
          </div>
          <div class="form-group">
-            <div class="col-md-6 col-md-offset-3">
-               <button type="submit" class="btn btn-danger">Cancel</button>
-               <button id="udpatecategory" name="udpatecategory" type="submit" class="btn btn-warning">Update</button>
-            </div>
+            
+               <button type="submit" class="btn btn-outline-danger">Cancel</button>
+               <button id="udpatecategory" name="udpatecategory" type="submit" class="btn btn-outline-warning">Update <i class="fa fa-floppy-o"></i></button>
+            
          </div>
       </form>
   </div>
@@ -161,10 +161,10 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
             <input id="opening_balance" class="form-control" name="opening_balance"  required="required" type="text">
          </div>
          <div class="form-group">
-            <div class="col-md-6 col-md-offset-3">
-               <button type="submit" class="btn btn-primary">Cancel</button>
-               <button id="savecategory" name="savecategory" type="submit" class="btn btn-success">Submit</button>
-            </div>
+            
+               <button type="submit" class="btn btn-outline-danger">Cancel</button>
+               <button id="savecategory" name="savecategory" type="submit" class="btn btn-outline-primary">Save <i class="fa fa-floppy-o"></i></button>
+          
          </div>
       </form>
   </div>
@@ -272,20 +272,20 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
                <td><?=$val['chart_name']?></td>
                <td><?=$val['opening_balance']?></td>
                <td><div class="dropdown">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    options
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-gear"></i>
   </button>
   <div class="dropdown-menu">
     <?php 
          if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="#">View</a>';
+              echo '<a class="dropdown-item" href="#">View <i class="fa fa-eye"></i></a>';
          }
          if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="accounce_charts.php?edit-id='.$val['charts_id'].'">Edit</a>';
+              echo '<a class="dropdown-item" href="accounce_charts.php?edit-id='.$val['charts_id'].'">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) {
              ?>
-              <a class="dropdown-item" href="accounce_charts.php?del-id=<?=$val['charts_id']?>" onclick="return confirm('Are you sure?')">Delete</a>
+              <a class="dropdown-item" href="accounce_charts.php?del-id=<?=$val['charts_id']?>" onclick="return confirm('Are you sure?')">Delete<i class="fa fa-times"></i></a>
       <?php 
          }
          if ($rbas->getPrint()) {

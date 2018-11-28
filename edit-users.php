@@ -65,7 +65,8 @@
                      <label for="email">Opening Balance:</label>
                      <input class="form-control" id="openingbalance" name="openingbalance" required="required" type="number" value="<?=$userdata['opening_balance']?>">
                   </div>
-                  <button class="btn btn-primary" id="saveusers" name="saveusers" type="submit">Update</button>
+                  <button type="reset" class="btn btn-outline-danger">Cancel</button>
+                  <button class="btn btn-outline-warning" id="saveusers" name="saveusers" type="submit">Update <i class="fa fa-floppy-o"></i></button>
                </form>
                <div id="loader"></div>
             </div>

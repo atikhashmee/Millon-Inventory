@@ -4,17 +4,22 @@ $rbas->setPageName(6)->run();
 $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
 
 
-if (isset($_GET['del-id'])) {
+        if (isset($_GET['del-id']))
+         {
 
-           $getstatus = $db->selectAll('recevecollection',"recol_id='".$_GET['del-id']."'")->fetch(PDO::FETCH_ASSOC);
-            if ($getstatus['bycashcheque'] == 'Cheque') {
+             $getstatus = $db->selectAll('recevecollection',"recol_id='".$_GET['del-id']."'")->fetch(PDO::FETCH_ASSOC);
+             if ($getstatus['bycashcheque'] == 'Cheque')
+               {
                  $db->delete("cheque","parent_table_id='rac_".$_GET['del-id']."'");
-            }
-             if ($db->delete("recevecollection","recol_id='".$_GET['del-id']."'") ) {?>
-            <script> alert('Data has been deleted');
-             window.location.href='recieve-collection.php'; </script>
-            <?php   }
                }
+             if ($db->delete("recevecollection","recol_id='".$_GET['del-id']."'") )
+              {       
+                  ?>
+                  <script> alert('Data has been deleted');
+                  window.location.href='recieve-collection.php'; </script>
+                  <?php  
+             }
+         }
 
 
 ?>
@@ -148,80 +153,86 @@ if (isset($_GET['del-id'])) {
                      </div>
                   </div>
                   <div class="form-group">
-                     <button type="submit" class="btn btn-primary">Cancel</button>
-                     <button id="savecategory" name="saverecieve" type="submit" class="btn btn-success">Submit</button>
+                     <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                     <button id="savecategory" name="saverecieve" type="submit" class="btn btn-outline-primary">Save <i class="fa fa-floppy-o"></i></button>
                   </div>
                </form>
             </div>
          </div>
          <?php 
-            if (isset($_POST['saverecieve'])) {
+            if (isset($_POST['saverecieve']))
+             {
 
 
-              if (empty($_POST['recievedate'])) {
-                 echo "<h1 style='color:red'>Date field can not be empty</h1>";
-              }else if (empty($_POST['customerid'])) {
-                echo "<h1 style='color:red'>Customer ID field can not be empty</h1>";
-              }else if (empty($_POST['amount'])) {
-                echo "<h1 style='color:red'>Amount ID field can not be empty</h1>";
-              }else if (empty($_POST['carrier'])) {
-                echo "<h1 style='color:red'>Carrier ID field can not be empty</h1>";
-              }else {
+                    if (empty($_POST['recievedate']))
+                     {
+                       echo "<h1 style='color:red'>Date field can not be empty</h1>";
+                     }
+                     else if (empty($_POST['customerid']))
+                     {
+                      echo "<h1 style='color:red'>Customer ID field can not be empty</h1>";
+                    }
+                    else if (empty($_POST['amount'])) 
+                    {
+                      echo "<h1 style='color:red'>Amount ID field can not be empty</h1>";
+                    }
+                    else if (empty($_POST['carrier'])) 
+                    {
+                      echo "<h1 style='color:red'>Carrier ID field can not be empty</h1>";
+                    }
+                    else 
+                    {
+                      $chequecash = ($_POST['customRadio']=="yes")?"Cheque":"Cash";
+                       $data = array(
+                         'recievedate' => $_POST['recievedate'], 
+                         'cusotmer_id' => $_POST['customerid'], 
+                         'amounts' => $_POST['amount'],
+                         'carreier' => $_POST['carrier'], 
+                         'adjustment' => $_POST['adjustment'],
+                         'addedby' =>   $_SESSION['u_id'],
+                         'bycashcheque' =>  $chequecash
+                          );
+                      $parentid = 0;
+                       if ($db->insert("recevecollection",$data)) 
+                       {
+                           $parentid = $db->getInsertId('recol_id');
 
+                           ?>
+                           <script>alert("Money Has been Collected")</script>
+                           <?php 
+                         
+                       }
+                       else
+                       {
+                            ?>
+                           <script>alert("Error occured")</script>
+                           <?php 
+                       }
 
+                        if ($_POST['customRadio']=="yes") 
+                        {
 
-                   
+                         $chquedata = array(
+                          'parent_table_id' => "rac_".$parentid,
+                          'accountno' => $_POST['checkno'],
+                          'customerid' => $_POST['customerid'],
+                          'bankname' => $_POST['accounts'],
+                          'expiredate' => $_POST['issuedate'],
+                          'amount' => $_POST['amount'],
+                          'carrier' => $_POST['carrier'],
+                          'userid' => $_SESSION['u_id'],
+                          'fromtable' => "add"
+                          );
+                        if ($db->insert("cheque",$chquedata)) 
+                        {
+                           ?>
+                           <script>alert("Check Information Saved")</script>
+                           <?php 
+                        }
+                        
+                      }
 
-                $chequecash = ($_POST['customRadio']=="yes")?"Cheque":"Cash";
-            
-                 $data = array(
-                   'recievedate' => $_POST['recievedate'], 
-                   'cusotmer_id' => $_POST['customerid'], 
-                   'amounts' => $_POST['amount'],
-                   'carreier' => $_POST['carrier'], 
-                   'adjustment' => $_POST['adjustment'],
-                   'addedby' =>   $_SESSION['u_id'],
-                   'bycashcheque' =>  $chequecash
-                 );
-                $parentid = 0;
-                 if ($db->insert("recevecollection",$data)) {
-                $parentid = $db->getInsertId('recol_id');
-                   echo "<h1 style='color:blue'> Money has been collected</h1>";
-                   
-                 }else {
-                   echo "<h1 style='color:red'> There is a problem</h1>";
-                 }
-
-                  if ($_POST['customRadio']=="yes") {
-                  $chquedata = array(
-                    'parent_table_id' => "rac_".$parentid,
-                    'accountno' => $_POST['checkno'],
-                    'customerid' => $_POST['customerid'],
-                    'bankname' => $_POST['accounts'],
-                    'expiredate' => $_POST['issuedate'],
-                    'amount' => $_POST['amount'],
-                    'carrier' => $_POST['carrier'],
-                    'userid' => $_SESSION['u_id'],
-                    'fromtable' => "add"
-                  );
-                  if ($db->insert("cheque",$chquedata)) {
-                   echo "<h1 style='color:blue'>Cheque has been saved</h1>";
-                 }
-                  
-                }
-                    /* echo "<pre>";
-                      print_r($data);
-                     echo "</pre>";*/
-
-
-
-                     
-
-              }
-
-
-                
-            
+                    }
                    
             }
             
@@ -255,19 +266,19 @@ if (isset($_GET['del-id'])) {
                      <td><?=$val['carreier']?></td>
                      <td><?=$val['bycashcheque']?></td>
                      <td> <div class="dropdown">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    options
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-gear"></i>
   </button>
   <div class="dropdown-menu">
     <?php 
          if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="#">View</a>';
+              echo '<a class="dropdown-item" href="#">View <i class="fa fa-eye"></i></a>';
          }
          if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="#">Edit</a>';
+              echo '<a class="dropdown-item" href="#">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) { ?>
-              <a class="dropdown-item" href="recieve-collection.php?del-id=<?=$val['recol_id']?>" onclick="return confirm('Are you sure?')">Delete</a>
+              <a class="dropdown-item" href="recieve-collection.php?del-id=<?=$val['recol_id']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
       <?php   }
          if ($rbas->getPrint()) {
               echo '<a class="dropdown-item" href="#">Print</a>';
@@ -290,9 +301,6 @@ if (isset($_GET['del-id'])) {
 <?php include 'files/footer.php'; ?>
 <script>
 
-   
-   
-   
             // check the radio button to show the cheque payment method
       function chequeoptioncheck(){
         var divid  = document.getElementById('chequeoption');

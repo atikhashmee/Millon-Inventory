@@ -51,10 +51,10 @@ $datas = $db->selectAll("cateogory","cat_id='".$_GET['edit-id']."'")->fetch(PDO:
                      <textarea id="description"  name="description" class="form-control"><?=$datas['cat_description']?> </textarea>
                   </div>
                   <div class="form-group">
-                     <div class="col-md-6 col-md-offset-3">
-                        <button type="submit" class="btn btn-primary">Cancel</button>
-                        <button id="updatecate" name="updatecate" type="submit" class="btn btn-warning">Update</button>
-                     </div>
+                     
+                        <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                        <button id="updatecate" name="updatecate" type="submit" class="btn btn-outline-warning">Update <i class="fa fa-floppy-o"></i></button>
+                     
                   </div>
                </form>
             </div>
@@ -72,10 +72,10 @@ $datas = $db->selectAll("cateogory","cat_id='".$_GET['edit-id']."'")->fetch(PDO:
                      <textarea id="description"  name="description" class="form-control"></textarea>
                   </div>
                   <div class="form-group">
-                     <div class="col-md-6 col-md-offset-3">
-                        <button type="submit" class="btn btn-primary">Cancel</button>
-                        <button id="saveusers" name="savecat" type="submit" class="btn btn-success">Submit</button>
-                     </div>
+                     
+                        <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                        <button id="saveusers" name="savecat" type="submit" class="btn btn-outline-primary">Submit <i class="fa fa-floppy-o"></i> </button>
+                     
                   </div>
                </form>
             </div>
@@ -166,20 +166,20 @@ $datas = $db->selectAll("cateogory","cat_id='".$_GET['edit-id']."'")->fetch(PDO:
                   <td><?=$val['cat_name']?></td>
                   <td><?=$val['cat_description']?></td>
                   <td><div class="dropdown">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    options
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-gear"></i>
   </button>
   <div class="dropdown-menu">
     <?php 
          if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="#">View</a>';
+              echo '<a class="dropdown-item" href="#">View <i class="fa fa-eye"></i> </a>';
          }
          if ($rbas->getUpdate()) {
               echo '<a class="dropdown-item"
-               href="category.php?edit-id='.$val['cat_id'].'">Edit</a>';
+               href="category.php?edit-id='.$val['cat_id'].'">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) { ?>
-              <a class="dropdown-item" href="category.php?del-id=<?=$val['cat_id']?>" onclick="return confirm('Are you sure?')">Delete</a>
+              <a class="dropdown-item" href="category.php?del-id=<?=$val['cat_id']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
       <?php   }
          if ($rbas->getPrint()) {
               echo '<a class="dropdown-item" href="#">Print</a>';

@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <label for="example-password-input" class="col-sm-4  col-form-label">Unit</label>
-                                    <div class="col-sm-8">
+                                    <div class="col-md-6">
                                       <input type="hidden" name="uintupdate" value="<?=$proinfo['unit']?>">
                                         <select class="form-control" name="unit">
                               <option value="">Select a unit</option>
@@ -114,7 +114,11 @@
                               <?php   }
                                  ?>
                            </select>
-                           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add new unit</button>
+                           
+                                    </div>
+                                    <div class="col-md-2">
+                                      <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus-circle" style="font-size: 19px;
+                             color: black;"></i></button>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -145,8 +149,8 @@
                                  <div class="form-group row">
                                   <div class="col-md-4"></div>
                      <div class="col-md-8 col-md-offset-3">
-                        <button type="submit" class="btn btn-danger">Cancel</button>
-                        <button id="updateproduct" name="updateproduct" type="submit" class="btn btn-warning">Update</button>
+                        <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                        <button id="updateproduct" name="updateproduct" type="submit" class="btn btn-outline-warning">Update</button>
                      </div>
                   </div>
                                 

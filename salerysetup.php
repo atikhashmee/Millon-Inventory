@@ -1,21 +1,23 @@
 <?php include 'files/header.php'; ?>
 <?php include 'files/menu.php'; ?>
 <?php 
-   $namearray = array();
-       $names  = $db->selectAll("users")->fetchAll();
-       foreach ($names as  $val) {
-         $namearray[$val['u_id']] = $val['name'];
-       }
-
+  
 
 
        // check if the users data is already exist
 
-       $dataexist  =  $db->joinQuery("SELECT COUNT(*) as exst FROM `employeesalerlist` WHERE `employeeid`='".$_GET['eid']."'")->fetch(PDO::FETCH_ASSOC);
+       $prevlist  =  $db->joinQuery("SELECT * FROM `employeesalerlist` WHERE `employeeid`='".$_GET['eid']."'");
+       $dataexist = $prevlist->rowCount();
+
+       $inforlist = $prevlist->fetch(PDO::FETCH_ASSOC);
 
 
        // check what are the basic fund has been taken by the employee 
        $usersalerykeys  =  $db->joinQuery("SELECT * FROM `employeesalerlist` WHERE `employeeid`='".$_GET['eid']."'")->fetchAll();
+
+    /*   echo "<pre>";
+       print_r($usersalerykeys);
+       echo "</pre>";*/
 
 
 
@@ -48,19 +50,41 @@
    
    ?>
 <div class="container">
+  <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <div class="btn-group pull-right">
+                                <ol class="breadcrumb hide-phone p-0 m-0">
+                                  <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+                                  <li class="breadcrumb-item"><a href="#">Settings</a></li>
+                                  <li class="breadcrumb-item active">Employee Salery Option</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title"> Set Up Salery For Employee </h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
+
    <div class="row">
-      <div class="col">
-         <h1><strong>Employee Name</strong> <?php echo $namearray[$_GET['eid']];?> </h1>
+    <div class="col-md-3"></div>
+      <div class="col-md-7">
+         
 
          <?php 
 
-            if ($dataexist['exst']>0) {
+            if ($dataexist>0) {
               ?>
-
-                  <form class="form-horizontal form-label-left" method="post" >
+            <div class="card card-body">
+            <form class="form-horizontal form-label-left" method="post" >
+              <div class="form-group">
+                <label for=""><h3>Employee Name</h3></label>
+              <input type="text" class="form-control" value="<?=$fn->getUserName($_GET['eid'])?>" readonly>
+            </div>
             <div class="form-group">
                <label  for="name"> Bank Name 
                </label>
+               <input type="hidden" name="dbbankname" value="<?=$inforlist['bankname']?>">
                <select class="form-control" name="banksname" id="banksname">
                 <option value="">Select a bank</option>
                 <option>AB Bank Limited</option>
@@ -81,9 +105,9 @@
             <div class="form-group">
                <label  for="name"> Account No 
                </label>
-  <input id="accountno" class="form-control" name="accountno"  type="text">
+  <input id="accountno" class="form-control" name="accountno"  type="text" value="<?=$inforlist['accountno']?>">
             </div>
-            <table class="table table-bordered table-responsive table-striped table-hover" id="myTable">
+            <table class="table table-bordered" >
                <thead>
                   <tr>
                      <th>Check</th>
@@ -104,13 +128,17 @@
                       ?>
                   <tr>
                      <th scope="row">
-                        <input type="checkbox" value="<?=$val['salery_key_id']?>" name="checkbox[]" 
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" id="customCheck_<?=$i?>" class="custom-control-input" value="<?=$val['salery_key_id']?>" name="checkbox[]" 
                         <?=(ifkeyexist($val['salery_key_id'])==1)?" ":"checked";?>>
+                        <label class="custom-control-label" for="customCheck_<?=$i?>">
+               </label>
+                        </div>
                      </th>
                      <td><?=$val['keysname']?></td>
                      <td>
                       <?php $amountvalue = (ikSV($val['salery_key_id'])!=0)?ikSV($val['salery_key_id']):"0";?>
-            <input type="text" name="keyamount[]" id="keyamount" class="amountke" value='<?=$amountvalue?>'></td>
+            <input type="text" name="keyamount[<?=$val['salery_key_id']?>][]" id="keyamount" class="amountke" value='<?=$amountvalue?>'></td>
                   </tr>
                   <?php   }
                      ?>
@@ -120,15 +148,23 @@
             <div class="ln_solid"></div>
             <div class="form-group">
                <div class="col-md-6 col-md-offset-3">
-                  <button type="submit" class="btn btn-primary">Cancel</button>
-                  <button id="updatesalerysetup" name="updatesalerysetup" type="submit" class="btn btn-success">Update</button>
+                  <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                  <button id="updatesalerysetup" name="updatesalerysetup" type="submit" class="btn btn-outline-warning">Update</button>
                </div>
             </div>
          </form>
+         </div>
               <?php 
               
-            } else { ?>
+            } 
+            else
+            { ?>
+              <div class="card card-body">
                 <form class="form-horizontal form-label-left" method="post" >
+                  <div class="form-group">
+                <label for=""><h3>Employee Name</h3></label>
+              <input type="text" class="form-control" value="<?=$fn->getUserName($_GET['eid'])?>" readonly>
+            </div>
             <div class="form-group">
                <label  for="name"> Bank Name <span class="required">*</span>
                </label>
@@ -152,9 +188,9 @@
             <div class="form-group">
                <label  for="name"> Account No <span class="required">*</span>
                </label>
-               <input id="accountno" class="form-control col-md-7 col-xs-12" name="accountno"  required="required" type="text">
+               <input id="accountno" class="form-control" name="accountno"  required="required" type="text">
             </div>
-            <table class="table table-bordered table-responsive table-striped table-hover" id="myTable">
+            <table class="table table-bordered" id="myTable">
                <thead>
                   <tr>
                      <th>Check</th>
@@ -174,7 +210,16 @@
                      foreach ($data as $val) {  $i++; ?>
                   <tr>
                      <th scope="row">
-                        <input type="checkbox" value="<?=$val['salery_key_id']?>" name="checkbox[]">
+                      <div class="custom-control custom-checkbox">
+
+                        <input type="checkbox" class="custom-control-input chebocs" id="customCheck_<?=$i?>"
+              value="<?=$val['salery_key_id']?>" name="checkbox[]">
+
+            <label class="custom-control-label" for="customCheck_<?=$i?>">
+               </label>
+          </div>
+
+                      
                      </th>
                      <td><?=$val['keysname']?></td>
                      <td><input type="text" name="keyamount[]" id="keyamount" class="amountke"></td>
@@ -187,25 +232,25 @@
             <div class="ln_solid"></div>
             <div class="form-group">
                <div class="col-md-6 col-md-offset-3">
-                  <button type="submit" class="btn btn-primary">Cancel</button>
-                  <button id="savesalerysetup" name="savesalerysetup" type="submit" class="btn btn-success">Submit</button>
+                  <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                  <button id="savesalerysetup" name="savesalerysetup" type="submit" class="btn btn-outline-primary">Submit</button>
                </div>
             </div>
          </form>
+         </div>
            <?php  }
          ?>
          
          <?php 
             if (isset($_POST['updatesalerysetup'])) {
-
               $db->joinQuery("DELETE FROM `employeesalerlist` WHERE employeeid ='".$_GET['eid']."'");
                 $cnnt = 0;
                for ($i=0; $i <count($_POST['checkbox']) ; $i++) { 
                     $data = array(
                   'skeysids' => $_POST['checkbox'][$i],
-                  'amount' => $_POST['keyamount'][$i],
+                  'amount' => $_POST['keyamount'][$_POST['checkbox'][$i]][0],
                   'employeeid' => $_GET['eid'],
-                  'bankname' => $_POST['banksname'],
+                  'bankname' => empty($_POST['banksname'])?$_POST['dbbankname']:$_POST['banksname'],
                   'accountno' => $_POST['accountno']
                    );
             
@@ -214,13 +259,21 @@
                     }
                     /* echo "<pre>";
                 print_r($data);
+                
                 echo "</pre>";*/
                }
             
-               if ($cnnt == count($_POST['checkbox'])) {
-                   echo "<h1 style='color:blue'> Data has been updated </h1>";
-               }else {
-                echo "<h1 style='color:red'> Data has not been Updated </h1>";
+               if ($cnnt == count($_POST['checkbox']))
+               {
+                   ?>
+                   <script> alert("Data has been Updated") </script>
+                    <?php 
+               }
+               else
+               {
+                     ?>
+                   <script> alert("Data has not been Updated") </script>
+                    <?php 
                }
                 
                
@@ -246,10 +299,16 @@
                 echo "</pre>";*/
                }
             
-               if ($cnnt == count($_POST['checkbox'])) {
-                   echo "<h1 style='color:blue'> Data has been saved </h1>";
-               }else {
-                echo "<h1 style='color:red'> Data has not been saved </h1>";
+               if ($cnnt == count($_POST['checkbox']))
+                {     ?>
+                   <script> alert("Data has been saved") </script>
+                    <?php  
+               }
+               else
+               {
+                    ?>
+                   <script> alert("Data has not been saved") </script>
+                   <?php 
                }
                 
                
@@ -257,15 +316,7 @@
             
             ?>
       </div>
+      <div class="col-md-2"></div>
    </div>
 </div>
 <?php include 'files/footer.php'; ?>
-<script type="text/javascript">
-   var d =  $(".amountke");
-   
-    $(d).each(function(index, el) {
-        
-    });
-   
-   
-</script>

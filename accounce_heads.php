@@ -62,8 +62,8 @@ $datas = $db->selectAll("acccount_category","category_id='".$_GET['edit-id']."'"
             </select>
          </div>
          <div class="form-group">
-               <button type="submit" class="btn btn-danger">Cancel</button>
-               <button id="udpatecategory" name="udpatecategory" type="submit" class="btn btn-warning">Update</button>
+               <button type="submit" class="btn btn-outline-danger">Cancel</button>
+               <button id="udpatecategory" name="udpatecategory" type="submit" class="btn btn-outline-warning">Update<i class="fa fa-floppy-o"></i></button>
            
          </div>
       </form>
@@ -89,8 +89,8 @@ $datas = $db->selectAll("acccount_category","category_id='".$_GET['edit-id']."'"
          </div>
          <div class="form-group">
             
-               <button type="submit" class="btn btn-primary">Cancel</button>
-               <button id="savecategory" name="savecategory" type="submit" class="btn btn-success">Submit</button>
+               <button type="submit" class="btn btn-outline-danger">Cancel</button>
+               <button id="savecategory" name="savecategory" type="submit" class="btn btn-outline-primary">Save <i class="fa fa-floppy-o"></i></button>
            
          </div>
       </form>
@@ -180,20 +180,20 @@ $datas = $db->selectAll("acccount_category","category_id='".$_GET['edit-id']."'"
                <td><?=$val['name']?></td>
                <td><?=$val['type']?></td>
                <td><div class="dropdown">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    options
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-gear"></i>
   </button>
   <div class="dropdown-menu">
     <?php 
          if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="#">View</a>';
+              echo '<a class="dropdown-item" href="#">View <i class="fa fa-eye"></i></a>';
          }
          if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="accounce_heads.php?edit-id='.$val['category_id'].'">Edit</a>';
+              echo '<a class="dropdown-item" href="accounce_heads.php?edit-id='.$val['category_id'].'">Edit <i class="fa fa-pencil"></i> </a>';
          }
          if ($rbas->getDelete()) {
               ?>
-              <a class="dropdown-item" href="accounce_heads.php?del-id=<?=$val['category_id']?>" onclick="return confirm('Are you sure?')">Delete</a>
+              <a class="dropdown-item" href="accounce_heads.php?del-id=<?=$val['category_id']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
       <?php 
          }
          if ($rbas->getPrint()) {

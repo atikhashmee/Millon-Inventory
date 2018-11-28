@@ -43,10 +43,10 @@ $datas = $db->selectAll("expensecategory","excate_id='".$_GET['edit-id']."'")->f
                      <input id="catname" class="form-control"  name="catname"  required="required" type="text" value="<?=$datas['name']?>">
                   </div>
                   <div class="form-group">
-                     <div class="col-md-6 col-md-offset-3">
-                        <button type="submit" class="btn btn-danger">Cancel</button>
-                        <button id="updatecat" name="updatecat" type="submit" class="btn btn-warning">Update</button>
-                     </div>
+                    
+                        <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                        <button id="updatecat" name="updatecat" type="submit" class="btn btn-outline-warning">Update <i class="fa fa-floppy-o"></i></button>
+                    
                   </div>
                </form>
             </div>
@@ -59,10 +59,10 @@ $datas = $db->selectAll("expensecategory","excate_id='".$_GET['edit-id']."'")->f
                      <input id="catname" class="form-control"  name="catname"  required="required" type="text">
                   </div>
                   <div class="form-group">
-                     <div class="col-md-6 col-md-offset-3">
-                        <button type="submit" class="btn btn-primary">Cancel</button>
-                        <button id="catsave" name="catsave" type="submit" class="btn btn-success">Submit</button>
-                     </div>
+                     
+                        <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                        <button id="catsave" name="catsave" type="submit" class="btn btn-outline-primary">Submit <i class="fa fa-floppy-o"></i></button>
+                     
                   </div>
                </form>
             </div>
@@ -149,20 +149,20 @@ $datas = $db->selectAll("expensecategory","excate_id='".$_GET['edit-id']."'")->f
                   <td><?=$val['name']?></td>
                   <td><?=$val['created_at']?></td>
                   <td><div class="dropdown">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    options
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-gear"></i>
   </button>
   <div class="dropdown-menu">
     <?php 
          if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="#">View</a>';
+              echo '<a class="dropdown-item" href="#">View <i class="fa fa-eye"></i></a>';
          }
          if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="expensecategory.php?edit-id='.$val['excate_id'].'">Edit</a>';
+              echo '<a class="dropdown-item" href="expensecategory.php?edit-id='.$val['excate_id'].'">Edit<i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) {
              ?>
-              <a class="dropdown-item" href="expensecategory.php?del-id=<?=$val['excate_id']?>" onclick="return confirm('Are you sure?')">Delete</a>
+              <a class="dropdown-item" href="expensecategory.php?del-id=<?=$val['excate_id']?>" onclick="return confirm('Are you sure?')">Delete<i class="fa fa-times"></i></a>
       <?php 
          }
          if ($rbas->getPrint()) {

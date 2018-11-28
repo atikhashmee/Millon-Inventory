@@ -15,25 +15,22 @@
      $qrry = $db->joinQuery('SELECT DISTINCT `user_id` FROM `role_base_access_system`')->fetchAll();
       
     
-     foreach ($qrry as $kv) {
+     foreach ($qrry as $kv)
+     {
 
         $qry = $db->joinQuery("SELECT * FROM `role_base_access_system` WHERE `user_id`='".$kv['user_id']."'")->fetchAll();
         $varray  = [];
-        foreach ($qry as $ke) {
-           array_push($varray ,  [
-            "userid"   => $ke['user_id'],
-            "pagename" => $ke['pagename'],
-            "roles"    => $ke['roles']
-         ]);
+        foreach ($qry as $ke)
+         {
+             array_push($varray ,  [
+              "userid"   => $ke['user_id'],
+              "pagename" => $ke['pagename'],
+              "roles"    => $ke['roles']
+              ]);
         }
         $priviligearray[$kv['user_id']] = $varray;
         
      }
-
-    /* echo "<pre>";
-     print_r($priviligearray);*/
-
-
  ?>
 
 
@@ -66,9 +63,11 @@
                       <option value="">Select a user</option>
                      <?php 
                         $cat  =  $db->joinQuery("SELECT * FROM `users` ")->fetchAll();
-                        foreach ($cat as $cater) { ?>
-                     <option value="<?=$cater['u_id']?>"><?=$cater['name']?></option>
-                     <?php   }
+                        foreach ($cat as $cater)
+                         {   ?>
+                              <option value="<?=$cater['u_id']?>"><?=$cater['name']?></option>
+                             <?php  
+                        }
                         ?>
                 </select>
               </div>
@@ -82,7 +81,8 @@
 
     echo "</pre>";*/
 
-                  for ($i=0,$j=1; $i <count($ss['priviliges']); $i++,$j++) {  ?>
+                  for ($i=0,$j=1; $i <count($ss['priviliges']); $i++,$j++)
+                   {  ?>
                           <tr>
                             <td><?=$j?></td>
                               <td> <input type="hidden" value="<?=$ss['priviliges'][$i]['priv_id']?>"> <h5> <b><?=$ss['priviliges'][$i]['priv_name']?></b></h5> </td>
@@ -92,7 +92,7 @@
 
                                     <td> 
                           <div class="custom-control custom-checkbox">
-  <input type="checkbox" name="provilig[<?=$ss['priviliges'][$i]['priv_id']?>][<?=$k?>]" class="custom-control-input" id="customCheck_<?=$ss['priviliges'][$i]['priv_id']?>_<?=$k?>" value="<?=$k?>">
+                <input type="checkbox" name="provilig[<?=$ss['priviliges'][$i]['priv_id']?>][<?=$k?>]" class="custom-control-input checkuncheck" id="customCheck_<?=$ss['priviliges'][$i]['priv_id']?>_<?=$k?>" value="<?=$k?>">
   <label class="custom-control-label" for="customCheck_<?=$ss['priviliges'][$i]['priv_id']?>_<?=$k?>"><?=$ss['priviliges'][$i]['subdata'][$k]?></label>
 </div>
 
@@ -110,7 +110,7 @@
               </tbody>
             </table>
             <div class="form-group">
-              <button class="btn btn-warning" name="btnupdatedata">Update</button>
+              <button class="btn btn-outline-warning" name="btnupdatedata">Update</button>
             </div>
             
             </form>
@@ -147,41 +147,43 @@
 <script>
 
 
-var valuearray = <?=json_encode($priviligearray);?>;
-//console.log(valuearray);
+   var valuearray = <?=json_encode($priviligearray);?>;
  
-
-   function updateuserinformation() {
+   function updateuserinformation()
+   {
 
        var userid = document.getElementById('userid').value;
-       
        valueupdate(userid);
    }
 
-   function valueupdate (id) {
+   function valueupdate (id) 
+   {
 
-      if(valuearray[id] !== undefined){
-       // window.location.reload(true);
-        for (var i = 0; i <valuearray[id].length; i++) {
-       // console.log(valuearray[id]);
-
-        var ele =  document.getElementById('customCheck_'+valuearray[id][i].pagename+'_'+valuearray[id][i].roles);
-        ele.checked = true;
-       /*userid.add(valuearray[id][i].userid);
-       pagename.add( valuearray[id][i].pagename);*/
-
+      if(valuearray[id] !== undefined)
+      {
+         //check item if already checked
+         var checkitem = document.getElementsByClassName("checkuncheck");
+         for (var i = 0; i < checkitem.length; i++)
+         {
+              if (checkitem[i].checked === true) 
+              {
+                checkitem[i].checked = false;
+              }
+         }
        
-   }
- }else{
- // window.location.reload(true);
-  console.log("there is no such as value");
- }
-      
+        for (var i = 0; i <valuearray[id].length; i++) 
+        {
+           var ele =  document.getElementById('customCheck_'+valuearray[id][i].pagename+'_'+valuearray[id][i].roles);
+           ele.checked = true;
+        }
+      }
+      else
+      {
+        console.log("there is no such as value");
+      }   
  }
 
    var userid = new Set();
    var pagename = new Set();
-   
-// console.log(valuearray);
 
 </script>

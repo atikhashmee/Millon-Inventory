@@ -3,12 +3,16 @@
   $rbas->setPageName(11)->run();
   $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
 
-    if (isset($_GET['del-id'])) {
-             if ($db->delete("p_brand","brand_id='".$_GET['del-id']."'")) {?>
-            <script> alert('Data has been deleted');
-             window.location.href='brand.php'; </script>
-            <?php   }
-               }
+       if (isset($_GET['del-id']))
+        {
+             if ($db->delete("p_brand","brand_id='".$_GET['del-id']."'")) 
+              {
+                 ?>
+                 <script> alert('Data has been deleted');
+                 window.location.href='brand.php'; </script>
+                <?php  
+              }
+        }
 
  ?>
 <div class="container">
@@ -32,7 +36,8 @@
       <div class="col">
           <?php 
 
-            if (isset($_GET['edit-id'])) { 
+            if (isset($_GET['edit-id']))
+             { 
               //fetch the values for the update
 $datas = $db->selectAll("p_brand","brand_id='".$_GET['edit-id']."'")->fetch(PDO::FETCH_ASSOC);
               ?>
@@ -44,8 +49,8 @@ $datas = $db->selectAll("p_brand","brand_id='".$_GET['edit-id']."'")->fetch(PDO:
                      <input id="brandname" class="form-control"  name="brandname"  required="required" type="text" value="<?=$datas['brand_name']?>">
                   </div>
                   <div class="form-group">
-                     <button type="submit" class="btn btn-primary">Cancel</button>
-                     <button id="updatebrand" name="updatebrand" type="submit" class="btn btn-warning">Update</button>
+                     <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                     <button id="updatebrand" name="updatebrand" type="submit" class="btn btn-outline-warning">Update <i class="fa fa-floppy-o"></i></button>
                   </div>
                </form>
             </div>
@@ -59,8 +64,8 @@ $datas = $db->selectAll("p_brand","brand_id='".$_GET['edit-id']."'")->fetch(PDO:
                      <input id="brandname" class="form-control"  name="brandname"  required="required" type="text">
                   </div>
                   <div class="form-group">
-                     <button type="submit" class="btn btn-primary">Cancel</button>
-                     <button id="savebrand" name="savebrand" type="submit" class="btn btn-success">Submit</button>
+                     <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                     <button id="savebrand" name="savebrand" type="submit" class="btn btn-outline-primary">Save <i class="fa fa-floppy-o"></i> </button>
                   </div>
                </form>
             </div>
@@ -151,19 +156,19 @@ $datas = $db->selectAll("p_brand","brand_id='".$_GET['edit-id']."'")->fetch(PDO:
                   <td><?=$val['brand_name']?></td>
                  
                   <td><div class="dropdown">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    options
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-gear"></i>
   </button>
   <div class="dropdown-menu">
     <?php 
          if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="#">View</a>';
+              echo '<a class="dropdown-item" href="#">View <i class="fa fa-eye"></i></a>';
          }
          if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="brand.php?edit-id='.$val['brand_id'].'">Edit</a>';
+              echo '<a class="dropdown-item" href="brand.php?edit-id='.$val['brand_id'].'">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) { ?>
-              <a class="dropdown-item" href="brand.php?del-id=<?=$val['brand_id']?>" onclick="return confirm('Are you sure?')">Delete</a>
+              <a class="dropdown-item" href="brand.php?del-id=<?=$val['brand_id']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
       <?php   }
          if ($rbas->getPrint()) {
               echo '<a class="dropdown-item" href="#">Print</a>';

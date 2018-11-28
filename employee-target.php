@@ -5,6 +5,14 @@
 <?php include 'files/menu.php';
 
 $rbas->setPageName(14)->run();
+
+ if (isset($_GET['del-id'])) {
+             if ($db->delete("target","autoid='".$_GET['del-id']."'")) {?>
+            <script> alert('Data has been deleted');
+             window.location.href='employee-target.php'; </script>
+            <?php   }
+               }
+
 ?>
 
 		
@@ -12,26 +20,33 @@ $rbas->setPageName(14)->run();
 
 
      <div class="container">
-      <div class="row ">
-      <div class="col">
-         <div class="bg-light card card-body header-wrapper" style=" background: #b4c6d8 !important">
-            <h1 style="text-align: center;">Set Employee Target</h1>
-         </div>
-      </div>
-   </div>
+     <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <div class="btn-group pull-right">
+                                <ol class="breadcrumb hide-phone p-0 m-0">
+                                  <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+                                  <li class="breadcrumb-item"><a href="#">Settings</a></li>
+                                  <li class="breadcrumb-item active">Employee Target</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title"> Employee Target </h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
 
       <div class="row" style="margin-top: 20px">
               <div class="col">
-               <div class="card border-primary">
-  <div class="card-header">Set Employee target</div>
-  <div class="card-body">
+               
+  <div class="card card-body">
      <form class="" action="#" method="post" id="addform">
           <div class="row">
             <div class="col-md-6">
                <div class="form-group">
-               <label for="">Employee Name</label>
+              
                <select class="form-control"  name="employeename" id="employeename">
-                  <option value="">select an option</option>
+                  <option value="">select an Employee</option>
                   <?php
                      $query1 = $db->joinQuery("SELECT * FROM `users` WHERE `user_role`='4'");
                      while($row=$query1->fetch())
@@ -46,7 +61,7 @@ $rbas->setPageName(14)->run();
             </div>
           </div>
 
-            <button type="button" class="btn btn-primary" onclick="addnew()">addnew</button>
+            <button type="button" class="btn btn-outline-primary" onclick="addnew()">Add more <i class="fa fa-plus-square"></i> </button>
             <div id="holder">
                <div class="row" id="rowholder">
                   <div class="col-sm-2">
@@ -72,7 +87,7 @@ $rbas->setPageName(14)->run();
                   <div class="col-sm-2">
                      <div class="form-group">
                         <label  for="exampleInputPassword3">Unit</label>
-                          <select class="form-control" name="unit[]" id="unit" >
+                    <select class="form-control" name="unit[]" id="unit" >
                            <option value="">Choose option</option>
                             <?php 
                             $unit = $db->selectAll("units")->fetchAll();
@@ -104,16 +119,12 @@ $rbas->setPageName(14)->run();
                   </div>
                </div>
             </div>
-            <div class="form-group"><button type="submit" name="saveinfo" class="btn btn-primary btn-lg">Save</button></div>
-
+            <div class="form-group"><button type="submit" name="saveinfo" class="btn btn-outline-primary btn-lg" >Save <i class="fa fa-floppy-o"></i></button></div>
          </form>
 
   </div>
-</div>
                     
                     <?php 
-
-
                         if (isset($_POST['saveinfo'])) {
                                   $cnt  = 0;
                                   if(empty($_POST['employeename'])){
@@ -145,9 +156,9 @@ $rbas->setPageName(14)->run();
                 </div>
 
                 <!-- table start -->
-                <div class="row">
+                <div class="row" style="margin-top:20px">
        <div class="col">
-         <div class="bg-light card card-body" style=" background: #060202 !important;">
+         <div class="card card-body">
           <form action="" method="post">
             <div class="row">
               <div class="col">
@@ -156,14 +167,11 @@ $rbas->setPageName(14)->run();
                   <?php 
                     //fetching only users who are given target
                       $ids = [];
-                     $cat  =  $db->joinQuery("SELECT  `employee_id` FROM `target`")->fetchAll();
-                     foreach ($cat as $c) {
-                         array_push($ids, $c['employee_id']);
-                     }
-                     $dd =  array_unique($ids); //removing duplicate value from the table
-                     for ($i=0; $i <count($dd) ; $i++) {  ?>
-                      <option value="<?=$dd[$i]?>"><?=$fn->getUserName($dd[$i])?></option>
-                   <?php   }
+                     $cat  =  $db->joinQuery("SELECT DISTINCT `employee_id` FROM `target` ")->fetchAll();
+                     
+                     foreach ($cat as $dd) { ?>
+                        <option value="<?=$dd['employee_id']?>"><?=$fn->getUserName($dd['employee_id'])?></option>
+                    <?php   } 
                      
                      
                      ?>
@@ -171,16 +179,17 @@ $rbas->setPageName(14)->run();
               </div>
               <div class="col"><input type="date" class="form-control" name="start"></div>
               <div class="col"><input type="date" class="form-control" name="to"></div>
-              <div class="col"><input type="submit" value="Search" name="search" class="btn btn-default"></div>
+              <div class="col"><button type="submit"  name="search" class="btn btn-outline-primary"> Search <i class="fa fa-search"></i> </button></div>
             </div>
           </form>
          </div>
        </div>
      </div>
 
-                <div class="row" style="margin-top:30px">
+                <div class="row" style="margin-top:20px">
                  <div class="col-xl-12">
-                    <table class="table table-hover" id="myTable">
+                  <div class="card card-body">
+                    <table class="table table-hover table-bordered" id="datatable">
                   <thead>
                     <tr>
                       <th>#SL</th>
@@ -221,19 +230,22 @@ $rbas->setPageName(14)->run();
                             <td><?=$tar['startdate']?></td>
                             <td><?=$tar['enddate']?></td>
                             <td><div class="dropdown">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    options
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-gear"></i> 
   </button>
   <div class="dropdown-menu">
     <?php 
          if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="#">View</a>';
+              echo '<a class="dropdown-item" href="#">View <i class="fa fa-eye"></i></a>';
          }
          if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="#">Edit</a>';
+              echo '<a class="dropdown-item" href="employee-target-edit.php?edit-id='.$tar['autoid'].'">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) {
-              echo '<a class="dropdown-item" href="#">Delete</a>';
+           ?>
+              <a class="dropdown-item" href="employee-target.php?del-id=<?=$tar['autoid']?>" onclick="return confirm('Are you sure?')">Delete<i class="fa fa-times"></i></a>
+      <?php 
+             
          }
          if ($rbas->getPrint()) {
               echo '<a class="dropdown-item" href="#">Print</a>';
@@ -248,6 +260,7 @@ $rbas->setPageName(14)->run();
                     ?>
                   </tbody>
                 </table>
+                </div>
                  </div>
                  
                 </div>

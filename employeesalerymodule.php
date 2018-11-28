@@ -5,13 +5,21 @@
   
 
      <div class="container">
-       <div class="row ">
-      <div class="col">
-         <div class="bg-light card card-body header-wrapper" style=" background: #b4c6d8 !important">
-            <h1 style="text-align: center;">Set Employee Salery</h1>
-         </div>
-      </div>
-   </div>
+       <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <div class="btn-group pull-right">
+                                <ol class="breadcrumb hide-phone p-0 m-0">
+                                  <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+                                  <li class="breadcrumb-item"><a href="#">Settings</a></li>
+                                  <li class="breadcrumb-item active">Employee Salery Option</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title"> Employee for Salery </h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
       <div class="row">
               
       
@@ -29,7 +37,8 @@
                       $data = $db->joinQuery($sql)->fetchAll();
 
                     ?>
-                    <table class="table table-bordered table-active table-hover table-striped" id="myTable" >
+                    <div class="card card-body">
+                    <table class="table table-bordered table-hover table-striped" id="datatable" >
                       <thead>
                         <tr>
                           <th>#</th>
@@ -57,15 +66,20 @@
                           <td><?=$val['opening_balance']?></td>
                           <td>
 
-                             <a class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"></a>
-    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
-      
-      <a href="pay_salery.php?eid=<?=$val['u_id']?>" class="dropdown-item btn btn-danger btn-sm">Pay salery</a>
-      <a class="dropdown-item btn btn-success btn-sm" href="salerysetup.php?eid=<?=$val['u_id']?>">Setup Salery</a>
-      
-    </div>
-  </a>
+                            <div class="dropdown">
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-gear"></i> 
+  </button>
+  <div class="dropdown-menu">
+    
+     <a href="pay_salery.php?eid=<?=$val['u_id']?>" class="dropdown-item">Pay salery</a>
+      <a class="dropdown-item" href="salerysetup.php?eid=<?=$val['u_id']?>">Setup Salery</a>
+    
+  </div>
+</div>
+
+
+                         
 
                             </td>
                           </tr>
@@ -76,6 +90,7 @@
                        
                       </tbody>
                     </table>
+                    </div>
 
                   </div>
                 </div>

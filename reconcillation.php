@@ -1,175 +1,191 @@
 <?php include 'files/header.php'; ?>
 <?php include 'files/menu.php';?>
 
-  
-  <style>
-    .dshborad{
-      width: 100%;
-      height: 345px;
-      background-color: #ddd;
-      padding: 20px;
-    }
-    .listcontainer{
-      width: 100%;
-      height: 100%;
-      background-color: black;
-      padding: 10px;
-       position: relative;
-    }
-    .buttons{
-    position:absolute;
-    left:37%;
-    top:50%;
-    margin-top:-50px;
-    margin-left:-50px;
-    display: block;
-    }
-
-  </style>
- 
-
 
 <div class="container">
 
    <div class="row">
-       <div class="col">
-         <div class="bg-light card card-body" style=" background: #b4c6d8 !important">
-          <h1 style="text-align: center;">Bank Reconcillation</h1>
-         </div>
-       </div>
-     </div>
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <div class="btn-group pull-right">
+                                <ol class="breadcrumb hide-phone p-0 m-0">
+                                  <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+                                  <li class="breadcrumb-item"><a href="#">Settings</a></li>
+                                  <li class="breadcrumb-item active">Accounts</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title"> Bank Reconciliation  </h4>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
+
      <div class="row">
        <div class="col">
-         <div class="bg-light card card-body" style=" background: #060202 !important;">
-            <form action="">
+         <div class="card card-body">
+            <form action="" method="post">
               <div class="row">
-                <div class="col-4"><div class="form-group"><input type="date"></div></div>
-                <div class="col-4"><input type="submit"></div>
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <input type="date" class="form-control" name="datename">
+                    <small><strong>(Search cheque list by date)</strong> </small>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <button  class="btn btn-outline-primary" name="searchcheque">Search <i class="fa fa-search"></i></button>
+
+                </div>
+
               </div>
             </form>
          </div>
        </div>
      </div>
 <!-- list of all the cheque  -->
-     <div class="row">
-      
+     <div class="row" style="margin-top: 20px; min-height: 200px;">
        <div class="col-8">
-         <div class="dshborad">
-             <div class="listcontainer">
-               <ul class="list-group" style="overflow-y:  scroll;">
+         
+         <div class="card card-body" style="height: 100%;width: 100%;">
+               <table class="table table-bordered">
                 <?php 
                   $i=0;
-                  $dd =  $db->joinQuery("SELECT * FROM `cheque` WHERE `expiredate`=CURRENT_DATE() AND approve = 0")->fetchAll();
+                  $sql = "SELECT * FROM `cheque` WHERE `expiredate`=CURRENT_DATE() AND approve = 0";
+                    if (isset($_POST['searchcheque'])) 
+                    {
+
+                       $sql .= " AND `expiredate` = '".$_POST['datename']."'";
+                    }
+                   // echo $sql;
+                  $dd =  $db->joinQuery($sql)->fetchAll();
                   foreach ($dd as $val) { $i++; ?>
-                    <li class="list-group-item"> <div class="form-group">
+                    <tr>
+                      <td style="text-align: center;">
+                        <div class="form-group">
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" name="myche" value="<?=$val['chequeno']?>" class="custom-control-input chekbox" id="customCheck<?=$i?>" checked="">
                   <label class="custom-control-label" for="customCheck<?=$i?>">
-                    <table border="1px"> <tr>
+
+                  </label>
+               </div>
+              </div> 
+                      </td>
+                     
+                    
                       <td><?=$val['accountno']?></td>
                       <td><?=$val['bankname']?></td>
                       <td><?=$val['amount']?></td>
-                    </tr></table>
-                  </label>
-                </div>
-              </div> </li>
+                   
+                  
+                
+               </tr>
                 <?php   }
                 ?>
-              </ul>
-             </div>
-         </div>
+              </table>
+              </div>
+             
        </div>
        <div class="col-4">
-         <div class="dshborad">
-           <div class="listcontainer">
-                <div class="buttons">
-          <button class="btn btn-default" type="button" name="honercheque" onclick="honorecheque()">Honer</button>
-               <button class="btn btn-default" type="button" onclick="dishonercheque()">Dishoner</button>
-                </div>
+         
+           <div class="card card-body" style="height: 100%; width: 100%;">
+                
+          <button class="btn btn-outline-info" type="button" name="honercheque" onclick="honorecheque()">Honer</button>
+
+
+               <button class="btn btn-outline-info" type="button" onclick="dishonercheque()">Dishoner</button>
+                
            </div>
-         </div>
+         
        </div>
        
        
      </div>
 
   <!-- only honored cheque  -->
- <div class="row">
+ <div class="row" style="margin-top: 20px;min-height: 200px;">
        <div class="col-8">
-         <div class="dshborad">
-             <div class="listcontainer">
-                <ul class="list-group" style="overflow-y:  scroll;">
+        
+             <div class="card card-body" style="height: 100%;width: 100%;">
+                <table class="table table-bordered" style="overflow-y:  scroll;">
                 <?php 
                   $j=0;
                   $dd =  $db->joinQuery("SELECT * FROM `cheque` WHERE `expiredate`=CURRENT_DATE() AND approve = 1")->fetchAll();
                   foreach ($dd as $val) { $j++; ?>
-                    <li class="list-group-item"> <div class="form-group">
+                    <tr>
+                      <td>
+                        <div class="form-group">
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" name="myche" value="<?=$val['chequeno']?>" class="custom-control-input chekbox" id="customChk<?=$j?>" checked="">
                   <label class="custom-control-label" for="customChk<?=$j?>">
-                    <table border="1px"> <tr>
-                      <td><?=$val['accountno']?></td>
+
+                  </label>
+
+                </div>
+              </div> 
+                      </td>
+                     
+              <td><?=$val['accountno']?></td>
                       <td><?=$val['bankname']?></td>
                       <td><?=$val['amount']?></td>
-                    </tr></table>
-                  </label>
-                </div>
-              </div> </li>
+            </tr>
                 <?php   }
                 ?>
-              </ul>
+              </table>
 
              </div>
-         </div>
+         
        </div>
        <div class="col-4">
-         <div class="dshborad">
-           <div class="listcontainer">
-                <div class="buttons">
-                  <button class="btn btn-default" onclick="defaultcondition()">Dishoner</button>
+        
+           <div class="card card-body" style="height: 100%;width: 100%;">
+                
+                  <button class="btn btn-outline-info" onclick="defaultcondition()">Dishoner</button>
               
-                </div>
+                
            </div>
-         </div>
+         
        </div>
      </div> 
 <!-- and only dishonored cheque -->
-     <div class="row">
+     <div class="row" style="margin-top: 20px;min-height: 200px;">
        <div class="col-8">
-         <div class="dshborad">
-             <div class="listcontainer">
-                <ul class="list-group" style="overflow-y:  scroll;">
+        
+             <div class="card card-body" style="height: 100%; width: 100%;">
+                <table class="table table-bordered" style="overflow-y:  scroll;">
                 <?php 
                   $k=0;
                   $dd =  $db->joinQuery("SELECT * FROM `cheque` WHERE `expiredate`=CURRENT_DATE() AND approve = 2")->fetchAll();
                   foreach ($dd as $val) { $k++; ?>
-                    <li class="list-group-item"> <div class="form-group">
+                    <tr>
+                      <td>
+                        <div class="form-group">
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" name="myche" value="<?=$val['chequeno']?>" class="custom-control-input chekbox" id="customChec<?=$k?>" checked="">
                   <label class="custom-control-label" for="customChec<?=$k?>">
-                    <table border="1px"> <tr>
-                      <td><?=$val['accountno']?></td>
-                      <td><?=$val['bankname']?></td>
-                      <td><?=$val['amount']?></td>
-                    </tr></table>
                   </label>
                 </div>
-              </div> </li>
+              </div>
+                      </td>
+                      
+              <td><?=$val['accountno']?></td>
+                      <td><?=$val['bankname']?></td>
+                      <td><?=$val['amount']?></td>
+            </tr>
                 <?php   }
                 ?>
-              </ul>
+              </table>
              </div>
-         </div>
+        
        </div>
        <div class="col-4">
-         <div class="dshborad">
-           <div class="listcontainer">
-                <div class="buttons">
-                  <button class="btn btn-default" onclick="defaultcondition() ">Honer</button>
-                   
-                </div>
+         
+           <div class="card card-body" style="height: 100%; width: 100%;">
+                
+                  <button class="btn btn-outline-info" onclick="defaultcondition() ">Honer</button>
+                
            </div>
-         </div>
+        
        </div>
      </div>
 

@@ -4,12 +4,18 @@
     $rbas->setPageName(1)->run();
 
 
-    if (isset($_GET['del-id'])) {
-             if ($db->delete("product_info","pro_id='".$_GET['del-id']."'")) {?>
-            <script> alert('Data has been deleted');
-             window.location.href='product-view.php'; </script>
-            <?php   }
-               }
+         if (isset($_GET['del-id']))
+          {
+             if ($db->delete("product_info","pro_id='".$_GET['del-id']."'"))
+              {
+                 ?>
+                 <script> 
+                 alert('Data has been deleted');
+                 window.location.href='product-view.php'; 
+                 </script>
+                 <?php  
+             }
+          }
 ?>
 
 
@@ -51,9 +57,8 @@
             ?>
             <div class="card m-b-30">
             <div class="card-body">
-
-                              
-         <table class="table table-condensed table-bordered" id="datatable" >
+          
+          <table class="table table-condensed table-bordered" id="datatable" >
             <thead>
                <tr>
                   <th>#</th>
@@ -90,20 +95,20 @@
                   <td>
                     
  <div class="dropdown">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    options
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-gear"></i>
   </button>
   <div class="dropdown-menu">
     <?php 
          if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="#">View</a>';
+              echo '<a class="dropdown-item" href="#">View <i class="fa fa-eye"></i></a>';
          }
          if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="product-update.php?edit-id='.$val['pro_id'].'">Edit</a>';
+              echo '<a class="dropdown-item" href="product-update.php?edit-id='.$val['pro_id'].'">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) {
               ?>
-              <a class="dropdown-item" href="product-view.php?del-id=<?=$val['pro_id']?>" onclick="return confirm('Are you sure?')">Delete</a>
+              <a class="dropdown-item" href="product-view.php?del-id=<?=$val['pro_id']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
       <?php
          }
          if ($rbas->getPrint()) {

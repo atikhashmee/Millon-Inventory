@@ -49,22 +49,22 @@
    {
     "priv_id" : 10,
     "priv_name":"Product-Category",
-    "subdata" : ["create","view","delete"]
+    "subdata" : ["create","update","delete"]
    },
    {
     "priv_id" : 11,
     "priv_name":"Product-Brand",
-    "subdata" : ["create","view","delete"]
+    "subdata" : ["create","update","delete"]
    },
    {
     "priv_id" : 12,
     "priv_name":"Product-Size",
-    "subdata" : ["create","view","delete"]
+    "subdata" : ["create","update","delete"]
    },
    {
     "priv_id" : 13,
     "priv_name":"Salery-keys",
-    "subdata" : ["create","view","delete"]
+    "subdata" : ["create","update","delete"]
    },
    {
     "priv_id" : 14,
@@ -79,22 +79,22 @@
    {
     "priv_id" : 16,
     "priv_name":"Account-category",
-    "subdata" : ["create","view","delete","print"]
+    "subdata" : ["create","update","delete"]
    },
    {
     "priv_id" : 17,
     "priv_name":"Account-Name",
-    "subdata" : ["create","view","delete","print"]
+    "subdata" : ["create","update","delete"]
    },
    {
     "priv_id" : 18,
     "priv_name":"Expense-category",
-    "subdata" : ["create","view","delete","print"]
+    "subdata" : ["create","update","delete"]
    },
    {
     "priv_id" : 19,
     "priv_name":"Users",
-    "subdata" : ["create","view","delete","print"]
+    "subdata" : ["create","view","update","delete"]
    }
 
 

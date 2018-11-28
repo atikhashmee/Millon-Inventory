@@ -2,12 +2,18 @@
 <?php include 'files/menu.php';
 $rbas->setPageName(9)->run();
 
-if (isset($_GET['del-id'])) {
-             if ($db->delete("expenditure","expenseid='".$_GET['del-id']."'")) {?>
-            <script> alert('Data has been deleted');
-             window.location.href='expenditure.php'; </script>
-            <?php   }
-               }
+         if (isset($_GET['del-id'])) 
+         {
+             if ($db->delete("expenditure","expenseid='".$_GET['del-id']."'")) 
+              {
+                  ?>
+                  <script> 
+                  alert('Data has been deleted');
+                  window.location.href='expenditure.php'; 
+                  </script>
+                  <?php 
+              }
+         }
 
  ?>
 <div class="container">
@@ -28,7 +34,7 @@ if (isset($_GET['del-id'])) {
                 </div>
                 <!-- end page title end breadcrumb -->
                 <div class="card card-body">
-   <form class="form-horizontal form-label-left" method="post" >
+   <form  method="post" >
       <div class="row">
          <div class="col">
             <div class=" form-group">
@@ -113,20 +119,16 @@ if (isset($_GET['del-id'])) {
          </div>
       </div>
       <div class="form-group">
-         <div class="col-md-6 col-md-offset-3">
-            <button type="submit" class="btn btn-primary">Cancel</button>
-            <button id="saveexpenditure" name="saveexpenditure" type="submit" class="btn btn-success">Submit</button>
-         </div>
+         
+            <button type="submit" class="btn btn-outline-danger">Cancel</button>
+            <button id="saveexpenditure" name="saveexpenditure" type="submit" class="btn btn-outline-primary">Save <i class="fa fa-floppy-o"></i></button>
+        
       </div>
    </form>
    </div>
    <?php 
-      if (isset($_POST['saveexpenditure'])) {
-      
-        /*  echo "<pre>";
-          print_r($_POST);
-          echo "</pre>";*/
-      
+      if (isset($_POST['saveexpenditure']))
+       {
       
             $data = array(
               'expendituredate' =>$_POST['expensedate'],
@@ -138,25 +140,42 @@ if (isset($_GET['del-id'])) {
               'addedby' => $_SESSION['u_id']
                );
             
-          if (!empty($_POST['expensedate'])) {
-              if ($db->insert("expenditure",$data)) {
-                  echo "<h1 style='color:blue'>Data has been saved</h1>";
-              } else {
-                echo "<h1 style='color:red'>Data has not been saved</h1>";
+          if (!empty($_POST['expensedate']))
+           {
+              if ($db->insert("expenditure",$data)) 
+              {
+                  ?>
+                  <script> 
+                  alert('Data has been Saved');
+                  </script>
+                  <?php 
+              } else 
+              {
+                  ?>
+                  <script> 
+                  alert('Data has not been Saved');
+                  </script>
+                  <?php
               }
-          }else{
-              echo "<h1 style='color:red'>Fields are empty</h1>";
-          }
+           }
+           else
+           {
+                  ?>
+                  <script> 
+                  alert('Fields are empty');
+                  </script>
+                  <?php
+           }
       }
       
       
       ?>
       
-   <div class="row">
+   <div class="row" style="margin-top: 20px;">
       <!-- users view section starts here -->
       <div class="col">
          
-         <div class="card card-body bg-primary">
+         <div class="card card-body">
           <form action="" method="post">
             <div class="row">
               <div class="col">
@@ -174,7 +193,11 @@ if (isset($_GET['del-id'])) {
               </div>
               <div class="col"><input type="date" class="form-control" name="start"></div>
               <div class="col"><input type="date" class="form-control" name="to"></div>
-              <div class="col"><input type="submit" value="Search" name="search" class="btn btn-default"></div>
+              <div class="col">
+          <button type="submit"  name="search" class="btn btn-outline-primary btn-lg">
+            Search <i class="fa fa-search"></i>
+          </button>
+        </div>
             </div>
           </form>
           <?php 
@@ -210,6 +233,12 @@ if (isset($_GET['del-id'])) {
             
             ?>
             </div>
+          </div>
+        </div>
+
+            <div class="row" style="margin-top: 20px;">
+      <!-- users view section starts here -->
+      <div class="col">
 
             <div class="card card-body">
          <table class="table table-condensed table-bordered table-hover table-striped" id="datatable" >
@@ -234,21 +263,27 @@ if (isset($_GET['del-id'])) {
                   <td><?=$val['amount']?></td>
                   <td>
     <div class="dropdown">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    options
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+   <i class="fa fa-gear"></i>
   </button>
   <div class="dropdown-menu">
     <?php 
-         if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="#">View</a>';
+         if ($rbas->getView()) 
+         {
+              echo '<a class="dropdown-item" href="#">View <i class="fa fa-eye"></i></a>';
          }
-         if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="#">Edit</a>';
+         if ($rbas->getUpdate()) 
+         {
+              echo '<a class="dropdown-item" href="#">Edit <i class="fa fa-pencil"></i></a>';
          }
-         if ($rbas->getDelete()) { ?>
-             <a class="dropdown-item" href="expenditure.php?del-id=<?=$val['expenseid']?>" onclick="return confirm('Are you sure?')">Delete</a>
-         <?php }
-         if ($rbas->getPrint()) {
+         if ($rbas->getDelete()) 
+          { 
+             ?>
+             <a class="dropdown-item" href="expenditure.php?del-id=<?=$val['expenseid']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
+            <?php
+          }
+         if ($rbas->getPrint()) 
+         {
               echo '<a class="dropdown-item" href="#">Print</a>';
          }
     ?>

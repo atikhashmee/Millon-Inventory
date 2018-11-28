@@ -4,19 +4,23 @@
 $rbas->setPageName(7)->run();
 $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
 
+if (isset($_GET['del-id'])) 
+{
 
-if (isset($_GET['del-id'])) {
-
-            $getstatus = $db->selectAll('supplierpayment',"pay_id='".$_GET['del-id']."'")->fetch(PDO::FETCH_ASSOC);
-            if ($getstatus['status'] == 'Cheque') {
+        $getstatus = $db->selectAll('supplierpayment',"pay_id='".$_GET['del-id']."'")->fetch(PDO::FETCH_ASSOC);
+        if ($getstatus['status'] == 'Cheque')
+         {
                  $db->delete("cheque","parent_table_id='pts_".$_GET['del-id']."'");
-            }
+         }
            
-     if ($db->delete("supplierpayment","pay_id='".$_GET['del-id']."'")) {?>
-            <script> alert('Data has been deleted');
+       if ($db->delete("supplierpayment","pay_id='".$_GET['del-id']."'"))
+        {  
+             ?>
+             <script> alert('Data has been deleted');
              window.location.href='payment-to-supplier.php'; </script>
-            <?php   }
-               }
+            <?php
+       }
+ }
 
 
  ?>
@@ -154,34 +158,41 @@ if (isset($_GET['del-id'])) {
                   </div>
                   <div class="form-group">
                      <div class="col-md-6 col-md-offset-3">
-                        <button type="submit" class="btn btn-primary">Cancel</button>
-                        <button id="savepayument" name="savepayument" type="submit" class="btn btn-success">Submit</button>
+                        <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                        <button id="savepayument" name="savepayument" type="submit" class="btn btn-outline-primary">Saved <i class="fa fa-floppy-o"></i></button>
                      </div>
                   </div>
                </form>
             </div>
          </div>
          <?php 
-            if (isset($_POST['savepayument'])) {
+            if (isset($_POST['savepayument'])) 
+            {
 
               //validation start from here
-              if (empty($_POST['paymentdat'])) {
+              if (empty($_POST['paymentdat'])) 
+              {
                  echo "<h1 style='color:red'>Date field can not be empty</h1>";
-              }else if (empty($_POST['suppliername'])) {
+              }
+              else if (empty($_POST['suppliername'])) 
+              {
                 echo "<h1 style='color:red'>Supplier ID field can not be empty</h1>";
-              }else if (empty($_POST['accounts_id'])) {
+              }
+              else if (empty($_POST['accounts_id'])) 
+              {
                 echo "<h1 style='color:red'>Accounts ID field can not be empty</h1>";
-              }else if (empty($_POST['amount'])) {
+              }
+              else if (empty($_POST['amount'])) 
+              {
                 echo "<h1 style='color:red'>Amount ID field can not be empty</h1>";
-              }else if (empty($_POST['carrier'])) {
+              }
+              else if (empty($_POST['carrier']))
+              {
                 echo "<h1 style='color:red'>Carrier ID field can not be empty</h1>";
-              }else {
-
-
-
-             
-            
-                $chequecash = ($_POST['customRadio']=="yes")?"Cheque":"Cash";
+              }
+              else
+              {
+                    $chequecash = ($_POST['customRadio']=="yes")?"Cheque":"Cash";
             
                              $data = array(
                               'pay_date' => $_POST['paymentdat'],
@@ -191,38 +202,51 @@ if (isset($_GET['del-id'])) {
                               'inputby' => $_SESSION['u_id'],
                               'status' =>  $chequecash
                                );
-                              $parentid = 0;
-                                         if ($db->insert("supplierpayment",$data)) {
-                          $parentid = $db->getInsertId('pay_id');
+                     $parentid = 0;
+                     if ($db->insert("supplierpayment",$data)) 
+                     {
+                           $parentid = $db->getInsertId('pay_id');
                         
-                                    echo "<h1 style='color:blue'> Money has been Paid</h1>";
+                                    ?>
+                                   <script> alert('Money Has been paid');
+                                    </script>
+                                   <?php
                                     
-                                  }else {
-                                      echo 'there is guniounly a problem';
-                                    echo "<h1 style='color:red'> There is a problem</h1>";
-                                  }
+                      }
+                      else
+                     {
+                                      ?>
+                                     <script> alert('Error Occured');
+                                     </script>
+                                    <?php
+                     }
 
 
 
-                                     if ($_POST['customRadio']=="yes") {
-                  $chquedata = array(
-                    'parent_table_id' => "pts_".$parentid,
-                    'accountno' => $_POST['chequeno'],
-                    'customerid' => $_POST['suppliername'],
-                    'bankname' => $_POST['accounts'],
-                    'expiredate' => $_POST['issuedate'],
-                    'amount' => $_POST['amount'],
-                    'carrier' => $_POST['carrier'],
-                    'userid' => $_SESSION['u_id'],
-                    'fromtable' => "minus"
-                  );
-                  if ($db->insert("cheque",$chquedata)) {
-                   echo "<h1 style='color:blue'>Cheque has been saved</h1>";
-                 }
+                     if ($_POST['customRadio']=="yes") 
+                     {
+                          $chquedata = array(
+                            'parent_table_id' => "pts_".$parentid,
+                            'accountno' => $_POST['chequeno'],
+                            'customerid' => $_POST['suppliername'],
+                            'bankname' => $_POST['accounts'],
+                            'expiredate' => $_POST['issuedate'],
+                            'amount' => $_POST['amount'],
+                            'carrier' => $_POST['carrier'],
+                            'userid' => $_SESSION['u_id'],
+                            'fromtable' => "minus"
+                          );
+                      if ($db->insert("cheque",$chquedata)) 
+                        {
+                                    ?>
+                                     <script> alert('Cheque Information saved');
+                                     </script>
+                                    <?php
+                        }
                   
-                }
+                     }
 
-                    }
+              }
              
             
             
@@ -266,19 +290,21 @@ if (isset($_GET['del-id'])) {
                   
                   <td>
                       <div class="dropdown">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    options
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-gear"></i>
   </button>
   <div class="dropdown-menu">
     <?php 
-         if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="#">View</a>';
-         }
-         if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="#">Edit</a>';
+         if ($rbas->getView())
+          {
+              echo '<a class="dropdown-item" href="#">View <i class="fa fa-eye"></i></a>';
+          }
+         if ($rbas->getUpdate())
+         {
+              echo '<a class="dropdown-item" href="#">Edit<i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) { ?>
-              <a class="dropdown-item" href="payment-to-supplier.php?del-id=<?=$val['pay_id']?>" onclick="return confirm('Are you sure?')">Delete</a>
+              <a class="dropdown-item" href="payment-to-supplier.php?del-id=<?=$val['pay_id']?>" onclick="return confirm('Are you sure?')">Delete<i class="fa fa-times"></i></a>
       <?php   }
          if ($rbas->getPrint()) {
               echo '<a class="dropdown-item" href="#">Print</a>';
