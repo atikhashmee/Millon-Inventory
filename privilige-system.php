@@ -158,11 +158,12 @@
 
    function valueupdate (id) 
    {
+    var checkitem = document.getElementsByClassName("checkuncheck");
 
       if(valuearray[id] !== undefined)
       {
          //check item if already checked
-         var checkitem = document.getElementsByClassName("checkuncheck");
+         
          for (var i = 0; i < checkitem.length; i++)
          {
               if (checkitem[i].checked === true) 
@@ -179,6 +180,16 @@
       }
       else
       {
+        //check item if already checked
+         
+         for (var i = 0; i < checkitem.length; i++)
+         {
+              if (checkitem[i].checked === true) 
+              {
+                checkitem[i].checked = false;
+              }
+         }
+          
         console.log("there is no such as value");
       }   
  }
