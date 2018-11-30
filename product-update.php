@@ -54,14 +54,9 @@
                                     <label for="example-search-input" class="col-sm-4 col-form-label">Product Category</label>
                                     <div class="col-sm-8">
                                       <input type="hidden" name="catupdate" value="<?=$proinfo['product_cat']?>">
-                                        <select class="form-control" name="category">
+                                        <select class="form-control" name="category" id="catid">
                               <option value="">Select a category</option>
-                              <?php 
-                                 $cat  =  $db->joinQuery("SELECT * FROM `cateogory`")->fetchAll();
-                                 foreach ($cat as $cater) { ?>
-                              <option value="<?=$cater['cat_id']?>"><?=$cater['cat_name']?></option>
-                              <?php   }
-                                 ?>
+                              <?php $dm->getCategories();?>
                            </select>
                                     </div>
                                 </div>
@@ -69,14 +64,9 @@
                                     <label for="example-email-input" class="col-sm-4 col-form-label">Product Brand</label>
                                     <div class="col-sm-8">
                                       <input type="hidden" name="brandupdate" value="<?=$proinfo['brand_id']?>">
-                                        <select class="form-control" name="brand">
+                                        <select class="form-control" name="brand" id="brands">
                               <option value="">Select a brand</option>
-                              <?php 
-                                 $brand  =  $db->joinQuery("SELECT * FROM `p_brand`")->fetchAll();
-                                 foreach ($brand as $bran) { ?>
-                              <option value="<?=$bran['brand_id']?>"><?=$bran['brand_name']?></option>
-                              <?php   }
-                                 ?>
+                              
                            </select>
                                     </div>
                                 </div>
@@ -84,14 +74,9 @@
                                     <label for="example-url-input" class="col-sm-4  col-form-label">Product Size</label>
                                     <div class="col-sm-8">
                                       <input type="hidden" name="sizeupdate" value="<?=$proinfo['size_id']?>">
-                                         <select class="form-control" name="size">
+                                         <select class="form-control" name="size" id="sizeid">
                               <option value="">Select A Product size</option>
-                              <?php 
-                                 $siz  =  $db->joinQuery("SELECT * FROM `p_size`")->fetchAll();
-                                 foreach ($siz as $size) { ?>
-                              <option value="<?=$size['pro_size_id']?>"><?=$size['pro_size_name']?></option>
-                              <?php   }
-                                 ?>
+                              
                            </select>
                                     </div>
                                 </div>
@@ -218,6 +203,8 @@
 </div>
 </div>
 <?php include 'files/footer.php'; ?>
+<script src="assets/js/brands.js"></script>
+<script src="assets/js/size.js"></script>
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
    <div class="modal-dialog">

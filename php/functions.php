@@ -9,25 +9,35 @@
 				    	parent::__construct();
 				    }
 
+				    public function getName($tablename,$whereclause,$colname)
+				    {
+				    	$qry =  $this->selectAll($tablename,$whereclause);
+				    	$names =  $qry->fetch(PDO::FETCH_ASSOC);
+				    	return ($qry->rowCount()==0)?"Not found":$names[$colname];
+				    }
+
 				 public function getBrandName($brandid)
 				   {
 				       
-				       $productname =  $this->selectAll("p_brand","brand_id='".$brandid."'")->fetch(PDO::FETCH_ASSOC);
-				       return $productname['brand_name'];
+				       $prod =  $this->selectAll("p_brand","brand_id='".$brandid."'");
+				       $productname = $prod->fetch(PDO::FETCH_ASSOC);
+				       return ($prod->rowCount()==0)?"Not found":$productname['brand_name'];
 
 				   }
 				   public function getSizeName($sizeid)
 				   {
 				       
-				      $productname =  $this->selectAll("p_size","pro_size_id='".$sizeid."'")->fetch(PDO::FETCH_ASSOC);
-				       return $productname['pro_size_name'];
+				      $prod =  $this->selectAll("p_size","pro_size_id='".$sizeid."'");
+				      $productname = $prod->fetch(PDO::FETCH_ASSOC);
+				       return ($prod->rowCount()==0)?"Not found":$productname['pro_size_name'];
 
 				   }
 
 				   public function getUserName($userid)
 				   {
-				   	 $productname =  $this->selectAll("users","u_id='".$userid."'")->fetch(PDO::FETCH_ASSOC);
-				       return $productname['name'];
+				   	 $user =  $this->selectAll("users","u_id='".$userid."'");
+				   	 $username = $user->fetch(PDO::FETCH_ASSOC);
+				       return ($user->rowCount()==0)?"Not Found":$username['name'];
 				   }
 
 				   public function Chartsaccounta($chartid)
@@ -45,11 +55,14 @@
 				   {
 				   	 $val =  $this->joinQuery("SELECT  `brand_id`, `size_id` FROM `product_info` WHERE `pro_id` ='{$Productid}'")->fetch(PDO::FETCH_ASSOC);
 				   	  $productname = '';
-                              if (!empty($val['size_id'])) {
-                                 $productname .= $this->getBrandName($val['brand_id'])."-". $this->getSizeName($val['size_id']);
-                              }else {
-                                 $productname .=$this->getBrandName($val['brand_id']);
-                              }
+                       if (!empty($val['size_id'])) 
+                       {
+                             $productname .= $this->getBrandName($val['brand_id'])."-".$this->getSizeName($val['size_id']);
+                       }
+                       else
+                       {
+                             $productname .=$this->getBrandName($val['brand_id']);
+                       }
 				       return $productname;
 				   }
 

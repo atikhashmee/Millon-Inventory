@@ -53,7 +53,7 @@
                <div class="col">
                   <div class="form-group">
                      <label  for="name">Product Category<span class="required">*</span></label>
-                     <select class="form-control" name="productcat" id="productcat" onchange="getProduct()">
+                     <select class="form-control" name="productcat" id="productcat">
                         <option>Choose option</option>
                         <?php 
                            $cat  =  $db->joinQuery("SELECT * FROM `cateogory`")->fetchAll();
@@ -92,7 +92,7 @@
                   <div class="form-group">
                      <label  for="name">Price <span class="required">*</span>
                      </label>
-                     <input id="price" class="form-control"  name="price" onblur="gettotalpric()" id="price"  type="text">
+                 <input id="price" class="form-control"  name="price"  type="text">
                   </div>
                </div>
                <div class="col">
@@ -105,8 +105,8 @@
             </div>
             <div class="form-group">
                <div class="col-md-6 col-md-offset-3">
-                  <button type="submit" class="btn btn-primary">Cancel</button>
-                  <button id="saveusers" type="button" onclick="addtocart()" class="btn btn-success">Add to list</button>
+                  <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                  <button id="pushtocard" type="button" class="btn btn-outline-primary">Add to list</button>
                </div>
             </div>
       </div>
@@ -136,7 +136,7 @@
    <div class="form-group">
 <label for="">Bill/challan No</label>
 <input type="text" class="form-control" name="billchallan" id="billchallan" placeholder="click on the button" required>
- <button type="button" onclick="gBCN()" class="btn btn-danger">Generate No</button>
+ <button type="button" id="generateinvoice" class="btn btn-outline-info"><i class="fa fa-hashtag"></i></button>
 </div>
  <div id="chequeoption"  style="display: none;">
     <div class="form-group">
@@ -168,12 +168,12 @@
 <div class="col">
 <div class="form-group" style="position: relative; top:20px; text-align: center;">
     <div class="custom-control custom-radio">
-      <input type="radio" id="customRadio1" name="cashcheque" value="no" onchange="chequeoptioncheck()" class="custom-control-input" checked="">
+      <input type="radio" id="customRadio1" name="cashcheque" value="no"  class="custom-control-input" checked="">
       <label class="custom-control-label" for="customRadio1">Cash</label>
     </div>
 
     <div class="custom-control custom-radio">
-      <input type="radio" id="customRadio2" name="cashcheque" value="yes" onchange="chequeoptioncheck()" class="custom-control-input">
+      <input type="radio" id="customRadio2" name="cashcheque" value="yes" class="custom-control-input">
       <label class="custom-control-label" for="customRadio2">Cheque</label>
     </div>
    
@@ -181,7 +181,7 @@
    <div id="cashoption">
    <div class="form-group">
    <label for="">Paid</label>
-   <input type="text" class="form-control" id="nowpayment" name="nowpayment" onblur="nowwpayment()">
+   <input type="text" class="form-control" id="nowpayment" name="nowpayment">
    </div>
    <div class="form-group">
    <label for="">Bill Balance</label>
@@ -200,25 +200,25 @@
      <div class="col">
        <div class="form-group">
    <label for="">commission (%)</label>
-   <input type="text" class="form-control" id="comision" name="comision" onblur="getcomsiondeducted()">
+   <input type="text" class="form-control" id="comision" name="comision">
    </div>
    <div class="form-group">
    <label for="">Discount</label>
-   <input type="text" class="form-control" id="discount" name="discount" onblur="getpricediscounted()">
+   <input type="text" class="form-control" id="discount" name="discount">
    </div>
      </div>
       <div class="col">
     <div class="form-group">
 <label for="">Weight</label>
-<input type="text" class="form-control" id="weght" name="weght" onblur="getValueF()">
+<input type="text" class="form-control" id="weght" name="weght">
 </div>
 <div class="form-group">
 <label for="">Transport</label>
-<input type="text" class="form-control" id="transport" name="transport" onblur="getValueF()">
+<input type="text" class="form-control" id="transport" name="transport">
 </div>
 <div class="form-group">
 <label for="">Vat (%)</label>
-<input type="text" class="form-control" id="vat" name="vat" onblur="getValueF()">
+<input type="text" class="form-control" id="vat" name="vat">
 </div>
   </div>
    </div>
@@ -240,7 +240,7 @@
   
    </div>
  </div>
-   <button type="button" class="btn btn-lg btn-primary" name="savepurchaseinfo" onclick="savePurchaseinfo()">Save</button>
+   <button type="button" class="btn btn-lg btn-outline-primary" id="savepurchaseinfo" name="savepurchaseinfo">Save <i class="fa fa-floppy-o"></i></button>
    <button class="btn btn-lg btn-primary">Print Invoice</button>
    </form>
    </div>
@@ -249,79 +249,80 @@
 
 <?php include 'files/footer.php'; ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="assets/js/productbasic.js"></script>
+<script src="assets/js/product.js"></script>
+<script src="assets/js/purchase.js"></script>
 <script type="text/javascript">
-   <?php 
-      $brand = $db->selectAll("p_brand");
-      $sizes = $db->selectAll("p_size");
-      $pro = $db->selectAll("product_info");
-       $branddd = [];
-       $sizsesss =  [];
-       $products =  [];
-      
-      while ($br = $brand->fetch(PDO::FETCH_ASSOC)) {
-       $branddd[$br['brand_id']] = $br['brand_name'];
-      }
-      
-      
-      while ($si = $sizes->fetch(PDO::FETCH_ASSOC)) {
-       $sizsesss[$si['pro_size_id']] = $si['pro_size_name'];
-      }
-      while ($prlist = $pro->fetch(PDO::FETCH_ASSOC)) {
-                           $productname = '';
-                              if (!empty($prlist['size_id'])) {
-                                 $productname .= $fn->getBrandName($prlist['brand_id'])."-". $fn->getSizeName($prlist['size_id']);
-                              }else {
-                                 $productname .=$fn->getBrandName($prlist['brand_id']);
-                              }
-       $products[$prlist['pro_id']] = $productname;
-      }
-      
-      
-      ?>
    
-   var brnds = <?php echo json_encode($branddd);?>;
-   var sizzz = <?php echo json_encode($sizsesss);?>;
-   var prod = <?php echo json_encode($products);?>;
+   var brnds = <?php echo  json_encode($dm->getBrandListByIds());?>;
+   var sizzz = <?php echo  json_encode($dm->getSizeListByIds());?>;
+   var prod =  <?php echo  json_encode($dm->getProListByIds());?>;
+
+   /*console.log(prod);*/
     /*alert(brnds[1]);
     alert(sizzz[1]);*/
+      new DefaultModule(brnds,sizzz,prod);
+     console.log(defaultModule.getBrands());
+       $("input[name^='cashcheque'").on("change",defaultModule.cashCheckVariation);
+
+
+
+       //$("#productcat").on("change",defaultModule.getProduct);
+
+       $("#price").on("blur",defaultModule.gettotalpric);
+
+       $("#generateinvoice").on("click",defaultModule.gBCN);
+
+       $("#nowpayment").on("blur",defaultModule.nowwpayment);
+
+       $("#comision").on("blur",defaultModule.getcomsiondeducted);
+
+       $("#discount").on("blur",defaultModule.getpricediscounted);
    
-   function  getProduct() {
-   var id = document.getElementById("productcat").value;
-   $.ajax({
-   url: 'ajax/getProductByCategory.php',
-   type: 'POST',
-   data: {
-     id: id },
-   })
-   .done(function(res) {
-   var text = "";
-   var data = JSON.parse(res);
-   var dll = "";
-   for(var j = 0; j < data.length; j++){
-    dll = "";
-    if (data[j].size_id.length !== 0) {
-       dll =  sizzz[data[j].size_id];
-    }
-   text +="<option value='"+data[j].pro_id+"'>"+brnds[data[j].brand_id]+"-"+ dll +"</option>";
+        $("#pushtocard").on("click",addtocart);
+
+        $("#weght").on("blur",defaultModule.getValueF);
+        $("#transport").on("blur",defaultModule.getValueF);
+        $("#vat").on("blur",defaultModule.getValueF);
+
+
+
+        $("#savepurchaseinfo").on("blur",defaultModule.savePurchaseinfo);
+
+         document.getElementById("productcat").addEventListener("change",(event)=>{
+        if (event.target.value.length !== 0) 
+        {
+            
+            var xyz = products();
+            xyz.then((obj) =>
+            {
+              console.log(obj);
+              var text = "";
+                obj.forEach((element)=>{
+                    if (element.product_cat === event.target.value)
+                     {
+                      text += "<option value='"+element.pro_id+"'>"+defaultModule.prod[element.pro_id]+"</option>";
+                     }
+                });
+          document.getElementById("product").innerHTML = text;
+        });
+        }
+       });
+
+
+   
+         var  purchaseitem  = [];
+            var totalsum = 0;
+
+    function ifExist (pid){  //to check the cart , whether a product is exist in the cart or not
+   for(var j =0; j<purchaseitem.length; j++){
+   if( purchaseitem[j].pname === pid)
+     return 1;
    }
-   $("#product").html(text);
-   // console.log(data[0].p_id);
-   $("#cuquntity").val("6");
-   })
-   .fail(function() {
-   console.log("error");
-   })
-   .always(function() {
-   console.log("complete");
-   });
-   
-   
+   return 0;
    }
-   
-   var  purchaseitem  = [];
-   var totalsum = 0;
-   
-   function addtocart(){
+
+    function addtocart (){
    
    var suppliername = $("#suppliername").val();
    var pcategory = $("#productcat").val();
@@ -340,70 +341,22 @@
    }
      
    }
-   
-   var productobj = function(sname,pcat,pname,quntity,price){ //declaring the object to design all the item in the cart 
-   this.name = sname;
-   this.pcat = pcat;
-   this.pname = pname;
-   this.quntity = quntity;
-   this.price  =  price;
-   }
-   
-   function ifExist(pid){  //to check the cart , whether a product is exist in the cart or not
-   for(var j =0; j<purchaseitem.length; j++){
-   if( purchaseitem[j].pname === pid)
-     return 1;
-   }
-   return 0;
-   }
-   
-   
-   
-   
-   function gettotalpric(){  // get the product price tlst after putting the quntoty and producdt price
-       $("#totallprice").val(parseInt($("#quntity").val()) * parseInt($("#price").val()))
-   }
-   
-   
-   function getcomsiondeducted(){  // when the user is using commission for deduction
-    var com =  $("#comision").val();
-     var totalprice =  $("#subtotalbeforecommsion").val();
-     $("#grandtotalaftercommision").val(  totalprice - ((com/100)*totalprice) );
-   }
-   
-   
-    function getpricediscounted(){ // when user is using direct money to be deducted
-        var com =  $("#discount").val();
-     var totalprice =  $("#subtotalbeforecommsion").val();
-     $("#grandtotalaftercommision").val(  totalprice - com );
-    }
-   
-   
-   
-     function nowwpayment(){   //billl payment after calculating the total
-         $("#billbalance").val( $("#grandtotalaftercommision").val() - $("#nowpayment").val() )
-     }
-   
-   
-   
-   
-   
-   
-     function savePurchaseinfo(){
+     function  savePurchaseinfo(){
 
       if ($("#billchallan").val().length === 0) {
-            alert('Bill/challan no is empty');
+            alert('Bill/challan no. is empty');
        }else {
    
      var tex = confirm("Are you sure ? ");
        if (tex ===  true) {
             $.ajax({
-            url:'ajax/add_new_purchase_info.php?item='+JSON.stringify(purchaseitem)+"&allotherinfo="+$("#allotherinfo").serialize(),
+            url:'ajax/add_new_purchase_info.php?item='+JSON.stringify(defaultModule.purchaseitem)+"&allotherinfo="+$("#allotherinfo").serialize(),
             type: 'GET',
           
           })
           .done(function(res) {
             console.log(res);
+            alert("Product Purchase Has been done");
             window.location.href="purchase.php";
    
           })
@@ -423,49 +376,13 @@
            //console.log(purchaseitem+"= "+$("#allinfo").serialize())
    
      }
-   
 
-   // check the radio button to show the cheque payment method
-      function chequeoptioncheck(){
-        var divid  = document.getElementById('chequeoption');
-       var radio  =  document.getElementById('customRadio2');
-       var cashoption = document.getElementById('cashoption');
-        if (radio.checked === true){
-          divid.style.display = 'inline-block';
 
-          cashoption.style.display  = 'none';
-          
-        }else {
-          divid.style.display = 'none';
-           cashoption.style.display  = 'inline-block';
-        }
-
-      }
    
 
 
-   function getValueF() {
-     var vat = ($("#vat").val().length !==0 )?parseInt($("#vat").val()):0;
-     var transport = ($("#transport").val().length !== 0)? parseInt($("#transport").val()):0;
-     var wight =  ($("#weght").val().length !== 0) ?  parseInt($("#weght").val()):0;
-     var totalprice =   parseInt($("#subtotalbeforecommsion").val());
-     var percent = ((vat/100)*totalprice)+totalprice;
-     var sum = percent + transport + wight;
-     $("#grandtotalaftercommision").val( sum );
-   }
+  
    
-   
-   
-   
-   
-    function gBCN() {
-     var d =  new Date();
-    $("#billchallan").val(d.getFullYear()+""+ parseInt(d.getMonth()+1)+""+d.getDate()+""+d.getHours() +""+d.getMinutes()+""+d.getSeconds());
-   }
-   
-   
-   
-   
-   
+
    
 </script>

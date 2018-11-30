@@ -44,6 +44,15 @@ $datas = $db->selectAll("p_brand","brand_id='".$_GET['edit-id']."'")->fetch(PDO:
             <div class="card card-body">
                <form class="form-horizontal form-label-left" method="post" >
                   <div class="form-group">
+                     <label for="name"> Category <span class="required">*</span>
+                     </label>
+                     <input id="dbcat" class="form-control"  name="dbcat" type="hidden" value="<?=$datas['cate_id']?>">
+                     <select class="form-control" name="catid">
+                       <option value="">Select a category</option>
+                       <?php $dm->getCategories();?>
+                     </select>
+                  </div>
+                  <div class="form-group">
                      <label for="name"> Name <span class="required">*</span>
                      </label>
                      <input id="brandname" class="form-control"  name="brandname"  required="required" type="text" value="<?=$datas['brand_name']?>">
@@ -58,6 +67,14 @@ $datas = $db->selectAll("p_brand","brand_id='".$_GET['edit-id']."'")->fetch(PDO:
 
               <div class="card card-body">
                <form class="form-horizontal form-label-left" method="post" >
+                <div class="form-group">
+                     <label for="name"> Category <span class="required">*</span>
+                     </label>
+                     <select class="form-control" name="catid">
+                       <option value="">Select a category</option>
+                       <?php $dm->getCategories();?>
+                     </select>
+                  </div>
                   <div class="form-group">
                      <label for="name"> Name <span class="required">*</span>
                      </label>
@@ -83,6 +100,7 @@ $datas = $db->selectAll("p_brand","brand_id='".$_GET['edit-id']."'")->fetch(PDO:
                 }
                   
                  $data = array(
+                  'cate_id' => $_POST['catid'],
                   'brand_name' => $_POST['brandname']
                 );
                 if (!empty($_POST['brandname'])) {
@@ -108,6 +126,7 @@ $datas = $db->selectAll("p_brand","brand_id='".$_GET['edit-id']."'")->fetch(PDO:
                 
                   
                  $data = array(
+                  'cate_id' => (empty($_POST['catid']))?$_POST['dbcat']:$_POST['catid'],
                   'brand_name' => $_POST['brandname']
                 );
                 if (!empty($_POST['brandname'])) {

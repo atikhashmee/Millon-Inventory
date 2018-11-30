@@ -50,53 +50,36 @@
                                       <button type="button" class="btn btn-outline-info" onclick="generate()"> <i class="fa fa-hashtag"></i> </button>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="example-search-input" class="col-sm-4 col-form-label">Product Category</label>
+                     <div class="form-group row">
+                            <label for="example-search-input" class="col-sm-4 col-form-label">Product Category</label>
                                     <div class="col-sm-6">
-                                        <select class="form-control" name="category">
+                       <select class="form-control" name="category" id="catid">
                               <option value="">Select a category</option>
-                              <?php 
-                                 $cat  =  $db->joinQuery("SELECT * FROM `cateogory`")->fetchAll();
-                                 foreach ($cat as $cater) { ?>
-                              <option value="<?=$cater['cat_id']?>"><?=$cater['cat_name']?></option>
-                              <?php   }
-                                 ?>
+                              <?php $dm->getCategories();?>
                            </select>
                                     </div>
                                     <div class="col-md-2">
-                                      <a href="category.php" class="btn btn-outline-info"><i class="fa fa-plus-circle" style="f    font-size: 19px;
-    color: black;"></i></a>
+                                      <a href="category.php" class="btn btn-outline-info"><i class="fa fa-plus-circle" style="font-size: 19px;color: black;"></i></a>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="example-email-input" class="col-sm-4 col-form-label">Product Brand</label>
                                     <div class="col-sm-6">
-                                        <select class="form-control" name="brand">
+                              <select class="form-control" name="brand" id="brands">
                               <option value="">Select a brand</option>
-                              <?php 
-                                 $brand  =  $db->joinQuery("SELECT * FROM `p_brand`")->fetchAll();
-                                 foreach ($brand as $bran) { ?>
-                              <option value="<?=$bran['brand_id']?>"><?=$bran['brand_name']?></option>
-                              <?php   }
-                                 ?>
+                              
                            </select>
                                     </div>
                                     <div class="col-md-2">
-                                      <a href="brand.php" class="btn btn-outline-info"><i class="fa fa-plus-circle" style="f    font-size: 19px;
-    color: black;"></i></a>
+                                <a href="brand.php" class="btn btn-outline-info"><i class="fa fa-plus-circle" style="   font-size: 19px;color: black;"></i></a>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="example-url-input" class="col-sm-4  col-form-label">Product Size</label>
                                     <div class="col-sm-6">
-                                         <select class="form-control" name="size">
+                                   <select class="form-control" name="size" id="sizeid">
                               <option value="">Select A Product size</option>
-                              <?php 
-                                 $siz  =  $db->joinQuery("SELECT * FROM `p_size`")->fetchAll();
-                                 foreach ($siz as $size) { ?>
-                              <option value="<?=$size['pro_size_id']?>"><?=$size['pro_size_name']?></option>
-                              <?php   }
-                                 ?>
+                              
                            </select>
                                     </div>
                                     <div class="col-md-2">
@@ -217,23 +200,15 @@
                 }
             }
             ?>
-      
-
-
- 
-
-
 </div>
 </div>
 <?php include 'files/footer.php'; ?>
+<script src="assets/js/brands.js"></script>
+<script src="assets/js/size.js"></script>
+<script src="assets/js/product.js"></script>
 
-<script>
-  function generate()
-  {
-    var d = new Date();
-      document.getElementById('productid').value = "P"+d.getDate()+""+d.getSeconds();
-  }
-</script>
+
+
 
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">

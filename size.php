@@ -39,6 +39,24 @@ $datas = $db->selectAll("p_size","pro_size_id='".$_GET['edit-id']."'")->fetch(PD
             <div class="card card-body">
                <form class="form-horizontal form-label-left" method="post" >
                   <div class="form-group">
+                     <label for="name"> Category Name <span class="required">*</span>
+                     </label>
+                     <input id="dbcat" class="form-control"  name="dbcat" type="hidden" value="<?=$datas['cat_id']?>">
+                     <select class="form-control" name="catid"  id="catid">
+                       <option value="">Select a category</option>
+                       <?php $dm->getCategories();?>
+                     </select>
+                  </div>
+                  <div class="form-group">
+                     <label for="name">Brand  Name <span class="required">*</span>
+                     </label>
+                     <input id="dbbrandid" class="form-control"  name="dbbrandid"  type="hidden" value="<?=$datas['brandid']?>">
+                     <select class="form-control" name="brandid" id="brands">
+                       <option value="">Select a Brand</option>
+                       <?php $dm->getBrands();?>
+                     </select>
+                  </div>
+                  <div class="form-group">
                      <label for="name"> Name <span class="required">*</span>
                      </label>
                      <input id="size_name" class="form-control"  name="size_name"  required="required" type="text" value="<?=$datas['pro_size_name']?>">
@@ -54,6 +72,24 @@ $datas = $db->selectAll("p_size","pro_size_id='".$_GET['edit-id']."'")->fetch(PD
         <?php    } else { ?>
           <div class="card card-body">
                <form class="form-horizontal form-label-left" method="post" >
+                  <div class="form-group">
+                     <label for="name"> Category Name <span class="required">*</span>
+                     </label>
+                    
+                     <select class="form-control" name="catid" id="catid">
+                       <option value="">Select a category</option>
+                       <?php $dm->getCategories();?>
+                     </select>
+                  </div>
+                  <div class="form-group">
+                     <label for="name">Brand  Name <span class="required">*</span>
+                     </label>
+                     
+                     <select class="form-control" name="brandid" id="brands">
+                       <option value="">Select a Brand</option>
+                         
+                     </select>
+                  </div>
                   <div class="form-group">
                      <label for="name"> Name <span class="required">*</span>
                      </label>
@@ -80,6 +116,8 @@ $datas = $db->selectAll("p_size","pro_size_id='".$_GET['edit-id']."'")->fetch(PD
                 }
             
                  $data = array(
+                  'cat_id'        => $_POST['catid'],
+                  'brandid'       => $_POST['brandid'],
                   'pro_size_name' => $_POST['size_name']
                   
                 );
@@ -104,6 +142,8 @@ $datas = $db->selectAll("p_size","pro_size_id='".$_GET['edit-id']."'")->fetch(PD
               
             
                  $data = array(
+                  'cat_id'        => empty($_POST['catid'])?$_POST['dbcat']:$_POST['catid'],
+                  'brandid'       => empty($_POST['brandid'])?$_POST['dbbrandid']:$_POST['brandid'],
                   'pro_size_name' => $_POST['size_name']
                   
                 );
@@ -180,3 +220,4 @@ $datas = $db->selectAll("p_size","pro_size_id='".$_GET['edit-id']."'")->fetch(PD
    </div>
 </div>
 <?php include 'files/footer.php'; ?>
+<script src="assets/js/brands.js"></script>
