@@ -40,11 +40,7 @@
                      <label for="name">supplierName<span class="required">*</span></label>
                      <select class="form-control" name="suppliername" id="suppliername">
                         <option>Choose option</option>
-                        <?php 
-                           $cat  =  $db->joinQuery("SELECT * FROM `users` WHERE `user_role`='2'")->fetchAll();
-                           foreach ($cat as $cater) { ?>
-                        <option value="<?=$cater['u_id']?>"><?=$cater['name']?></option>
-                        <?php } ?>
+                        <?=$dm->getUsersByRole(2)?>
                      </select>
                   </div>
                </div>

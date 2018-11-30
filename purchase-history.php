@@ -9,7 +9,7 @@
 <?php 
    if (isset($_GET['del-id'])) {
            if ($db->delete("purchase","billchallan = '".$_GET['del-id']."'")) {?>
-<script> alert('Data has been deleted'); window.location.href='purchase.php'; </script>
+<script> alert('Data has been deleted'); window.location.href='purchase-history.php'; </script>
 <?php   }
    }
    
@@ -96,7 +96,9 @@
               echo '<a class="dropdown-item" href="product-purchase-edit.php?invo='.$pur['billchallan'].'">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) {
-              echo '<a class="dropdown-item" href="#">Delete <i class="fa fa-times"></i></a>';
+              ?>
+              <a class="dropdown-item" href="purchase-history.php?del-id=<?=$pur['billchallan']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
+      <?php
          }
          if ($rbas->getPrint()) {
               echo '<a class="dropdown-item" href="#">Print</a>';

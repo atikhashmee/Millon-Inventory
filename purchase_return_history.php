@@ -3,6 +3,17 @@
 
 $rbas->setPageName(3)->run();
 
+    if (isset($_GET['del-id']))
+        {
+             if ($db->delete("purchase_return","memono='".$_GET['del-id']."'")) 
+              {
+                 ?>
+                 <script> alert('Data has been deleted');
+                 window.location.href='purchase_return_history.php'; </script>
+                <?php  
+              }
+        }
+
 ?>
 <div class="container">
     <div class="row">
@@ -42,7 +53,7 @@ $rbas->setPageName(3)->run();
                             <div class="card-body">
 
                               
-         <table class="table table-condensed table-bordered table-hover  table-striped" id="datatable" >
+         <table class="table table-condensed table-bordered table-hover  table-striped" id="datatable">
             <thead>
                <tr>
                   <th>SL</th>
@@ -60,7 +71,7 @@ $rbas->setPageName(3)->run();
                <tr>
                   <th scope="row"><?=$i?></th>
                   <td><?=$val['memono']?></td>
-                  <td><?=$fn->getProductName($val['productid'])?></td>
+                  <td><?=$fn->getProductName(trim($val['productid']))?></td>
                   <td><?=$val['quntity']?></td>
                   <td><?=$val['price']?></td>
                   <td><?=$val['return_date']?></td>
@@ -74,10 +85,12 @@ $rbas->setPageName(3)->run();
               echo '<a class="dropdown-item" href="purchase-return-view-details.php?invo='.$val['memono'].'">View <i class="fa fa-eye"></i></a>';
          }
          if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="#">Edit <i class="fa fa-pencil"></i></a>';
+              echo '<a class="dropdown-item" href="purchase-return-edit.php?invo='.$val['memono'].'">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) {
-              echo '<a class="dropdown-item" href="#">Delete <i class="fa fa-times"></i></a>';
+             ?>
+              <a class="dropdown-item" href="purchase_return_history.php?del-id=<?=$val['memono']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
+      <?php 
          }
          if ($rbas->getPrint()) {
               echo '<a class="dropdown-item" href="#">Print</a>';

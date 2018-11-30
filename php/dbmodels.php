@@ -13,6 +13,7 @@
 			private $brandTableName = "p_brand";
 			private $sizeTableName = "p_size";
 			private $productTableName = "product_info";
+			private $userTableName = "users";
 
 
 			private $brands = [];
@@ -36,6 +37,14 @@
 			    foreach ($datas as $dt)
 			     {
 			    	 echo "<option value='".$dt['cat_id']."'>".$dt['cat_name']."</option>";
+			    }
+			}
+			public function getUsersByRole($roleid)
+			{
+			    $datas = $this->selectAll($this->userTableName,"user_role='".$roleid."'")->fetchAll();
+			    foreach ($datas as $dt)
+			     {
+			    	 echo "<option value='".$dt['u_id']."'>".$dt['name']."</option>";
 			    }
 			}
 
@@ -98,6 +107,16 @@
 			{
 				$this->products();
 				return $this->products;
+			}
+
+
+
+			public function getUserFullDetails($uid)
+			{
+				$users =  $this->selectAll("users","u_id='".$uid."'")->fetch(PDO::FETCH_ASSOC);
+				return "<b>Name </b>   : ".$users['name']."</br>
+						<b>Phone  </b> : ".$users['contact_number']."</br>
+						<b>Address</b> : ".$users['address'].".";
 			}
 
 

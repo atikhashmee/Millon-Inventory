@@ -1,23 +1,12 @@
 <?php include 'files/header.php'; ?>
-<?php include 'files/menu.php';?>
-<?php 
-   if (isset($_GET['del-id'])) {
-           if ($db->delete("sell","billchallan = '".$_GET['del-id']."'")) {?>
-<script> alert('Data has been deleted'); window.location.href='sellproduct.php'; </script>
-<?php   }
-   }
+<?php include 'files/menu.php';
    
    
    
    
-   $salehistory = $db->joinQuery('SELECT DISTINCT `billchallan`, `purchasedate`, `payment_taka`,  `purchaseentryby` FROM `purchase` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
+   $salehistory = $db->joinQuery('SELECT DISTINCT `billchallan`, `purchasedate`, `payment_taka`,  `purchaseentryby`,`supplier` FROM `purchase` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
    
-   /* echo "<pre>";
-   print_r($salehistory);
-   echo "</pre>";*/
-   
-   
-   
+
    
    ?>
 <div class="container">
@@ -44,20 +33,29 @@
                   <div class="col-12">
                      <div class="row">
                         <div class="col-6">
-                           <address>
-                              <strong>Customer Info:</strong><br>
-                              John Smith<br>
-                              1234 Main<br>
-                              Apt. 4B<br>
-                              Springfield, ST 54321
-                           </address>
+                          <form method="post" id="allotherinfo">
+                            <input type="hidden" name="atik">
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="billchallan" value="<?=$salehistory['billchallan']?>" readonly>
+
                         </div>
+                           <div class="form-group">
+                            <select class="form-control" name="suppliername" id="suppliername">
+                              <option value="<?=$salehistory['supplier']?>">Select a supplier</option>
+                              <?=$dm->getUsersByRole(2)?>
+                           </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="date" class="form-control" name="datepurchase" value="<?=$salehistory['purchasedate']?>">
+                        </div>
+                      </div>
                         <div class="col-6 text-right">
                            <address>
                               <strong>Shipment Details:</strong>
                               <br>
                               Invoice No: <?=$salehistory['billchallan']?><br>
-                              Sale Date :  <?=date("Y-M-d",strtotime($salehistory['purchasedate']))?>
+                              Sale Date :  <?=date("Y-M-d",strtotime($salehistory['purchasedate']))?> </br>
+                              Supplier Name :  <?=$fn->getUserName($salehistory['supplier'])?>
                            </address>
                         </div>
                      </div>
@@ -164,7 +162,7 @@
                                           <?=($inv['price']*$inv['quantity'])?>
                                        </td>
                                        <td class="text-right">
-                                          <button type="button" onclick="removeitem(<?=$inv['productid']?>,<?=$i?>)" class="btn btn-outline-danger">X</button>
+                                          <button type="button" data-pr="<?=$inv['productid']?>" data-inc="<?=$i?>" onclick="removeitem(this)" class="btn btn-outline-danger">X</button>
                                        </td>
                                     </tr>
                                     <?php
@@ -178,10 +176,11 @@
                               <!-- Use accounts sections  -->
                               <div class="col">
                               </div>
-                              <form method="post" id="allotherinfo">
-                                 <input type="hidden" name="datepurchase" value="<?=$salehistory['purchasedate']?>">
+                              
+                                 
                                  <input type="hidden" name="sellby" value="<?=$salehistory['purchaseentryby']?>">
-                                 <input type="hidden" name="billchallan" value="<?=$salehistory['billchallan']?>">
+
+                                 
                                  <input type="hidden" name="nowpayment" value="<?=$salehistory['payment_taka']?>">
                                  <div class="col">
                                     <div class="form-group">
@@ -354,7 +353,7 @@
     var incr = i;
    function addtocart(){
     incr++;
-    var cutomername = $("#cutomername").val();
+    var cutomername = $("#suppliername").val();
     var pcategory = $("#productcat").val();
     var pname = $("#product").val();
     var quantity =  $("#quntity").val();
@@ -365,7 +364,7 @@
         $("#productqunatityhidden").val(quantity);
         $("#productpricehideen").val(price);
         purchaseitem.push(new productobj(cutomername,pname,quantity,price)); //pushing every item to the cart so that i can retrive and modified in the cart 
-      $("#mycartlists").append('<tr id="trcontent_'+incr+'"> <td>'+prod[pname]+'</td> <td class="text-center">'+price+'</td>  <td class="text-center">'+quantity+'</td>    <td class="totatlbalnceshow text-right">'+price*quantity+'</td> <td class="text-right"><button type="button" onclick="removeitem('+pname+','+incr+')" class="btn btn-outline-danger">X</button></td></tr>');
+      $("#mycartlists").append('<tr id="trcontent_'+incr+'"> <td>'+prod[pname]+'</td> <td class="text-center">'+price+'</td>  <td class="text-center">'+quantity+'</td>    <td class="totatlbalnceshow text-right">'+price*quantity+'</td> <td class="text-right"><button type="button" data-pr="'+pname+'" data-inc="'+incr+'" onclick="removeitem(this)" class="btn btn-outline-danger">X</button></td></tr>');
         totalsum += parseInt((price*quantity));
       $("#subtotalbeforecommsion").val(totalsum); // value gets updated everytime a new item get added to the cart
     }else {
@@ -389,8 +388,8 @@
        
          var tex = confirm("Are you sure ?");
         if (tex ===  true) {
-         console.log($("#allotherinfo").serialize());
-         console.log(JSON.stringify(purchaseitem));
+         /*console.log($("#allotherinfo").serialize());
+         console.log(JSON.stringify(purchaseitem));*/
              $.ajax({
              url:'ajax/add_new_purchase_info.php?item='+JSON.stringify(purchaseitem)+"&allotherinfo="+$("#allotherinfo").serialize(),
              type: 'GET',
@@ -398,7 +397,7 @@
            })
            .done(function(res) {
              console.log(res);
-           //  alert('res');
+             //alert('res');
              alert("Purchase History has been updated");
              window.location.href="purchase-history.php";
            })
@@ -425,13 +424,25 @@
 
    
    
-      function removeitem(pid,tracid) {
-      
-            var index = ifExist(pid);
-            purchaseitem.splice(index,1);
+      function removeitem(obj) {
+         var proid = obj.getAttribute("data-pr");
+         var rowid = obj.getAttribute("data-inc");
+
+
+            if (purchaseitem.length !== 1) 
+            {
+              var index = ifExist(proid);
+              purchaseitem.splice(index,1);
+              var element = document.getElementById('trcontent_'+rowid);
+              element.style.display = 'none';
+            }
+            else 
+            {
+              alert("Sorry !! You can't empty the list");
+            }
+            
             console.log(purchaseitem);
-            var element = document.getElementById('trcontent_'+tracid);
-            element.parentElement.removeChild(element);
+            
             //alert(index);
       }
    

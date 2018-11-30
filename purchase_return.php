@@ -298,7 +298,7 @@
                          var quantity  = $(this).find('#quntity').text();
                          var price  = $(this).find('#price').text();
                          var returndate = $("#returndate").val();
-                        confirmlist.push(new obj(memono,product,quantity,price,returndate));
+                        confirmlist.push(new obj(memono.trim(),product.trim(),quantity.trim(),price.trim(),returndate.trim()));
                   });
    
    

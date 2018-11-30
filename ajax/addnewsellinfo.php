@@ -11,10 +11,10 @@
 
 			
 
-                if (empty($_GET['billchallan'])) {
+               /* if (empty($_GET['billchallan'])) {
                 	echo 'Bill/challan no is not given';
                 	exit();
-                }
+                }*/
                 /* to perform an update operation we are deleting the previous product and inserting newly update product*/
 
                 $dd =  $db->joinQuery("SELECT COUNT(*) as rowexist FROM `sell` WHERE `billchallan`='".$_GET['billchallan']."'")->fetch(PDO::FETCH_ASSOC);
@@ -53,7 +53,7 @@
 			    	 	'payment_taka' => $_GET['nowpayment'],
 			    	 	'comission' => $_GET['comision'],
 			    	 	'discount' =>  $_GET['discount'],
-			    	 	'customerid' => $datass[$i]->name,
+			    	 	'customerid' => $_GET['cutomername'],
 			    	 	'productid' => $datass[$i]->pname,
 			    	 	'quantity' => $datass[$i]->quntity,
 			    	 	'price' => $datass[$i]->price

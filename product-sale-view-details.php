@@ -16,7 +16,7 @@
 
 
 
-   $salehistory = $db->joinQuery('SELECT DISTINCT`selldate`,`billchallan` FROM `sell` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
+   $salehistory = $db->joinQuery('SELECT DISTINCT `selldate`,`billchallan`,`customerid` FROM `sell` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
 
   /* echo "<pre>";
    print_r($salehistory);
@@ -55,11 +55,8 @@
                                         <div class="row">
                                             <div class="col-6">
                                                 <address>
-                                                    <strong>Customer Info:</strong><br>
-                                                    John Smith<br>
-                                                    1234 Main<br>
-                                                    Apt. 4B<br>
-                                                    Springfield, ST 54321
+                                       <strong>Customer Info:</strong><br>
+                            <?=$dm->getUserFullDetails($salehistory['customerid'])?>
                                                 </address>
                                             </div>
                                             <div class="col-6 text-right">

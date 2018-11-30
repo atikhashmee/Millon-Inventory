@@ -10,7 +10,7 @@
    
    
    
-   $salehistory = $db->joinQuery('SELECT DISTINCT`selldate`,`billchallan`,`payment_taka`,`sellby` FROM `sell` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
+   $salehistory = $db->joinQuery('SELECT DISTINCT`customerid`,`selldate`,`billchallan`,`payment_taka`,`sellby` FROM `sell` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
    
    /* echo "<pre>";
    print_r($salehistory);
@@ -44,20 +44,30 @@
                   <div class="col-12">
                      <div class="row">
                         <div class="col-6">
-                           <address>
-                              <strong>Customer Info:</strong><br>
-                              John Smith<br>
-                              1234 Main<br>
-                              Apt. 4B<br>
-                              Springfield, ST 54321
-                           </address>
+                           <form method="post" id="allotherinfo">
+                            <input type="hidden" name="atik">
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="billchallan" value="<?=$salehistory['billchallan']?>" readonly>
+
+                        </div>
+                           <div class="form-group">
+                            <select class="form-control" name="cutomername" id="cutomername">
+                              <option value="<?=$salehistory['customerid']?>">Select a Customer</option>
+                              <?=$dm->getUsersByRole(1)?>
+                           </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="date" class="form-control" name="datesell" value="<?=$salehistory['selldate']?>">
+                        </div>
                         </div>
                         <div class="col-6 text-right">
                            <address>
                               <strong>Shipment Details:</strong>
                               <br>
                               Invoice No: <?=$salehistory['billchallan']?><br>
-                              Sale Date :  <?=date("Y-M-d",strtotime($salehistory['selldate']))?>
+                              Sale Date :  <?=date("Y-M-d",strtotime($salehistory['selldate']))?> </br>
+                              Customer : <?=$fn->getUserName($salehistory['customerid'])?>
+
                            </address>
                         </div>
                      </div>
@@ -151,8 +161,8 @@
                                            $discount = $inv['discount'];
                                            ?>
                                     <tr id="trcontent_<?=$i?>">
-                                       <td contenteditable="true">
-                                          <?=$fn->getProductName($inv['productid'])?>
+                                       <td>
+                                          <?=$fn->getProductName(trim($inv['productid']))?>
                                        </td>
                                        <td class="text-center" contenteditable="true">
                                           <?=$inv['price']?>
@@ -164,7 +174,7 @@
                                           <?=($inv['price']*$inv['quantity'])?>
                                        </td>
                                        <td class="text-right">
-                                          <button type="button" onclick="removeitem(<?=$inv['productid']?>,<?=$i?>)" class="btn btn-outline-danger">X</button>
+                                          <button type="button" data-pr="<?=$inv['productid']?>" data-inc="<?=$i?>" onclick="removeitem(this)" class="btn btn-outline-danger">X</button>
                                        </td>
                                     </tr>
                                     <?php
@@ -178,10 +188,10 @@
                               <!-- Use accounts sections  -->
                               <div class="col">
                               </div>
-                              <form method="post" id="allotherinfo">
-                                 <input type="hidden" name="datesell" value="<?=$salehistory['selldate']?>">
+                              
+                                 
                                  <input type="hidden" name="sellby" value="<?=$salehistory['sellby']?>">
-                                 <input type="hidden" name="billchallan" value="<?=$salehistory['billchallan']?>">
+                                 
                                  <input type="hidden" name="nowpayment" value="<?=$salehistory['payment_taka']?>">
                                  <div class="col">
                                     <div class="form-group">
@@ -354,18 +364,18 @@
     var incr = i;
    function addtocart(){
     incr++;
-    var cutomername = $("#cutomername").val();
-    var pcategory = $("#productcat").val();
-    var pname = $("#product").val();
-    var quantity =  $("#quntity").val();
-    var price =  $("#price").val();
+    var cutomername =  $("#cutomername").val();
+    var pcategory   =  $("#productcat").val();
+    var pname       =  $("#product").val();
+    var quantity    =  $("#quntity").val();
+    var price       =  $("#price").val();
     
       if (ifExist(pname)===0) {
         $("#productnameid").val(pname);
         $("#productqunatityhidden").val(quantity);
         $("#productpricehideen").val(price);
         purchaseitem.push(new productobj(cutomername,pname,quantity,price)); //pushing every item to the cart so that i can retrive and modified in the cart 
-      $("#mycartlists").append('<tr id="trcontent_'+incr+'"> <td>'+prod[pname]+'</td> <td class="text-center">'+price+'</td>  <td class="text-center">'+quantity+'</td>    <td class="totatlbalnceshow text-right">'+price*quantity+'</td> <td class="text-right"><button type="button" onclick="removeitem('+pname+','+incr+')" class="btn btn-outline-danger">X</button></td></tr>');
+      $("#mycartlists").append('<tr id="trcontent_'+incr+'"> <td>'+prod[pname]+'</td> <td class="text-center">'+price+'</td>  <td class="text-center">'+quantity+'</td>    <td class="totatlbalnceshow text-right">'+price*quantity+'</td> <td class="text-right"><button type="button" data-pr="'+pname+'" data-inc="'+incr+'" onclick="removeitem(this)" class="btn btn-outline-danger">X</button></td></tr>');
         totalsum += parseInt((price*quantity));
       $("#subtotalbeforecommsion").val(totalsum); // value gets updated everytime a new item get added to the cart
     }else {
@@ -423,16 +433,27 @@
       }
    
    
-      function removeitem(pid,tracid) {
-      
-            var index = ifExist(pid);
-            purchaseitem.splice(index,1);
+        function removeitem(obj) {
+         var proid = obj.getAttribute("data-pr");
+         var rowid = obj.getAttribute("data-inc");
+
+
+            if (purchaseitem.length !== 1) 
+            {
+              var index = ifExist(proid);
+              purchaseitem.splice(index,1);
+              var element = document.getElementById('trcontent_'+rowid);
+              element.style.display = 'none';
+            }
+            else 
+            {
+              alert("Sorry !! You can't empty the list");
+            }
+            
             console.log(purchaseitem);
-            var element = document.getElementById('trcontent_'+tracid);
-            element.parentElement.removeChild(element);
+            
             //alert(index);
       }
-   
    
    
      

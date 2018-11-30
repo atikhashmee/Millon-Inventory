@@ -2,28 +2,11 @@
 <?php include 'files/menu.php';
 
 
- ?>
 
 
-
-<?php 
-   if (isset($_GET['del-id'])) {
-           if ($db->delete("sell","billchallan = '".$_GET['del-id']."'")) {?>
-<script> alert('Data has been deleted'); window.location.href='sellproduct.php'; </script>
-<?php   }
-   }
+   $salehistory = $db->joinQuery('SELECT DISTINCT `billchallan`, `purchasedate`,`supplier` FROM `purchase` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
 
 
-
-
-   $salehistory = $db->joinQuery('SELECT DISTINCT `billchallan`, `purchasedate` FROM `purchase` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
-
-  /* echo "<pre>";
-   print_r($salehistory);
-   echo "</pre>";*/
-
-   
-   
    
    ?>
 <div class="container">
@@ -55,11 +38,8 @@
                                         <div class="row">
                                             <div class="col-6">
                                                 <address>
-                                                <strong>Customer Info:</strong><br>
-                                                    John Smith<br>
-                                                    1234 Main<br>
-                                                    Apt. 4B<br>
-                                                    Springfield, ST 54321
+                                       <strong>Supplier Info:</strong> </br>
+                             <?=$dm->getUserFullDetails($salehistory['supplier'])?>
                                                 </address>
                                             </div>
                                             <div class="col-6 text-right">
@@ -79,7 +59,7 @@
                                     <div class="col-12">
                                         <div class="panel panel-default">
                                             <div class="p-2">
-                                                <h3 class="panel-title font-20"><strong>Order summary</strong></h3>
+                                                <h3 class="panel-title font-20"><strong>Purchase summary</strong></h3>
                                             </div>
                                             <div class="">
                        <div class="table-responsive">
@@ -176,7 +156,7 @@
 
         <div class="d-print-none mo-mt-2">
         <div class="pull-right">
-        <a href="#" class="btn btn-danger waves-effect waves-light">Delete <i class="fa fa-minus-square-o"></i></a>
+        <a href="purchase-history.php?del-id=<?=$_GET['invo']?>" onclick="return confirm('Are you sure?')" class="btn btn-danger waves-effect waves-light">Delete <i class="fa fa-minus-square-o"></i></a>
         <a href="product-purchase-edit.php?invo=<?=$_GET['invo']?>" class="btn btn-warning waves-effect waves-light">Update <i class="fa fa-external-link"></i></a>
         <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light">Print <i class="fa fa-print"></i></a>
         <a href="#" class="btn btn-primary waves-effect waves-light">Mail</a>

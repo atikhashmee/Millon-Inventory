@@ -6,11 +6,7 @@
 
                     <!-- Logo container-->
                     <div class="logo">
-                        <!-- Text Logo -->
-                        <!--<a href="index.html" class="logo">-->
-                        <!--Upcube-->
-                        <!--</a>-->
-                        <!-- Image Logo -->
+                      
                         <a href="home.php" class="logo">
                             <img src="assets/images/logos/<?=$setdata['logo']?>" alt="" height="22" class="logo-small">
                             <img src="assets/images/logos/<?=$setdata['logo']?>" alt="" height="24" class="logo-large">
@@ -271,10 +267,13 @@
                                     <li>
                                       <ul>
                                         <li><a  href="product-view.php">View All product</a></li>
-                                      <li><a  href="sell_return_history.php">Sell Return History</a></li>
+                                        <li><a  href="purchase-history.php">Purchase History</a></li>
+                                        <li><a  href="purchase_return_history.php">Purchase Return History</a></li>
+                                      
                                       <li><a  href="product-sale-history.php">Product sale history</a></li>
-                                      <li><a  href="purchase_return_history.php">Purchase Return History</a></li>
-                                      <li><a  href="purchase-history.php">Purchase History</a></li>
+                                      <li><a  href="sell_return_history.php">Sell Return History</a></li>
+                                      
+                                      
                                     </ul>
                                   </li>
                                 </ul>

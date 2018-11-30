@@ -16,7 +16,7 @@
 
 
 
-   $salehistory = $db->joinQuery('SELECT DISTINCT `memono`,`return_date` FROM `purchase_return` WHERE `memono`= "'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
+   $salehistory = $db->joinQuery('SELECT DISTINCT `memono`,`supplierId`,`return_date` FROM `purchase_return` WHERE `memono`= "'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
 
   /* echo "<pre>";
    print_r($salehistory);
@@ -55,11 +55,8 @@
                                         <div class="row">
                                             <div class="col-6">
                                                 <address>
-                                                    <strong>Customer Info:</strong><br>
-                                                    John Smith<br>
-                                                    1234 Main<br>
-                                                    Apt. 4B<br>
-                                                    Springfield, ST 54321
+                                       <strong>Supplier Info:</strong> </br>
+                             <?=$dm->getUserFullDetails($salehistory['supplierId'])?>
                                                 </address>
                                             </div>
                                             <div class="col-6 text-right">
@@ -176,7 +173,10 @@
 
         <div class="d-print-none mo-mt-2">
         <div class="pull-right">
-        <a href="#" class="btn btn-danger waves-effect waves-light">Delete <i class="fa fa-minus-square-o"></i></a>
+
+            
+      
+        <a href="purchase_return_history.php?del-id=<?=$val['memono']?>" onclick="return confirm('Are you sure?')" class="btn btn-danger waves-effect waves-light">Delete <i class="fa fa-minus-square-o"></i></a>
         <a href="purchase-return-edit.php?invo=<?=$_GET['invo']?>" class="btn btn-warning waves-effect waves-light">Update <i class="fa fa-external-link"></i></a>
         <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light">Print <i class="fa fa-print"></i></a>
         <a href="#" class="btn btn-primary waves-effect waves-light">Mail</a>

@@ -46,7 +46,7 @@
 			    	 	'discount' => $_GET['discount'],
 			    	 	'payment_taka' => $_GET['nowpayment'],
 			    	 	'purchaseentryby' => $_SESSION['u_id'],
-			    	 	'supplier' => $datass[$i]->name,
+			    	 	'supplier' => $_GET['suppliername'],
 			    	 	'productid' => $datass[$i]->pname,
 			    	 	'quantity' => $datass[$i]->quntity,
 			    	 	'price' => $datass[$i]->price
@@ -58,7 +58,7 @@
 			    	$db->insert("purchase",$data);
 			    	  
 			    }
-			  /*echo "<pre>";
+			 /* echo "<pre>";
 			   print_r($_GET['allotherinfo']);
 			  print_r($_GET);
 			  echo "</pre>";*/
