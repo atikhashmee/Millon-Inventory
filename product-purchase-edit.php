@@ -10,7 +10,7 @@
    
    
    
-   $salehistory = $db->joinQuery('SELECT DISTINCT`selldate`,`billchallan`,`payment_taka`,`sellby` FROM `sell` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
+   $salehistory = $db->joinQuery('SELECT DISTINCT `billchallan`, `purchasedate`, `payment_taka`,  `purchaseentryby` FROM `purchase` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
    
    /* echo "<pre>";
    print_r($salehistory);
@@ -57,7 +57,7 @@
                               <strong>Shipment Details:</strong>
                               <br>
                               Invoice No: <?=$salehistory['billchallan']?><br>
-                              Sale Date :  <?=date("Y-M-d",strtotime($salehistory['selldate']))?>
+                              Sale Date :  <?=date("Y-M-d",strtotime($salehistory['purchasedate']))?>
                            </address>
                         </div>
                      </div>
@@ -130,7 +130,7 @@
                                  </thead>
                                  <tbody id="mycartlists">
                                     <?php 
-                                       $invoiceinfo = $db->selectAll('sell','`billchallan`= "'.$_GET['invo'].'"')->fetchAll();
+                                       $invoiceinfo = $db->selectAll('purchase','`billchallan`= "'.$_GET['invo'].'"')->fetchAll();
                                        /*echo "<pre>";
                                        print_r($invoiceinfo);
                                        echo "</pre>";*/
@@ -179,8 +179,8 @@
                               <div class="col">
                               </div>
                               <form method="post" id="allotherinfo">
-                                 <input type="hidden" name="datesell" value="<?=$salehistory['selldate']?>">
-                                 <input type="hidden" name="sellby" value="<?=$salehistory['sellby']?>">
+                                 <input type="hidden" name="datepurchase" value="<?=$salehistory['purchasedate']?>">
+                                 <input type="hidden" name="sellby" value="<?=$salehistory['purchaseentryby']?>">
                                  <input type="hidden" name="billchallan" value="<?=$salehistory['billchallan']?>">
                                  <input type="hidden" name="nowpayment" value="<?=$salehistory['payment_taka']?>">
                                  <div class="col">
@@ -389,18 +389,18 @@
        
          var tex = confirm("Are you sure ?");
         if (tex ===  true) {
-         /*console.log($("#allotherinfo").serialize());
-         console.log(JSON.stringify(purchaseitem));*/
+         console.log($("#allotherinfo").serialize());
+         console.log(JSON.stringify(purchaseitem));
              $.ajax({
-             url: 'ajax/addnewsellinfo.php?item='+JSON.stringify(purchaseitem)+"&allinfo="+$("#allotherinfo").serialize(),
+             url:'ajax/add_new_purchase_info.php?item='+JSON.stringify(purchaseitem)+"&allotherinfo="+$("#allotherinfo").serialize(),
              type: 'GET',
            
            })
            .done(function(res) {
              console.log(res);
            //  alert('res');
-             alert("Sale History has been updated");
-             window.location.href="product-sale-history.php";
+             alert("Purchase History has been updated");
+             window.location.href="purchase-history.php";
            })
            .fail(function() {
              console.log("error");
@@ -421,6 +421,8 @@
             //console.log(purchaseitem+"= "+$("#allinfo").serialize())
     
       }
+
+
    
    
       function removeitem(pid,tracid) {

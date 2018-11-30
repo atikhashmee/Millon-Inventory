@@ -24,6 +24,16 @@
                  
                   
                 }
+
+                	
+                /* to perform an update operation we are deleting the previous product and inserting newly update product*/
+
+                $dd =  $db->joinQuery("SELECT COUNT(*) as rowexist FROM `purchase` WHERE `billchallan`='".$_GET['billchallan']."'")->fetch(PDO::FETCH_ASSOC);
+                if ($dd['rowexist']>0) {
+                   $db->delete('purchase',"`billchallan`='".$_GET['billchallan']."'");
+                }
+                /*end of product update*/
+
    
 			   for ($i=0; $i <count($datass); $i++) { 
 			    	 $data = array(

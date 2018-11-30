@@ -16,7 +16,7 @@
 
 
 
-   $salehistory = $db->joinQuery('SELECT DISTINCT `memono`,`return_date` FROM `sell_return` WHERE `memono`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
+   $salehistory = $db->joinQuery('SELECT DISTINCT `memono`,`return_date` FROM `purchase_return` WHERE `memono`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
 
   
 
@@ -101,7 +101,7 @@
                     </thead>
                        <tbody id="mycartlists">
                           <?php 
-                          $invoiceinfo = $db->selectAll('sell_return','`memono`= "'.$_GET['invo'].'"')->fetchAll();
+                          $invoiceinfo = $db->selectAll('purchase_return','`memono`= "'.$_GET['invo'].'"')->fetchAll();
                           /*echo "<pre>";
                           print_r($invoiceinfo);
                           echo "</pre>";*/
@@ -116,7 +116,7 @@
                               $sum += ((int)$inv['price']*(int)$inv['quntity']);
                               $weight = $inv['weight'];
                               $transport = $inv['transport'];
-                              $cus =  $inv['customerid'];
+                              $cus =  $inv['supplierId'];
                               ?>
                               <tr class="domclass">
                       <td contenteditable="true" id="proname">

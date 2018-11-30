@@ -16,7 +16,7 @@
 
 
 
-   $salehistory = $db->joinQuery('SELECT DISTINCT `memono`,`return_date` FROM `sell_return` WHERE `memono`= "'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
+   $salehistory = $db->joinQuery('SELECT DISTINCT `memono`,`return_date` FROM `purchase_return` WHERE `memono`= "'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
 
   /* echo "<pre>";
    print_r($salehistory);
@@ -94,7 +94,7 @@
                    </thead>
                        <tbody>
                           <?php 
-                          $invoiceinfo = $db->selectAll('sell_return','`memono`="'.$_GET['invo'].'"')->fetchAll();
+                          $invoiceinfo = $db->selectAll('purchase_return','`memono`="'.$_GET['invo'].'"')->fetchAll();
                           /*echo "<pre>";
                           print_r($invoiceinfo);
                           echo "</pre>";*/
@@ -177,7 +177,7 @@
         <div class="d-print-none mo-mt-2">
         <div class="pull-right">
         <a href="#" class="btn btn-danger waves-effect waves-light">Delete <i class="fa fa-minus-square-o"></i></a>
-        <a href="product-sale-return-edit.php?invo=<?=$_GET['invo']?>" class="btn btn-warning waves-effect waves-light">Update <i class="fa fa-external-link"></i></a>
+        <a href="purchase-return-edit.php?invo=<?=$_GET['invo']?>" class="btn btn-warning waves-effect waves-light">Update <i class="fa fa-external-link"></i></a>
         <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light">Print <i class="fa fa-print"></i></a>
         <a href="#" class="btn btn-primary waves-effect waves-light">Mail</a>
                                                     </div>

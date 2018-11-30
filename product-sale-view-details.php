@@ -112,7 +112,7 @@
                               ?>
                               <tr>
                                 <td>
-                                  <?=$inv['productid']?>
+                                  <?=$fn->getProductName($inv['productid'])?>
                                 </td> 
                                 <td class="text-center">
                                   <?=$inv['price']?>

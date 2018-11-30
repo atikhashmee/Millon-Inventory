@@ -7,10 +7,6 @@ $rbas->setPageName(5)->run();
  ?>
 
 
-
-
-
-
    <div class="container">
      <div class="row">
                     <div class="col-sm-12">
@@ -38,9 +34,7 @@ $rbas->setPageName(5)->run();
             
             ?>
             <div class="card m-b-30">
-                            <div class="card-body">
-
-                               
+               <div class="card-body">           
          <table class="table table-condensed table-bordered table-hover table-striped" id="datatable" >
             <thead>
                <tr>
@@ -59,31 +53,29 @@ $rbas->setPageName(5)->run();
                <tr>
                   <th scope="row"><?=$i?></th>
                   <td><?=$val['memono']?></td>
-                  <td><?=$val['productid']?></td>
+                  <td><?=$fn->getProductName(trim($val['productid']))?></td>
                   <td><?=$val['quntity']?></td>
                   <td><?=$val['price']?></td>
                   <td><?=$val['return_date']?></td>
                   <td><div class="dropdown">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    options
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-gear"></i>
   </button>
   <div class="dropdown-menu">
     <?php 
          if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="product-sale-return-view-details.php?invo='.$val['memono'].'">View</a>';
+              echo '<a class="dropdown-item" href="product-sale-return-view-details.php?invo='.$val['memono'].'">View <i class="fa fa-eye"></i></a>';
          }
          if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="product-sale-return-edit.php?invo='.$val['memono'].'">Edit</a>';
+              echo '<a class="dropdown-item" href="product-sale-return-edit.php?invo='.$val['memono'].'">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) {
-              echo '<a class="dropdown-item" href="#">Delete</a>';
+              echo '<a class="dropdown-item" href="#">Delete <i class="fa fa-times"></i></a>';
          }
          if ($rbas->getPrint()) {
               echo '<a class="dropdown-item" href="#">Print</a>';
          }
     ?>
-    
-    
   </div>
 </div></td>
                </tr>

@@ -74,21 +74,11 @@
             <tbody>
                <?php 
                   foreach ($data as $val) {  $i++; 
-
-
-                              $productname = '';
-                              if (!empty($val['size_id'])) {
-                                 $productname .= $fn->getBrandName($val['brand_id'])."-". $fn->getSizeName($val['size_id']);
-                              }else {
-                                 $productname .=$fn->getBrandName($val['brand_id']);
-                              }
-
-
                      ?>
                <tr>
                   <th scope="row"><?=$i?></th>
                   <td><?=$val['pro_id']?></td>
-                  <td><?=$productname?></td>
+                  <td><?=$fn->getProductName($val['pro_id'])?></td>
                   
                   <td><?=$val['purchase_price']?></td>
                   <td><?=$val['selling_price']?></td>

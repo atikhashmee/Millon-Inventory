@@ -136,8 +136,8 @@ $rbas->setPageName(3)->run();
                            <div class="col">
                               <div class="form-group">
                                  <div class="col-md-6 col-md-offset-3">
-                                    <button type="submit" class="btn btn-primary">Cancel</button>
-                                    <button id="saveusers" type="button" onclick="addtocart()" class="btn btn-success">Add to list</button>
+                                    <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                                    <button id="saveusers" type="button" onclick="addtocart()" class="btn btn-outline-primary">Add to list</button>
                                  </div>
                               </div>
                            </div>
@@ -168,7 +168,7 @@ $rbas->setPageName(3)->run();
                         <div class="form-group">
                            <label for="">Bill/challan No</label>
                            <input type="text" class="form-control" name="billchallan" id="billchallan" placeholder="click on the button" required>
-                           <button type="button" onclick="gBCN()" class="btn btn-danger">Generate No</button>
+                           <button type="button" onclick="gBCN()" class="btn btn-outline-info"><i class="fa fa-hashtag"></i></button>
                         </div>
                         <div id="chequeoption"  style="display: none;">
                            <div class="form-group">
@@ -266,7 +266,7 @@ $rbas->setPageName(3)->run();
                            <label for="">Grand Total</label>
                            <input type="text" class="form-control" id="grandtotalaftercommision">
                         </div>
-                        <button type="button" class="btn btn-lg btn-primary" name="savepurchaseinfo" onclick="savePurchaseinfo()">Save</button>
+                        <button type="button" class="btn btn-lg btn-outline-primary" name="savepurchaseinfo" onclick="savePurchaseinfo()">Save <i class="fa fa-floppy-o"></i> </button>
                         <button class="btn btn-lg btn-primary">Print Invoice</button>
                      </div>
                   </div>
@@ -354,12 +354,11 @@ $rbas->setPageName(3)->run();
    var totalsum = 0;
    
    function addtocart(){
-   
-   var cutomername = $("#cutomername").val();
-   var pcategory = $("#productcat").val();
-   var pname = $("#product").val();
-   var quantity =  $("#quntity").val();
-   var price =  $("#price").val();
+   var cutomername =  $("#cutomername").val();
+   var pcategory   =  $("#productcat").val();
+   var pname       =  $("#product").val();
+   var quantity    =  $("#quntity").val();
+   var price       =  $("#price").val();
    
      if (ifExist(pname)===0) {
        $("#productnameid").val(pname);

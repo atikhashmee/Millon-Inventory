@@ -80,20 +80,20 @@ $rbas->setPageName(4)->run();
                     <td><?=$sel['selldate']?></td>
                     <td><?=$fn->getUserName($sel['sellby'])?></td>
                     <td><div class="dropdown">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    options
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+   <i class="fa fa-gear"></i>
   </button>
   <div class="dropdown-menu">
     <?php 
          if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="product-sale-view-details.php?invo='.$sel['billchallan'].'">View</a>';
+              echo '<a class="dropdown-item" href="product-sale-view-details.php?invo='.$sel['billchallan'].'">View <i class="fa fa-eye"></i></a>';
          }
          if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="product-sale-edit.php?invo='.$sel['billchallan'].'">Edit</a>';
+              echo '<a class="dropdown-item" href="product-sale-edit.php?invo='.$sel['billchallan'].'">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) {
              ?>
-              <a class="dropdown-item" href="product-sale-history.php?del-id=<?=$val['brand_id']?>" onclick="return confirm('Are you sure?')">Delete</a>
+              <a class="dropdown-item" href="product-sale-history.php?del-id=<?=$val['brand_id']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
       <?php 
          }
          if ($rbas->getPrint()) {

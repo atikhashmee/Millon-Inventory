@@ -16,7 +16,7 @@
 
 
 
-   $salehistory = $db->joinQuery('SELECT DISTINCT `memono`,`return_date` FROM `sell_return` WHERE `memono`= "'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
+   $salehistory = $db->joinQuery('SELECT DISTINCT `billchallan`, `purchasedate` FROM `purchase` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
 
   /* echo "<pre>";
    print_r($salehistory);
@@ -55,7 +55,7 @@
                                         <div class="row">
                                             <div class="col-6">
                                                 <address>
-                                                    <strong>Customer Info:</strong><br>
+                                                <strong>Customer Info:</strong><br>
                                                     John Smith<br>
                                                     1234 Main<br>
                                                     Apt. 4B<br>
@@ -66,8 +66,8 @@
                                                 <address>
                      <strong>Shipment Details:</strong>
                      <br>
-                     Invoice No: <?=$salehistory['memono']?><br>
-                     Sale Date :  <?=date("Y-M-d",strtotime($salehistory['return_date']))?>
+                     Invoice No: <?=$salehistory['billchallan']?><br>
+                     Sale Date :  <?=date("Y-M-d",strtotime($salehistory['purchasedate']))?>
                                                 </address>
                                             </div>
                                         </div>
@@ -94,7 +94,7 @@
                    </thead>
                        <tbody>
                           <?php 
-                          $invoiceinfo = $db->selectAll('sell_return','`memono`="'.$_GET['invo'].'"')->fetchAll();
+                          $invoiceinfo = $db->selectAll('purchase','`billchallan`="'.$_GET['invo'].'"')->fetchAll();
                           /*echo "<pre>";
                           print_r($invoiceinfo);
                           echo "</pre>";*/
@@ -105,23 +105,23 @@
 
 
                             foreach ($invoiceinfo as $inv) {
-                              $sum += ((int)$inv['price']*(int)$inv['quntity']);
+                              $sum += ($inv['price']*$inv['quantity']);
                               $weight = $inv['weight'];
                               $transport = $inv['transport'];
                               $vat = $inv['vat'];
                               ?>
                               <tr>
                                 <td>
-                                  <?=$fn->getProductName(trim($inv['productid']))?>
+                                  <?=$fn->getProductName($inv['productid'])?>
                                 </td> 
                                 <td class="text-center">
                                   <?=$inv['price']?>
                                 </td>
                                 <td class="text-center">
-                                  <?=$inv['quntity']?>
+                                  <?=$inv['quantity']?>
                                 </td>
                                 <td class="text-right">
-                                  <?=((int)$inv['price']*(int)$inv['quntity'])?>
+                                  <?=($inv['price']*$inv['quantity'])?>
                                 </td>
 
                                 
@@ -177,7 +177,7 @@
         <div class="d-print-none mo-mt-2">
         <div class="pull-right">
         <a href="#" class="btn btn-danger waves-effect waves-light">Delete <i class="fa fa-minus-square-o"></i></a>
-        <a href="product-sale-return-edit.php?invo=<?=$_GET['invo']?>" class="btn btn-warning waves-effect waves-light">Update <i class="fa fa-external-link"></i></a>
+        <a href="product-purchase-edit.php?invo=<?=$_GET['invo']?>" class="btn btn-warning waves-effect waves-light">Update <i class="fa fa-external-link"></i></a>
         <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light">Print <i class="fa fa-print"></i></a>
         <a href="#" class="btn btn-primary waves-effect waves-light">Mail</a>
                                                     </div>
