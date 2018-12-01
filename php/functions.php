@@ -24,6 +24,15 @@
 				       return ($prod->rowCount()==0)?"Not found":$productname['brand_name'];
 
 				   }
+
+				   public function getCatName($catid)
+				   {
+				       
+				       $prod =  $this->selectAll("cateogory","cat_id='".$catid."'");
+				       $productname = $prod->fetch(PDO::FETCH_ASSOC);
+				       return ($prod->rowCount()==0)?"Not found":$productname['cat_name'];
+
+				   }
 				   public function getSizeName($sizeid)
 				   {
 				       

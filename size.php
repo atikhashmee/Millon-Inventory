@@ -62,10 +62,10 @@ $datas = $db->selectAll("p_size","pro_size_id='".$_GET['edit-id']."'")->fetch(PD
                      <input id="size_name" class="form-control"  name="size_name"  required="required" type="text" value="<?=$datas['pro_size_name']?>">
                   </div>
                   <div class="form-group">
-                     <div class="col-md-6 col-md-offset-3">
+                     
                         <button type="reset" class="btn btn-outline-danger">Cancel</button>
                         <button  name="updatesize" type="submit" class="btn btn-outline-warning">Update <i class="fa fa-floppy-o"></i></button>
-                     </div>
+                     
                   </div>
                </form>
             </div>
@@ -96,10 +96,10 @@ $datas = $db->selectAll("p_size","pro_size_id='".$_GET['edit-id']."'")->fetch(PD
                      <input id="size_name" class="form-control"  name="size_name"  required="required" type="text">
                   </div>
                   <div class="form-group">
-                     <div class="col-md-6 col-md-offset-3">
+                     
                         <button type="submit" class="btn btn-outline-danger">Cancel</button>
                         <button  name="savesize" type="submit" class="btn btn-outline-primary">Save <i class="fa fa-floppy-o"></i></button>
-                     </div>
+                    
                   </div>
                </form>
             </div>
@@ -107,47 +107,68 @@ $datas = $db->selectAll("p_size","pro_size_id='".$_GET['edit-id']."'")->fetch(PD
 
          <?php 
             if (isset($_POST['savesize'])) {
-              $alredythere = $db->joinQuery("SELECT COUNT(*) as existalready FROM `p_size` WHERE `pro_size_name`='".$_POST['size_name']."'")->fetch(PDO::FETCH_ASSOC);
-                if ($alredythere['existalready']>0) {
-                  ?>
-                        <script> alert("The name is already there! try different name") </script>
-                 <?php
-                   exit();
-                }
-            
-                 $data = array(
-                  'cat_id'        => $_POST['catid'],
-                  'brandid'       => $_POST['brandid'],
-                  'pro_size_name' => $_POST['size_name']
+
+              //validating duplicate vlaues
+                $alredythere2 = $db->joinQuery("SELECT COUNT(*) as existalready FROM `p_size` WHERE `pro_size_name`='".$_POST['size_name']."' AND brandid= '".$_POST['brandid']."'  ")->fetch(PDO::FETCH_ASSOC);
+
+                if ($alredythere2['existalready']>0) 
+                {
+                          ?>
+                      <script> alert("The name is already there! try different name") </script>
+                        <?php
                   
-                );
-                if (!empty($_POST['size_name'])) {
-                    if ($db->insert("p_size",$data)) {
-                        ?>
-                        <script> alert("Data has been saved") </script>
-                 <?php
-                    } else {
-                     ?>
-                        <script> alert("Data has been not saved") </script>
-                 <?php
-                    }
-                }else{
+                }
+                else if (empty($_POST['size_name']))
+                {
                     ?>
                         <script> alert("Fields are empty ") </script>
-                 <?php
+                    <?php
                 }
+                else 
+                {
+                        $data = array(
+                          'cat_id'        => $_POST['catid'],
+                          'brandid'       => $_POST['brandid'],
+                          'pro_size_name' => $_POST['size_name']
+                        );
+                 
+                        if ($db->insert("p_size",$data)) 
+                        {
+                            ?>
+                            <script> alert("Data has been saved") </script>
+                           <?php
+                        }
+                       else
+                        {
+                            ?>
+                            <script> alert("Data has been not saved") </script>
+                            <?php
+                        }
+                }
+
             }
               
               if (isset($_POST['updatesize'])) {
               
-            
-                 $data = array(
+            $alredythere2 = $db->joinQuery("SELECT COUNT(*) as existalready FROM `p_size` WHERE `pro_size_name`='".$_POST['size_name']."' AND brandid= '".$_POST['brandid']."'  ")->fetch(PDO::FETCH_ASSOC);
+
+                if ($alredythere2['existalready']>0) 
+                {
+                          ?>
+                      <script> alert("The name is already there! try different name") </script>
+                        <?php
+                  
+                }
+                else
+                {
+                  $data = array(
                   'cat_id'        => empty($_POST['catid'])?$_POST['dbcat']:$_POST['catid'],
                   'brandid'       => empty($_POST['brandid'])?$_POST['dbbrandid']:$_POST['brandid'],
                   'pro_size_name' => $_POST['size_name']
                   
                 );
-                if (!empty($_POST['size_name'])) {
+                if (!empty($_POST['size_name'])) 
+                {
                     if ($db->update("p_size",$data,"pro_size_id='".$_GET['edit-id']."'")) {
                         ?>
                         <script> alert("Data has been Updated") </script>
@@ -162,18 +183,22 @@ $datas = $db->selectAll("p_size","pro_size_id='".$_GET['edit-id']."'")->fetch(PD
                         <script> alert("Fields are empty") </script>
                  <?php
                 }
+                }
+                 
             }
             
             
             ?>
       </div>
       <!-- users view section starts here -->
-      <div class="col">
+      <div class="col-md-8">
         <div class="card card-body">
          <table class="table table-bordered table-hover table-condensed" id="datatable">
             <thead>
                <tr>
                   <th>#</th>
+                  <th>Cat Name</th>
+                  <th>Brand Name</th>
                   <th>Name</th>
                   <th>Action</th>
                </tr>
@@ -186,6 +211,8 @@ $datas = $db->selectAll("p_size","pro_size_id='".$_GET['edit-id']."'")->fetch(PD
                         foreach ($data as $val) {  $i++; ?>
                <tr>
                   <th scope="row"><?=$i?></th>
+                  <td><?=$fn->getCatName($val['cat_id'])?></td>
+                  <td><?=$fn->getBrandName($val['brandid'])?></td>
                   <td><?=$val['pro_size_name']?></td>
                   <td><div class="dropdown">
   <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">

@@ -89,61 +89,91 @@ $datas = $db->selectAll("p_brand","brand_id='".$_GET['edit-id']."'")->fetch(PDO:
               <?php   } ?>
         
          <?php 
-            if (isset($_POST['savebrand'])) {
+            if (isset($_POST['savebrand']))
+             {
 
-                $alredythere = $db->joinQuery("SELECT COUNT(*) as existalready FROM `p_brand` WHERE `brand_name`='".$_POST['brandname']."'")->fetch(PDO::FETCH_ASSOC);
-                if ($alredythere['existalready']>0) {
-                   ?>
+                $alredythere = $db->joinQuery("SELECT COUNT(*) as existalready FROM `p_brand` WHERE `brand_name`='".$_POST['brandname']."' AND cate_id = '".$_POST['catid']."' ")->fetch(PDO::FETCH_ASSOC);
+                if ($alredythere['existalready']>0) 
+                {
+                         ?>
                         <script> alert("This name is already there try different name") </script>
-                 <?php
-                   exit();
+                        <?php
+                   
+                }
+                else 
+                {
+
+                      $data = array(
+                      'cate_id' => $_POST['catid'],
+                      'brand_name' => $_POST['brandname']
+                       );
+                  if (!empty($_POST['brandname'])) 
+                  {
+                      if ($db->insert("p_brand",$data))
+                       {
+                          ?>
+                          <script> alert("Data has been saved") </script>
+                         <?php
+                       } 
+                       else
+                       {
+                           ?>
+                          <script> alert("Data has been not saved") </script>
+                           <?php
+                      }
+                  }
+                  else
+                  {
+                         ?>
+                          <script> alert("Fields are empty") </script>
+                         <?php
+                  }
                 }
                   
-                 $data = array(
-                  'cate_id' => $_POST['catid'],
-                  'brand_name' => $_POST['brandname']
-                );
-                if (!empty($_POST['brandname'])) {
-                    if ($db->insert("p_brand",$data)) {
-                        ?>
-                        <script> alert("Data has been saved") </script>
-                 <?php
-                    } else {
-                      ?>
-                        <script> alert("Data has been not saved") </script>
-                 <?php
-                    }
-                }else{
-                    ?>
-                        <script> alert("Fields are empty") </script>
-                 <?php
-                }
+                 
             }
 
 
              if (isset($_POST['updatebrand'])) {
 
-                
-                  
-                 $data = array(
-                  'cate_id' => (empty($_POST['catid']))?$_POST['dbcat']:$_POST['catid'],
-                  'brand_name' => $_POST['brandname']
-                );
-                if (!empty($_POST['brandname'])) {
-                    if ($db->update("p_brand",$data,"brand_id='".$_GET['edit-id']."'")) {
-                        ?>
-                        <script> alert("Data has been Updated") </script>
-                 <?php
-                    } else {
-                      ?>
-                        <script> alert("Data has been not Updated") </script>
-                 <?php
-                    }
-                }else{
-                    ?>
-                        <script> alert("Fields are empty") </script>
-                 <?php
+                $alredythere = $db->joinQuery("SELECT COUNT(*) as existalready FROM `p_brand` WHERE `brand_name`='".$_POST['brandname']."' AND cate_id = '".$_POST['catid']."' ")->fetch(PDO::FETCH_ASSOC);
+                if ($alredythere['existalready']>0) 
+                {
+                         ?>
+                        <script> alert("This name is already there try different name") </script>
+                        <?php
+                   
                 }
+                else 
+                {
+                   $data = array(
+                      'cate_id' => (empty($_POST['catid']))?$_POST['dbcat']:$_POST['catid'],
+                              'brand_name' => $_POST['brandname']
+                        
+                            );
+                        if (!empty($_POST['brandname'])) 
+                        {
+                          if ($db->update("p_brand",$data,"brand_id='".$_GET['edit-id']."'")) {
+                                ?>
+                                <script> alert("Data has been Updated") </script>
+                                <?php
+                            } 
+                            else
+                            {
+                              ?>
+                                <script> alert("Data has been not Updated") </script>
+                               <?php
+                            }
+                        }
+                        else
+                        {
+                               ?>
+                                <script> alert("Fields are empty") </script>
+                             <?php
+                        }
+                }
+                  
+                    
             }
             
             
@@ -163,6 +193,7 @@ $datas = $db->selectAll("p_brand","brand_id='".$_GET['edit-id']."'")->fetch(PDO:
             <thead>
                <tr>
                   <th>#</th>
+                  <th>Category Name</th>
                   <th>Name</th>
                   <th>Action</th>
                </tr>
@@ -172,6 +203,7 @@ $datas = $db->selectAll("p_brand","brand_id='".$_GET['edit-id']."'")->fetch(PDO:
                   foreach ($data as $val) {  $i++; ?>
                <tr>
                   <th scope="row"><?=$i?></th>
+                  <td><?=$fn->getCatName($val['cate_id'])?></td>
                   <td><?=$val['brand_name']?></td>
                  
                   <td><div class="dropdown">

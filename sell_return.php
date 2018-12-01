@@ -125,7 +125,7 @@
             </div>
            
             <div class="form-group">
-              <button type="button" class="btn btn-primary" onclick="addtolists()" >Add to list</button>
+              <button type="button" class="btn btn-outline-primary" onclick="addtolists()" >Add to list <i class="fa fa-list"></i></button>
             </div>
             </form>
             </div>
@@ -165,7 +165,7 @@
                 <input type="text" class="form-control" id="grndtot">
               </div>
               <div class="form-group">
-                <button type="button" class="btn btn-primary btn-lg" onclick="savereturninfo()" >Submit</button>
+                <button type="button" class="btn btn-outline-primary btn-lg" onclick="savereturninfo()" >Save <i class="fa fa-floppy-o"></i></button>
               </div>
                
             </form>

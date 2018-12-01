@@ -4,6 +4,17 @@
 <?php include 'files/menu.php';
 
 $rbas->setPageName(5)->run();
+
+if (isset($_GET['del-id']))
+        {
+             if ($db->delete("sell_return","memono='".$_GET['del-id']."'")) 
+              {
+                 ?>
+                 <script> alert('Data has been deleted');
+                 window.location.href='sell_return_history.php'; </script>
+                <?php  
+              }
+        }
  ?>
 
 
@@ -70,7 +81,9 @@ $rbas->setPageName(5)->run();
               echo '<a class="dropdown-item" href="product-sale-return-edit.php?invo='.$val['memono'].'">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) {
-              echo '<a class="dropdown-item" href="#">Delete <i class="fa fa-times"></i></a>';
+              ?>
+              <a class="dropdown-item" href="sell_return_history.php?del-id=<?=$val['memono']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
+      <?php 
          }
          if ($rbas->getPrint()) {
               echo '<a class="dropdown-item" href="#">Print</a>';
