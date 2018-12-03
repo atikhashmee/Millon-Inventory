@@ -84,6 +84,9 @@
         <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
         <!-- alertify plugin -->
         <link href="assets/plugins/alertify/css/alertify.css" rel="stylesheet" type="text/css">
+
+        <!-- jquery datepicker -->
+         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
        
 
          

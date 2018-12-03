@@ -51,11 +51,7 @@
 
 
 
-      getcomsiondeducted = function (){  // when the user is using commission for deduction
-    var com =  $("#comision").val();
-     var totalprice =  $("#subtotalbeforecommsion").val();
-     $("#grandtotalaftercommision").val(  totalprice - ((com/100)*totalprice) );
-   }
+     
    
    
      getpricediscounted = function (){ // when user is using direct money to be deducted

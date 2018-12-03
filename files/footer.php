@@ -44,6 +44,9 @@
         <script src="assets/plugins/datatables/dataTables.responsive.min.js"></script>
         <script src="assets/plugins/datatables/responsive.bootstrap4.min.js"></script>
 
+        <!-- jquery datepicker -->
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
         <!-- Datatable init js -->
         <script src="assets/pages/datatables.init.js"></script>
 

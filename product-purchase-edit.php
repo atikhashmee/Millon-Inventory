@@ -1,13 +1,7 @@
 <?php include 'files/header.php'; ?>
 <?php include 'files/menu.php';
-   
-   
-   
-   
-   $salehistory = $db->joinQuery('SELECT DISTINCT `billchallan`, `purchasedate`, `payment_taka`,  `purchaseentryby`,`supplier` FROM `purchase` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
-   
 
-   
+   $salehistory = $db->joinQuery('SELECT DISTINCT `billchallan`, `purchasedate`, `payment_taka`,  `purchaseentryby`,`supplier` FROM `purchase` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
    ?>
 <div class="container">
    <div class="row">
@@ -187,29 +181,29 @@
                                        <label for="">Total</label>
                                        <input type="text" class="form-control" id="subtotalbeforecommsion" name="subtotalbeforecommsion" value="0">
                                     </div>
-                                    <div class="row">
+                                    <div class="row" id="calculatepart">
                                        <div class="col">
                                           <div class="form-group">
                                              <label for="">Commission (%)</label>
-                                             <input type="text" class="form-control" id="comision" name="comision" onblur="getcomsiondeducted()" value="<?=$comision?>">
+                                             <input type="text" class="form-control" id="comision" name="comision" value="<?=$comision?>">
                                           </div>
                                           <div class="form-group">
                                              <label for="">Discount</label>
-                                             <input type="text" class="form-control" id="discount" name="discount" onblur="getpricediscounted()" value="<?=$discount?>">
+                                             <input type="text" class="form-control" id="discount" name="discount"  value="<?=$discount?>">
                                           </div>
                                        </div>
                                        <div class="col">
                                           <div class="form-group">
                                              <label for="">Weight</label>
-                                             <input type="text" class="form-control" id="weght" name="weght" onblur="getValueF()" value="<?=$weight?>">
+                                             <input type="text" class="form-control" id="weght" name="weght" value="<?=$weight?>">
                                           </div>
                                           <div class="form-group">
                                              <label for="">Transport</label>
-                                             <input type="text" class="form-control" id="transport" name="transport" onblur="getValueF()" value="<?=$transport?>">
+                                             <input type="text" class="form-control" id="transport" name="transport"  value="<?=$transport?>">
                                           </div>
                                           <div class="form-group">
                                              <label for="">Vat (%)</label>
-                                             <input type="text" class="form-control" id="vat" name="vat" onblur="getValueF()" value="<?=$vat?>">
+                                             <input type="text" class="form-control" id="vat" name="vat" value="<?=$vat?>">
                                           </div>
                                        </div>
                                     </div>
@@ -236,16 +230,7 @@
 </div>
 <?php include 'files/footer.php'; ?>
 <script>
-   function getcomsiondeducted(){  // when the user is using commission for deduction
-     var com =  $("#comision").val();
-      var totalprice =  $("#subtotalbeforecommsion").val();
-      $("#grandtotalaftercommision").val(  totalprice - ((com/100)*totalprice) );
-    }
-   function getpricediscounted(){ // when user is using direct money to be deducted
-         var com =  $("#discount").val();
-      var totalprice =  $("#subtotalbeforecommsion").val();
-      $("#grandtotalaftercommision").val(  totalprice - com );
-     }
+   
     <?php 
       $brand = $db->selectAll("p_brand");
       $sizes = $db->selectAll("p_size");
@@ -358,6 +343,13 @@
     var pname = $("#product").val();
     var quantity =  $("#quntity").val();
     var price =  $("#price").val();
+
+    if (getValue("productcat").length === 0) 
+   {
+    alert("Select a product")
+   }
+   else 
+   {
     
       if (ifExist(pname)===0) {
         $("#productnameid").val(pname);
@@ -370,18 +362,11 @@
     }else {
       alert("This product is already in the cart");
     }
+  }
       
     }
    
-    function getValueF() {
-      var vat = ($("#vat").val().length !==0 )?parseInt($("#vat").val()):0;
-      var transport = ($("#transport").val().length !== 0)? parseInt($("#transport").val()):0;
-      var wight =  ($("#weght").val().length !== 0) ?  parseInt($("#weght").val()):0;
-      var totalprice =   parseInt($("#subtotalbeforecommsion").val());
-      var percent = ((vat/100)*totalprice)+totalprice;
-      var sum = percent + transport + wight;
-      $("#grandtotalaftercommision").val( sum );
-    }
+    
    
    
       function savePurchaseinfo(){
@@ -445,6 +430,73 @@
             
             //alert(index);
       }
+
+
+         function getValue(id) {
+      return document.getElementById(id).value;
+    }
+     
+
+     
+     document.getElementById("calculatepart").addEventListener("blur",event=>{
+          var totalprice =  parseFloat(getValue("subtotalbeforecommsion"));
+          var sum = totalprice;
+         
+          var valu        = parseFloat(event.target.value) || 0;
+             var disc     = parseFloat(getValue("discount"))  || 0,
+                 wight    = parseFloat(getValue("weght"))  || 0,
+                 tranport = parseFloat(getValue("transport"))  || 0,
+                    vat   = parseFloat(getValue("vat"))  || 0,
+                 comssion = parseFloat(getValue("comision"))  || 0;
+
+          if (event.target.id === "comision")
+           {      sum  -=  disc;
+                  sum  +=  wight;
+                  sum  +=  tranport;
+                  sum  += ((vat/100)  * totalprice);
+                  sum  -= ((valu/100) * totalprice);
+           }
+           else if (event.target.id === "discount")
+           {
+                  sum  -= valu;
+                  sum  +=  wight;
+                  sum  +=  tranport;
+                  sum  += ((vat/100)  * totalprice);
+                  sum  -= ((comssion/100) * totalprice);
+           }
+           else if (event.target.id === "weght") 
+           {
+                
+                  sum  -= disc;
+                  sum  +=  valu;
+                  sum  +=  tranport;
+                  sum  += ((vat/100)  * totalprice);
+                  sum  -= ((comssion/100) * totalprice);
+           }
+           else if (event.target.id === "transport") 
+           {
+             
+
+                  sum  -= disc;
+                  sum  +=  wight;
+                  sum  += valu;
+                  sum  += ((vat/100)  * totalprice);
+                  sum  -= ((comssion/100) * totalprice);
+           }
+           else if (event.target.id === "vat") 
+           {
+             
+              
+                  sum  -= disc;
+                  sum  +=  wight;
+                  sum  += tranport;
+                  sum  += ((valu/100)*totalprice);
+                  sum  -= ((comssion/100) * totalprice);
+           }
+           $("#grandtotalaftercommision").val(sum);
+
+
+     },true);
    
    
    

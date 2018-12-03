@@ -114,7 +114,7 @@
               </div>
             </div>
          <div class="form-group">
-         <button type="button" class="btn btn-primary" onclick="addtolists()" >Add to list</button>
+         <button type="button" class="btn btn-outline-info" onclick="addtolists()" >Add to list <i class="fa fa-list"></i> </button>
          </div>
          </form>
          </div>
@@ -154,7 +154,7 @@
                 <input type="text" class="form-control" id="grndtot">
               </div>
               <div class="form-group">
-                <button type="button" class="btn btn-primary btn-lg" onclick="savereturninfo()" >Submit</button>
+                <button type="button" class="btn btn-outline-primary btn-lg" onclick="savereturninfo()" >Save <i class="fa fa-floppy-o"></i></button>
               </div>
                
             </form>
@@ -234,7 +234,7 @@
                console.log(res);
                var trvalus = "";
                for (var i = 0; i < res.length; i++) {
-                   trvalus += "<tr><td id='proname_"+i+"'>" + res[i].productid + "</td> <td id='quntity_"+i+"'>" + res[i].quantity + "</td> <td id='price_"+i+"'>" + res[i].price + "</td><td>" + res[i].quantity * res[i].price + "</td> <td><button type='button' class='btn btn-primary' onclick='dataedit("+i+")'>Edit</button</td></tr>";
+                   trvalus += "<tr><td id='proname_"+i+"'>" + res[i].productid + "</td> <td id='quntity_"+i+"'>" + res[i].quantity + "</td> <td id='price_"+i+"'>" + res[i].price + "</td><td>" + res[i].quantity * res[i].price + "</td> <td><button type='button' class='btn btn-outline-info' onclick='dataedit("+i+")'>Edit</button</td></tr>";
                }
                document.getElementById('datalist').innerHTML = trvalus;
            })
