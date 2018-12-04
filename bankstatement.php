@@ -3,15 +3,24 @@
  ?>
 <div class="container">
    <div class="row">
-       <div class="col">
-         <div class="bg-light card card-body" style=" background: #b4c6d8 !important">
-          <h1 style="text-align: center;">Bank Statement</h1>
-         </div>
-       </div>
-     </div>
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <div class="btn-group pull-right">
+                                <ol class="breadcrumb hide-phone p-0 m-0">
+                                  <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+                                  <li class="breadcrumb-item"><a href="#">Report</a></li>
+                                  <li class="breadcrumb-item active">Bank statement</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title"> Bank Statement</h4>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
      <div class="row">
        <div class="col">
-         <div class="bg-light card card-body" style=" background: #060202 !important;">
+         <div class="card card-body">
           <form action="">
             <div class="row">
                <div class="col">
@@ -28,7 +37,7 @@
                 </div>
               <div class="col"><input type="date" class="form-control" name="start"></div>
               <div class="col"><input type="date" class="form-control" name="to"></div>
-              <div class="col"><input type="submit" class="btn btn-default"></div>
+              <div class="col"><button type="submit"  class="btn btn-outline-primary">  Search <i class="fa fa-search"></i> </button> </div>
             </div>
           </form>
          </div>
@@ -37,9 +46,10 @@
 
 
 
-<div class="row" style="margin-top: 22px;">
+<div class="row" style="margin-top: 20px;">
 
    <!-- users view section starts here -->
+
    <div class="col">
       <?php 
          $sql =  "SELECT `selldate`, `customerid`, `payment_taka`, `token` FROM `sell` WHERE `payment_taka` IS NOT NULL AND TRIM(`payment_taka`) <> ''
@@ -52,11 +62,16 @@ SELECT `expiredate`, `customerid`, `amount`, `fromtable` FROM `cheque` WHERE `ap
            //echo $sql;
          $data = $db->joinQuery($sql)->fetchAll();
          $opening_balance  =  $db->joinQuery("SELECT `opening_balance` FROM `charts_accounts` WHERE `chart_name`='Cash'")->fetch(PDO::FETCH_ASSOC);
-         echo "<h1 style='color:blue'> Account type = Cash </h1>";
-         echo "<h1 style='color:blue'> Opening Balance = ".$opening_balance['opening_balance']."</h1>";
+         echo "<div class='card card-body'>";
+         echo "<h5> Account type = Cash </h5>";
+         echo "<h5> Opening Balance = ".$opening_balance['opening_balance']."</h5>";
+         echo "</div>";
          
          ?>
-      <table class="table table-hover table-striped table-bordered" id="myTable" >
+       <div class="card card-body">
+        <h4>Statement</h4>
+        <hr>
+      <table class="table table-hover table-bordered" id="datatable-buttons" >
          <thead>
             <tr>
                <th>#</th>
@@ -106,13 +121,15 @@ SELECT `expiredate`, `customerid`, `amount`, `fromtable` FROM `cheque` WHERE `ap
                </tr>
             <?php   }
                ?>
-               
+              
          </tbody>
+            <tr>
+               
+               <td colspan="4" class="text-right"> <h5>Total Cash Balance</h5> </td>
+               <td> <strong><?=number_format((float)$sum,2,'.',',')?></strong></td>
+             </tr>
       </table>
-      <tr>
-                 <td>Total Cash Balance</td>
-                 <td> <h1><b><?=number_format((float)$sum,2,'.',',')?></b></h1> </td>
-               </tr>
+      </div>
    </div>
 </div>
 </div>

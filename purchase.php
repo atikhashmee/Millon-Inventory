@@ -23,7 +23,7 @@
          <div class="row">
             <div class="col">
                <div class="form-group">
-                  <label for="name">supplierName<span class="required">*</span></label>
+                <label for="name">supplierName<span class="required">*</span></label>
                   <select class="form-control" name="suppliername" id="suppliername">
                      <option value="">Choose option</option>
                      <?=$dm->getUsersByRole(2)?>
@@ -99,6 +99,7 @@
                         <th>Quantity</th>
                         <th>price</th>
                         <th>Total Price</th>
+                        <th>Action</th>
                      </tr>
                   </thead>
                   <tbody id="mycartlists">
@@ -251,7 +252,7 @@
             var xyz = products();
             xyz.then((obj) =>
             {
-              console.log(obj);
+              //console.log(obj);
               var text = "";
                 obj.forEach((element)=>{
                     if (element.product_cat === event.target.value)
@@ -276,11 +277,11 @@
    }
    return 0;
    }
-   
+   var incr = 0;
     function addtocart (){
    var suppliername = $("#suppliername").val();
    var pcategory = $("#productcat").val();
-   var pname = $("#product").val();
+   var pname =     $("#product").val();
    var quantity =  $("#quntity").val();
    var price =  $("#price").val();
    if (getValue("productcat").length === 0) 
@@ -290,9 +291,10 @@
    else 
    {
          if (ifExist(pname)===0) {
+          incr++;
        
        purchaseitem.push(new productobj(suppliername,pcategory,pname,quantity,price)); //pushing every item to the cart so that i can retrive and modified in the cart 
-     $("#mycartlists").append('<tr> <td>'+prod[pname]+'</td>  <td>'+quantity+'</td>   <td>'+price+'</td> <td class="totatlbalnceshow">'+price*quantity+'</td> </tr>');
+     $("#mycartlists").append('<tr id="trcontent_'+incr+'"> <td>'+prod[pname]+'</td>  <td>'+quantity+'</td>   <td>'+price+'</td> <td class="totatlbalnceshow">'+price*quantity+'</td>  <td><button type="button" data-pr="'+pname+'" data-inc="'+incr+'" class="btn btn-outline-danger" onclick="removeitem(this)">X</button></td> </tr>');
        totalsum += parseInt((price*quantity));
      $("#subtotalbeforecommsion").val(totalsum); // value gets updated everytime a new item get added to the cart
        }
@@ -415,6 +417,14 @@
 
 
      },true);
+
+     function removeitem(obj) {
+         var proid = obj.getAttribute("data-pr");
+         var rowid = obj.getAttribute("data-inc");
+         purchaseitem.splice(purchaseitem.map(el => el.pname).indexOf(proid),1);
+         var element = document.getElementById('trcontent_'+rowid);
+         element.style.display = 'none';
+      }
   
    
 </script>

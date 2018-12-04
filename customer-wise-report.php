@@ -3,17 +3,25 @@
  ?>
 <div class="container">
 
-   <div class="row">
-       <div class="col">
-         <div class="bg-light card card-body" style=" background: #b4c6d8 !important">
-          <h1 style="text-align: center;">Customerwise Report</h1>
-         </div>
-       </div>
-     </div>
-
+    <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <div class="btn-group pull-right">
+                                <ol class="breadcrumb hide-phone p-0 m-0">
+                                  <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+                                  <li class="breadcrumb-item"><a href="#">Report</a></li>
+                                  <li class="breadcrumb-item active">Customerwise report</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title"> Customerwise Report</h4>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
      <div class="row">
        <div class="col">
-         <div class="bg-light card card-body" style=" background: #060202 !important;">
+         <div class="card card-body">
           <form action="" method="POST">
             <div class="row">
               <!-- <div class="col">
@@ -26,41 +34,23 @@
                <div class="col">
                 <select class="form-control" name="cutomername" id="cutomername">
                      <option>Select a Customer</option>
-                     <?php 
-                        $cat  =  $db->joinQuery("SELECT * FROM `users` WHERE `user_role`='1'")->fetchAll();
-                        foreach ($cat as $cater) { ?>
-                     <option value="<?=$cater['u_id']?>"><?=$cater['name']?></option>
-                     <?php   }
-                        ?>
+                      <?=$dm->getUsersByRole(1)?>
                   </select>
                 </div>
-               <div class="col">
-                 
-                     
-                     <select class="form-control" name="productcat" id="productcat" onchange="getProduct()">
-                        <option>product category</option>
-                        <?php 
-                           $cat  =  $db->joinQuery("SELECT * FROM `cateogory`")->fetchAll();
-                           foreach ($cat as $cater) { ?>
-                        <option value="<?=$cater['cat_id']?>"><?=$cater['cat_name']?></option>
-                        <?php
-                           }
-                           
-                           ?>
-                     </select>
-                  
-               </div>
-               <div class="col">
-                  
-                     <select class="form-control" name="product" id="product">
-
-                     </select>
-                  
-               </div>
-                 
+              <div class="col">
+                <select name="productcat" id="productcat" class="form-control">
+                   <option value="">Select A Product category</option>
+                     <?php $dm->getCategories();?>
+                </select>
+                </div>
+              <div class="col">
+                <select name="product" id="product" class="form-control" >
+                   
+                </select>
+              </div>
               <div class="col"><input type="date" class="form-control" name="start"></div>
-              <div class="col"><input type="date" class="form-control" name="to"></div>
-              <div class="col"><input type="submit" value="Search" name="filter" class="btn btn-default"></div>
+            <div class="col"><input type="date" class="form-control" name="to"></div>
+              <div class="col"><button type="submit" name="filter" class="btn btn-outline-primary"> Search <i class="fa fa-search"></i> </button></div>
             </div>
           </form>
          </div>
@@ -117,8 +107,8 @@
          $data = $db->joinQuery($sql)->fetchAll();
          
          ?>
-     
-      <table class="table table-hover table-striped table-bordered" id="myTable" >
+       <div class="card card-body">
+      <table class="table table-hover  table-bordered" id="datatable-buttons" >
          <thead>
             <tr>
                <th>#</th>
@@ -190,76 +180,41 @@
                
          </tbody>
       </table>
-      
+      </div>
    </div>
 </div>
 </div>
 <?php include 'files/footer.php'; ?>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="assets/js/productbasic.js"></script>
+<script src="assets/js/product.js"></script>
 <script>
-  <?php 
-      $brand = $db->selectAll("p_brand");
-      $sizes = $db->selectAll("p_size");
-      $pro = $db->selectAll("product_info");
-       $branddd = [];
-       $sizsesss =  [];
-       $products =  [];
-      
-      while ($br = $brand->fetch(PDO::FETCH_ASSOC)) {
-       $branddd[$br['brand_id']] = $br['brand_name'];
-      }
-      
-      
-      while ($si = $sizes->fetch(PDO::FETCH_ASSOC)) {
-       $sizsesss[$si['pro_size_id']] = $si['pro_size_name'];
-      }
-      while ($prlist = $pro->fetch(PDO::FETCH_ASSOC)) {
-                           $productname = '';
-                              if (!empty($prlist['size_id'])) {
-                                 $productname .= $fn->getBrandName($prlist['brand_id'])."-". $fn->getSizeName($prlist['size_id']);
-                              }else {
-                                 $productname .=$fn->getBrandName($prlist['brand_id']);
-                              }
-       $products[$prlist['pro_id']] = $productname;
-      }
-      
-      
-      ?>
+
    
-   var brnds = <?php echo json_encode($branddd);?>;
-   var sizzz = <?php echo json_encode($sizsesss);?>;
-   var prod = <?php echo json_encode($products);?>;
-     
-   function  getProduct() {
-   var id = document.getElementById("productcat").value;
-   $.ajax({
-   url: 'ajax/getProductByCategory.php',
-   type: 'POST',
-   data: {
-     id: id },
-   })
-   .done(function(res) {
-   var text = "";
-   var data = JSON.parse(res);
-   var dll = "";
-   for(var j = 0; j < data.length; j++){
-    dll = "";
-    if (data[j].size_id.length !== 0) {
-       dll =  sizzz[data[j].size_id];
-    }
-   text +="<option value='"+data[j].pro_id+"'>"+brnds[data[j].brand_id]+"-"+ dll +"</option>";
-   }
-   $("#product").html(text);
-   // console.log(data[0].p_id);
-   $("#cuquntity").val("6");
-   })
-   .fail(function() {
-   console.log("error");
-   })
-   .always(function() {
-   console.log("complete");
-   });
+   var brnds = <?php echo  json_encode($dm->getBrandListByIds());?>;
+   var sizzz = <?php echo  json_encode($dm->getSizeListByIds());?>;
+   var prod =  <?php echo  json_encode($dm->getProListByIds());?>;
+
+new DefaultModule(brnds,sizzz,prod);
    
-   
-   }
+     document.getElementById("productcat").addEventListener("change",(event)=>{
+        if (event.target.value.length !== 0) 
+        {
+            
+            var xyz = products();
+            xyz.then((obj) =>
+            {
+              //console.log(obj);
+              var text = "";
+                obj.forEach((element)=>{
+                    if (element.product_cat === event.target.value)
+                     {
+                      text += "<option value='"+element.pro_id+"'>"+defaultModule.prod[element.pro_id]+"</option>";
+                     }
+                });
+          document.getElementById("product").innerHTML = text;
+        });
+        }
+       });
+  
+</script>
 </script>

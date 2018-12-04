@@ -413,7 +413,6 @@
          var proid = obj.getAttribute("data-pr");
          var rowid = obj.getAttribute("data-inc");
 
-
             if (purchaseitem.length !== 1) 
             {
               var index = ifExist(proid);

@@ -34,21 +34,29 @@
 
  </style>
      <div class="container">
-      <div class="row ">
-      <div class="col">
-         <div class="bg-light card card-body header-wrapper" style=" background: #b4c6d8 !important">
-            <h1 style="text-align: center;">Target Report</h1>
-         </div>
-      </div>
-  
-   </div>
+      <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <div class="btn-group pull-right">
+                                <ol class="breadcrumb hide-phone p-0 m-0">
+                                  <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+                                  <li class="breadcrumb-item"><a href="#">Report</a></li>
+                                  <li class="breadcrumb-item active">Target Report</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title"> Employee Target Report</h4>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
 
       
                 <!-- table start -->
                 <div class="row">
        <div class="col">
-         <div class="bg-light card card-body" style=" background: #060202 !important;">
-.,ল বয বrm action="" method="post">
+         <div class="card card-body">
+         <form action="" method="post">
             <div class="row">
               <div class="col">
                 <select class="form-control" name="employeeid">
@@ -69,8 +77,9 @@
                 </select>
               </div>
               <div class="col"><input type="date" class="form-control" name="start"></div>
-              <div class="col"><input type="date" class="form-control" name="to"></div>
-              <div class="col"><input type="submit" value="Search" name="search" class="btn btn-default"></div>
+            <div class="col"><input type="date" class="form-control" name="to"></div>
+              <div class="col">
+                <button type="submit"  name="search" class="btn btn-outline-primary">Search <i class="fa fa-search"></i> </button></div>
             </div>
           </form>
          </div>

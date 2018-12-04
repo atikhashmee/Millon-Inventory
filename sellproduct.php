@@ -337,7 +337,7 @@ body {
    
    var  purchaseitem  = [];
    var totalsum = 0;
-   
+   var incr = 0;
    function addtocart(){
    var cutomername =  $("#cutomername").val();
    var pcategory   =  $("#productcat").val();
@@ -351,12 +351,13 @@ body {
    }
    else 
    {
+       incr++;
       if (ifExist(pname)===0) {
        $("#productnameid").val(pname);
        $("#productqunatityhidden").val(quantity);
        $("#productpricehideen").val(price);
        purchaseitem.push(new productobj(cutomername,pcategory,pname,quantity,price)); //pushing every item to the cart so that i can retrive and modified in the cart 
-     $("#mycartlists").append('<tr> <td>'+prod[pname]+'</td>  <td>'+quantity+'</td>   <td>'+price+'</td> <td class="totatlbalnceshow">'+price*quantity+'</td> </tr>');
+     $("#mycartlists").append('<tr id="trcontent_'+incr+'"> <td>'+prod[pname]+'</td>  <td>'+quantity+'</td>   <td>'+price+'</td> <td class="totatlbalnceshow">'+price*quantity+'</td> <td><button type="button" data-pr="'+pname+'" data-inc="'+incr+'" class="btn btn-outline-danger" onclick="removeitem(this)">X</button></td> </tr>');
        totalsum += parseInt((price*quantity));
      $("#subtotalbeforecommsion").val(totalsum); // value gets updated everytime a new item get added to the cart
    }else {
@@ -567,6 +568,14 @@ body {
            $("#grandtotalaftercommision").val(sum);
 
      },true);
+
+    function removeitem(obj) {
+         var proid = obj.getAttribute("data-pr");
+         var rowid = obj.getAttribute("data-inc");
+         purchaseitem.splice(purchaseitem.map(el => el.pname).indexOf(proid),1);
+         var element = document.getElementById('trcontent_'+rowid);
+         element.style.display = 'none';
+      }
 
 
    

@@ -75,12 +75,12 @@
                     <td><?=$i?></td>
                     <td><?=$pur['billchallan']?></td>
                     <td><?=$fn->getUserName($pur['supplier'])?></td>
-                    <td><?=$fn->getProductName($pur['productid'])?></td>
+                    <td><?=$pur['productid']?>-<?=$fn->getProductName($pur['productid'])?></td>
                     <td><?=$pur['quantity']?></td>
                     <td><?=$pur['price']?></td>
                   
                     
-                    <td><?=($pur['quantity'] * $pur['price']) - ($pur['comdiscount']/100 * ($pur['quantity'] * $pur['price']))?></td>
+                    <td><?=($pur['quantity'] * $pur['price']) - ($pur['comdiscount']/100 * ($pur['quantity'] * $pur['price']))?></td> 
                     
                     <td><?=$pur['purchasedate']?></td>
                     <td><div class="dropdown">
