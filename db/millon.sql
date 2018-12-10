@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 30, 2018 at 06:10 AM
+-- Generation Time: Dec 10, 2018 at 08:08 AM
 -- Server version: 10.1.33-MariaDB
 -- PHP Version: 7.2.6
 
@@ -86,7 +86,7 @@ CREATE TABLE `cateogory` (
 --
 
 INSERT INTO `cateogory` (`cat_id`, `cat_name`, `cat_description`, `cat_created_at`) VALUES
-(1, 'ROD', '', '2018-10-27'),
+(1, 'ROD', '', '2018-12-10'),
 (2, 'CEMENT', '', '2018-10-27');
 
 -- --------------------------------------------------------
@@ -114,7 +114,7 @@ CREATE TABLE `charts_accounts` (
 --
 
 INSERT INTO `charts_accounts` (`charts_id`, `main_cat_id`, `chart_name`, `accountno`, `contactperson`, `contactnumber`, `email`, `address`, `opening_balance`, `created_at`, `updated_at`) VALUES
-(1, '1', 'Cash', '3452352653656', 'Kamal', '01735623513', 'atikhashmee6235@gmail.com', 'feni, feni2', '50000', '2018-11-27', '002');
+(1, '1', 'Cash', '3452352653656', 'Kamal', '01735623513', 'atikhashmee6235@gmail.com', 'feni, feni2', '50000', '2018-12-10', '002');
 
 -- --------------------------------------------------------
 
@@ -147,7 +147,8 @@ INSERT INTO `cheque` (`chequeno`, `parent_table_id`, `customerid`, `accountno`, 
 (5, '3', '', '', 'BASIC Bank Limited', '2018-11-25', '500', '36', 'minus', 0, 'Millon'),
 (6, '0', '27', '4325423454', 'BRAC Bank Limited', '2018-11-25', '500', '36', 'minus', 0, 'Millon'),
 (8, 'rac_5', '18', '234567', 'Agrani Bank Limited', '2018-11-28', '5050', '36', 'add', 2, 'Millon'),
-(9, 'pts_7', '26', '4535324', 'Citibank N.A', '2018-11-28', '510', '36', 'minus', 2, 'Millon');
+(9, 'pts_7', '26', '4535324', 'Citibank N.A', '2018-11-28', '510', '36', 'minus', 2, 'Millon'),
+(10, 'rac_7', '22', '234567', 'Agrani Bank Limited', '2018-12-10', '8000', '36', 'add', 0, 'Millon');
 
 -- --------------------------------------------------------
 
@@ -187,7 +188,31 @@ INSERT INTO `employeesalerlist` (`emsaleryid`, `skeysids`, `amount`, `employeeid
 (60, '2', '1300', '1', 'Bangladesh Krishi Bank', '123456674243545'),
 (61, '3', '5000', '1', 'Bangladesh Krishi Bank', '123456674243545'),
 (62, '4', '250', '1', 'Bangladesh Krishi Bank', '123456674243545'),
-(63, '5', '450', '1', 'Bangladesh Krishi Bank', '123456674243545');
+(63, '5', '450', '1', 'Bangladesh Krishi Bank', '123456674243545'),
+(64, '1', '700', '40', 'Bangladesh Commerce Bank Limited', '123456'),
+(65, '2', '300', '40', 'Bangladesh Commerce Bank Limited', '123456'),
+(66, '3', '400', '40', 'Bangladesh Commerce Bank Limited', '123456');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `employeetype`
+--
+
+CREATE TABLE `employeetype` (
+  `et_id` int(11) NOT NULL,
+  `name` varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `employeetype`
+--
+
+INSERT INTO `employeetype` (`et_id`, `name`) VALUES
+(1, 'Sales Man'),
+(2, 'Accounts'),
+(3, 'Driver'),
+(4, 'Marketing');
 
 -- --------------------------------------------------------
 
@@ -201,8 +226,8 @@ CREATE TABLE `expenditure` (
   `expensecatid` varchar(200) NOT NULL,
   `accountsid` varchar(200) NOT NULL,
   `amount` varchar(200) NOT NULL,
-  `employeeid` varchar(200) NOT NULL,
-  `islabor` varchar(200) NOT NULL,
+  `employeeid` varchar(200) NOT NULL DEFAULT '-1',
+  `employeetype` varchar(200) NOT NULL DEFAULT '0',
   `addedby` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -210,10 +235,12 @@ CREATE TABLE `expenditure` (
 -- Dumping data for table `expenditure`
 --
 
-INSERT INTO `expenditure` (`expenseid`, `expendituredate`, `expensecatid`, `accountsid`, `amount`, `employeeid`, `islabor`, `addedby`) VALUES
+INSERT INTO `expenditure` (`expenseid`, `expendituredate`, `expensecatid`, `accountsid`, `amount`, `employeeid`, `employeetype`, `addedby`) VALUES
 (2, '2018-10-29', '4', '1', '500', '', 'yes', '36'),
 (3, '2018-11-28', '3', '1', '500', '13', 'no', '36'),
-(4, '2018-11-28', '2', '1', '5000', '', 'no', '36');
+(4, '2018-11-28', '2', '1', '5000', '', 'no', '36'),
+(5, '2018-12-10', '2', '1', '5000', '-1', '0', '36'),
+(6, '2018-12-10', '3', '1', '5000', '13', '1', '36');
 
 -- --------------------------------------------------------
 
@@ -275,7 +302,8 @@ INSERT INTO `e_payment_salery` (`payment_id`, `payment_date`, `amount_pay`, `pay
 (3, '2018-10-31', '58000', '', '14'),
 (4, '2018-10-31', '58000', '', '14'),
 (5, '2018-11-19', '55000', '0', '38'),
-(6, '2018-11-27', '57000', '0', '1');
+(6, '2018-11-27', '57000', '0', '1'),
+(7, '2018-12-10', '1400', '0', '40');
 
 -- --------------------------------------------------------
 
@@ -328,7 +356,8 @@ INSERT INTO `product_info` (`p_id`, `pro_id`, `product_cat`, `brand_id`, `size_i
 (1, 'P001', '2', '1', '7', 2, '400', '500', '550', '100', '', '2018-11-28'),
 (2, 'P002', '1', '5', '6', 1, '400', '500', '550', '30', '', '2018-11-29'),
 (3, '123432', '1', '1', '14', 1, '90', '660', '5534', '10', '', '2018-11-28'),
-(4, '435654', '2', '9', '11', 1, '1234', '545', '565', '50', '', '2018-11-29');
+(4, '435654', '2', '9', '11', 1, '1234', '545', '565', '50', '', '2018-11-29'),
+(5, 'P107', '1', '5', '6', 1, '400', '500', '550', '30', '', '2018-12-10');
 
 -- --------------------------------------------------------
 
@@ -359,13 +388,24 @@ CREATE TABLE `purchase` (
 --
 
 INSERT INTO `purchase` (`purchaseid`, `billchallan`, `purchasedate`, `supplier`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`, `payment_taka`, `comission`, `discount`, `purchaseentryby`, `token`) VALUES
-(1, '2018111164734', '2018-11-01', '25', 'P001', '50', '58', '500', '3000', '10', '31400', '', '500', '36', 'p'),
-(2, '2018111164734', '2018-11-01', '25', 'P002', '50', '580', '500', '3000', '10', '31400', '', '500', '36', 'p'),
-(3, '20181129102720', '2018-11-29', 'Choose option', '123432', '50', '580', '500', '3000', '10', '35400', '3', '500', '36', 'p'),
 (4, '20181130103819', '2018-11-30', '25', '123432', '50', '580', '500', '3000', '10', '28500', '3', '500', '36', 'p'),
-(5, '2018113011142', '2018-11-30', '26', 'P002', '50', '580', '500', '3000', '10', '28500', '3', '500', '36', 'p'),
 (6, '2018113011313', '2018-11-30', '28', 'P001', '50', '580', '500', '3000', '10', '67300', '3', '500', '36', 'p'),
-(7, '2018113011313', '2018-11-30', '28', '123432', '50', '580', '500', '3000', '10', '67300', '3', '500', '36', 'p');
+(7, '2018113011313', '2018-11-30', '28', '123432', '50', '580', '500', '3000', '10', '67300', '3', '500', '36', 'p'),
+(17, '20181130185559', '2018-11-30', '28', '435654', '54', '567', '500', '3000', '10', '84581', '3', '500', '36', 'p'),
+(18, '20181130185559', '2018-11-30', '28', 'P001', '76', '567', '500', '3000', '10', '84581', '3', '500', '36', 'p'),
+(25, '2018113011142', '2018-11-30', '26', 'P002', '50', '580', '500', '3000', '10', '28500', '3', '500', '36', 'p'),
+(26, '2018113011142', '2018-11-30', '26', '435654', '50', '580', '500', '3000', '10', '28500', '3', '500', '36', 'p'),
+(27, '2018113011142', '2018-11-30', '26', 'P001', '50', '580', '500', '3000', '10', '28500', '3', '500', '36', 'p'),
+(28, '2018121232641', '2018-12-01', '26', '123432', '55', '580', '500', '3000', '10', '67400', '3', '500', '36', 'p'),
+(29, '2018121232641', '2018-12-01', '26', 'P002', '60', '600', '500', '3000', '10', '67400', '3', '500', '36', 'p'),
+(31, '2018123134916', '2018-12-03', '28', 'P002', '50', '580', '500', '3000', '10', '34030', '3', '500', '36', 'p'),
+(32, '2018123134916', '2018-12-03', '28', 'P001', '50', '580', '500', '3000', '10', '34030', '3', '500', '36', 'p'),
+(37, '201812412920', '2018-12-04', '27', 'P002', '50', '580', '500', '3000', '10', '127120', '3', '500', '36', 'p'),
+(38, '201812412920', '2018-12-04', '27', 'P001', '50', '580', '500', '3000', '10', '127120', '3', '500', '36', 'p'),
+(39, '201812412920', '2018-12-04', '27', '123432', '50', '580', '500', '3000', '10', '127120', '3', '500', '36', 'p'),
+(40, '201812412920', '2018-12-04', '27', '435654', '50', '580', '500', '3000', '10', '127120', '3', '500', '36', 'p'),
+(41, '20181210125912', '2018-12-10', '', 'P002', '360', '580', '500', '3000', '10', '0', '3', '500', '36', 'p'),
+(42, '2018121013025', '2018-12-10', '', 'P002', '720', '580', '500', '3000', '10', '0', '3', '500', '36', 'p');
 
 -- --------------------------------------------------------
 
@@ -393,7 +433,9 @@ CREATE TABLE `purchase_return` (
 --
 
 INSERT INTO `purchase_return` (`pr_id`, `memono`, `productid`, `supplierId`, `quntity`, `price`, `weight`, `transport`, `vat`, `discount`, `return_date`, `token`) VALUES
-(1, '2018111164734', 'P001', '25', '20', '58', '30', '200', '0', '0', '2018-11-01', 'pr');
+(6, '20181130185559', '435654', '28', '40', '567', '200', '200', '0', '0', '2018-11-30', 'pr'),
+(7, '201812412920', '435654', '27', '90', '580', '200', '200', '0', '0', '2018-12-04', 'pr'),
+(8, '2018113011313', '123432', '28', '30', '580', '200', '300', '0', '0', '2018-11-30', 'pr');
 
 -- --------------------------------------------------------
 
@@ -416,11 +458,11 @@ INSERT INTO `p_brand` (`brand_id`, `cate_id`, `brand_name`) VALUES
 (13, '2', 'Fresh Regular'),
 (6, '1', 'Meghnacem Deluxe'),
 (5, '1', 'RAHIM STEEL'),
-(7, '', 'Supercrete'),
-(8, '', 'Seven Ring Regular'),
-(9, '', 'Seven Ring Special'),
-(10, '', 'Seven Ring gold'),
-(11, '', 'Meghnacem Deluxe special'),
+(7, '2', 'Supercrete'),
+(8, '1', 'Seven Ring Regular'),
+(9, '1', 'Seven Ring Special'),
+(10, '1', 'Seven Ring gold'),
+(11, '1', 'Meghnacem Deluxe special'),
 (12, '', 'Meghnacem Deluxe super'),
 (14, '', 'Fresh special'),
 (15, '', 'Fresh Gold');
@@ -445,14 +487,15 @@ CREATE TABLE `p_size` (
 INSERT INTO `p_size` (`pro_size_id`, `cat_id`, `brandid`, `pro_size_name`) VALUES
 (6, '1', '5', '10mm 40G 300W'),
 (5, '1', '5', '8mm 40G 300W'),
-(7, '', '', '12mm 40G 300W'),
-(8, '', '', '16mm 40G 300W'),
-(9, '', '', '8mm 72.5G 500W'),
-(11, '', '', '10mm 72.5G 500W'),
+(7, '1', '6', '12mm 40G 300W'),
+(8, '1', '6', '16mm 40G 300W'),
+(9, '1', '6', '8mm 72.5G 500W'),
+(11, '1', '6', '10mm 72.5G 500W'),
 (12, '1', '5', '12mm 72.5G 500W'),
-(13, '', '', '16mm 72.5G 500W'),
-(14, '', '', '20mm 40G 300W'),
-(15, '', '', '20mm 72.5G 500W');
+(13, '1', '6', '16mm 72.5G 500W'),
+(14, '1', '6', '20mm 40G 300W'),
+(15, '1', '6', '20mm 72.5G 500W'),
+(16, '1', '6', '10mm 40G 300W');
 
 -- --------------------------------------------------------
 
@@ -478,7 +521,9 @@ CREATE TABLE `recevecollection` (
 INSERT INTO `recevecollection` (`recol_id`, `recievedate`, `cusotmer_id`, `amounts`, `carreier`, `adjustment`, `addedby`, `bycashcheque`) VALUES
 (1, '2018-11-18', '15', '500', 'Millon', '0', '36', 'Cash'),
 (2, '2018-11-25', '16', '500', 'Millon', '0', '36', 'Cheque'),
-(5, '2018-11-28', '18', '5050', 'Millon', '0', '36', 'Cheque');
+(5, '2018-11-28', '18', '5050', 'Millon', '0', '36', 'Cheque'),
+(6, '2018-12-10', '16', '4000', 'Millon', '0', '36', 'Cash'),
+(7, '2018-12-10', '22', '8000', 'Millon', '0', '36', 'Cheque');
 
 -- --------------------------------------------------------
 
@@ -543,16 +588,28 @@ CREATE TABLE `sell` (
 --
 
 INSERT INTO `sell` (`sellid`, `selldate`, `billchallan`, `customerid`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`, `payment_taka`, `comission`, `discount`, `sellby`, `token`) VALUES
-(4, '2018-11-01', '201811122127', '18', 'P002', '50', '580', '500', '3000', '10', '28500', '', '500', 1, 's'),
 (5, '2018-11-01', '2018111221632', '17', 'P002', '50', '580', '500', '3000', '10', '28500', '', '500', 38, 's'),
 (6, '2018-11-01', '2018111221659', '19', 'P001', '50', '580', '500', '3000', '10', '28500', '', '500', 38, 's'),
 (7, '2018-11-26', '20181126114059', '24', 'P001', '50', '580', '500', '3000', '10', '67300', '5', '500', 13, 's'),
 (8, '2018-11-26', '20181126114059', '24', 'P002', '50', '580', '500', '3000', '10', '67300', '5', '500', 13, 's'),
-(9, '', '2018103003023', '18', 'P001', '25', '560', '120', '230', '2', '14000', '0', '0', 1, 's'),
-(10, '', '2018103003023', '', 'R007', '60', '580', '120', '230', '2', '14000', '0', '0', 1, 's'),
-(11, '', '201810300326', '20', 'P001', '30', '580', '220', '430', '2', '18298', '0', '0', 1, 's'),
-(12, '', '201810300326', '', 'R007', '700', '580', '220', '430', '2', '18298', '0', '0', 1, 's'),
-(13, '2018-11-30', '201811301160', '33', 'P001', '50', '580', '500', '3000', '10', '35400', '3', '500', 0, 's');
+(13, '2018-11-30', '201811301160', '33', 'P001', '50', '580', '500', '3000', '10', '35400', '3', '500', 0, 's'),
+(24, '2018-12-01', '201811122127', '18', 'P002', '50', '580', '500', '3000', '10', '28500', '3', '500', 1, 's'),
+(25, '2018-12-01', '201811122127', '18', '123432', '50', '580', '500', '3000', '10', '28500', '3', '500', 1, 's'),
+(26, '2018-12-01', '201811122127', '18', '435654', '50', '580', '500', '3000', '10', '28500', '3', '500', 1, 's'),
+(27, '2018-12-01', '201811122127', '18', 'P001', '50', '580', '500', '3000', '10', '28500', '3', '500', 1, 's'),
+(28, '2018-12-01', '201810300326', '17', 'P001', '30', '580', '220', '430', '2', '18298', '0', '0', 1, 's'),
+(29, '2018-12-01', '201810300326', '17', 'R007', '700', '580', '220', '430', '2', '18298', '0', '0', 1, 's'),
+(30, '2018-12-01', '2018103003023', '18', 'P001', '25', '560', '120', '230', '2', '14000', '0', '0', 1, 's'),
+(31, '2018-12-01', '2018103003023', '18', 'R007', '60', '580', '120', '230', '2', '14000', '0', '0', 1, 's'),
+(34, '2018-12-02', '201812293342', '32', '123432', '50', '780', '500', '3000', '10', '', '3', '500', 0, 's'),
+(35, '2018-12-03', '20181231401', '35', '123432', '50', '580', '500', '3000', '10', '34030', '3', '500', 0, 's'),
+(37, '2018-12-03', '2018123144638', '35', 'P002', '50', '580', '500', '3000', '10', '', '3', '500', 0, 's'),
+(38, '2018-12-03', '2018123144638', '35', '123432', '50', '580', '500', '3000', '10', '', '3', '500', 0, 's'),
+(39, '2018-12-04', '201812413652', '34', 'P002', '50', '580', '500', '3000', '10', '185700', '5', '500', 0, 's'),
+(40, '2018-12-04', '201812413652', '34', '123432', '50', '580', '500', '3000', '10', '185700', '5', '500', 0, 's'),
+(41, '2018-12-04', '201812413652', '34', 'P001', '50', '580', '500', '3000', '10', '185700', '5', '500', 0, 's'),
+(42, '2018-12-04', '201812413652', '34', '435654', '50', '580', '500', '3000', '10', '185700', '5', '500', 0, 's'),
+(43, '2018-12-10', '2018121013335', '16', 'P002', '1440', '580', '500', '3000', '10', '0', '3', '500', 0, 's');
 
 -- --------------------------------------------------------
 
@@ -581,8 +638,7 @@ CREATE TABLE `sell_return` (
 --
 
 INSERT INTO `sell_return` (`sr_id`, `memono`, `customerid`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `discount`, `return_date`, `token`, `takenby`) VALUES
-(3, '2018103003023', '18', '\n                                  P001                                ', '\n                                  10                                ', '\n                                  560                                ', '200', '120', '0', '0', '2018-10-30', 'sr', '36'),
-(4, '2018103003023', '18', '\n                                  \n                                  P001                                                                ', '\n                                  \n                                  16                                ', '\n                                  \n                                  560                                                                ', '200', '120', '0', '0', '2018-10-30', 'sr', '36');
+(13, '201811122127', '18', '\n                                    HOLCIM-20mm 40G 300W                                 ', '\n                                    40', '\n                                    580                                 ', '20', '30', '0', '0', '', 'sr', '36');
 
 -- --------------------------------------------------------
 
@@ -705,7 +761,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`u_id`, `user_role`, `name`, `password`, `email`, `contact_number`, `address`, `employeetype`, `opening_balance`, `created_at`) VALUES
-(1, '4', 'Salesman1', 'e10adc3949ba59abbe56e057f20f883e', 'salesman@gmail.com', '01735623513', 'feni\r\nfeni2', 'ss2', '', '2018-10-29'),
+(1, '4', 'Counter 1', 'e10adc3949ba59abbe56e057f20f883e', 'salesman@gmail.com', '01735623513', 'feni\r\nfeni2', '1', '0', '2018-12-10'),
 (13, '4', 'IMRAN', 'e10adc3949ba59abbe56e057f20f883e', '', '01912541124', 'HAREZ ROAD, VHATARA, DHAKA', 'ss2', '0', '2018-08-06'),
 (15, '4', 'MILON', 'e10adc3949ba59abbe56e057f20f883e', 'atikhashmee6235@gmail.com', '01735623513', 'VHATARA', 'acc1', '0', '2018-11-27'),
 (16, '1', 'MR.BASAR', 'e10adc3949ba59abbe56e057f20f883e', '', '0', 'HAREZ ROAD, VHATARA, DHAKA', 'Choose option', '4500', '2018-08-07'),
@@ -730,7 +786,9 @@ INSERT INTO `users` (`u_id`, `user_role`, `name`, `password`, `email`, `contact_
 (35, '1', 'ENGR.KAMRUL ISLAM', 'e10adc3949ba59abbe56e057f20f883e', 'pongta_virus@yahoo.com', '01345267651', 'HAREZ ROAD, VHATARA, DHAKA', 'Choose option', '10000', '2018-10-27'),
 (36, '0', 'admin', '6ebe76c9fb411be97b3b0d48b791a7c9', '', '', '', '', '', ''),
 (37, '1', 'hashem', 'e10adc3949ba59abbe56e057f20f883e', 'hashem@gmail.com', '01735623513', 'feni\r\nfeni2', 'Choose option', '4000', '2018-11-27'),
-(38, '4', 'Salesman2', 'e10adc3949ba59abbe56e057f20f883e', 'salesman@gmail.com', '01735623513', 'feni\r\nfeni2', '0', '6000', '2018-11-27');
+(38, '4', 'Salesman2', 'e10adc3949ba59abbe56e057f20f883e', 'salesman@gmail.com', '01735623513', 'feni\r\nfeni2', '0', '6000', '2018-11-27'),
+(39, '4', 'Salesman3', 'e10adc3949ba59abbe56e057f20f883e', 'salesman3@gmail.com', '21245', 'Nilphamari', '1', '', '2018-12-10'),
+(40, '4', 'Shah Jalal', 'e10adc3949ba59abbe56e057f20f883e', 'jalal@gmail.com', '01735623513', 'Nikunja-2\r\nKhilkhet', '4', '', '2018-12-10');
 
 --
 -- Indexes for dumped tables
@@ -771,6 +829,12 @@ ALTER TABLE `cheque`
 --
 ALTER TABLE `employeesalerlist`
   ADD PRIMARY KEY (`emsaleryid`);
+
+--
+-- Indexes for table `employeetype`
+--
+ALTER TABLE `employeetype`
+  ADD PRIMARY KEY (`et_id`);
 
 --
 -- Indexes for table `expenditure`
@@ -918,19 +982,25 @@ ALTER TABLE `charts_accounts`
 -- AUTO_INCREMENT for table `cheque`
 --
 ALTER TABLE `cheque`
-  MODIFY `chequeno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `chequeno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `employeesalerlist`
 --
 ALTER TABLE `employeesalerlist`
-  MODIFY `emsaleryid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `emsaleryid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+
+--
+-- AUTO_INCREMENT for table `employeetype`
+--
+ALTER TABLE `employeetype`
+  MODIFY `et_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `expenditure`
 --
 ALTER TABLE `expenditure`
-  MODIFY `expenseid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `expenseid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `expensecat`
@@ -948,7 +1018,7 @@ ALTER TABLE `expensecategory`
 -- AUTO_INCREMENT for table `e_payment_salery`
 --
 ALTER TABLE `e_payment_salery`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `e_salerykeys`
@@ -960,19 +1030,19 @@ ALTER TABLE `e_salerykeys`
 -- AUTO_INCREMENT for table `product_info`
 --
 ALTER TABLE `product_info`
-  MODIFY `p_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `p_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `purchase`
 --
 ALTER TABLE `purchase`
-  MODIFY `purchaseid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `purchaseid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `purchase_return`
 --
 ALTER TABLE `purchase_return`
-  MODIFY `pr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `pr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `p_brand`
@@ -984,13 +1054,13 @@ ALTER TABLE `p_brand`
 -- AUTO_INCREMENT for table `p_size`
 --
 ALTER TABLE `p_size`
-  MODIFY `pro_size_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `pro_size_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `recevecollection`
 --
 ALTER TABLE `recevecollection`
-  MODIFY `recol_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `recol_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `role_base_access_system`
@@ -1002,13 +1072,13 @@ ALTER TABLE `role_base_access_system`
 -- AUTO_INCREMENT for table `sell`
 --
 ALTER TABLE `sell`
-  MODIFY `sellid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `sellid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `sell_return`
 --
 ALTER TABLE `sell_return`
-  MODIFY `sr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `sr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -1020,7 +1090,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `supplierpayment`
 --
 ALTER TABLE `supplierpayment`
-  MODIFY `pay_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `pay_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `target`
@@ -1038,7 +1108,7 @@ ALTER TABLE `units`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
