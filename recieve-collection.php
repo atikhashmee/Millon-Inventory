@@ -58,7 +58,7 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
                         <div class="form-group">
                            <label class="control-label" for="name">Customer Name  <span class="required">*</span>
                            </label>
-                           <select class="form-control" name="customerid">
+                           <select class="form-control" name="customerid" id="customerid">
                               <option value="">Choose option</option>
                               <?php 
                                  $cat  =  $db->joinQuery("SELECT * FROM `users` WHERE `user_role` ='3' OR user_role = '1'")->fetchAll();
@@ -299,6 +299,8 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
    </div>
 </div>
 <?php include 'files/footer.php'; ?>
+<link href="assets/plugins/alertify/css/alertify.css" rel="stylesheet" type="text/css">
+<script src="assets/plugins/alertify/js/alertify.js"></script>
 <script>
 
             // check the radio button to show the cheque payment method
@@ -312,5 +314,11 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
         }
    
       }
+
+      /*customers calculation done here*/
+        var customers = <?=json_encode($customersb);?>;
+      document.getElementById("customerid").addEventListener("change",function(ev){
+           alertify.alert("<h3 class='font-18'>Customer due</h3><hr><p> "+customers[ev.target.value]+"</p>");
+      });
    
 </script>

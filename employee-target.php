@@ -46,9 +46,9 @@ $rbas->setPageName(14)->run();
                <div class="form-group">
               
                <select class="form-control"  name="employeename" id="employeename">
-                  <option value="">select an Employee</option>
+                  <option value="">Select an marketing</option>
                   <?php
-                     $query1 = $db->joinQuery("SELECT * FROM `users` WHERE `user_role`='4'");
+                     $query1 = $db->joinQuery("SELECT * FROM `users` WHERE `user_role`='4' AND employeetype='4'");
                      while($row=$query1->fetch())
                      { ?>
                   <option value="<?=$row['u_id']?>"><?=$row['name']?></option>

@@ -14,6 +14,7 @@
 			private $sizeTableName = "p_size";
 			private $productTableName = "product_info";
 			private $userTableName = "users";
+			private $emplyeeTypeTable = "employeetype";
 
 
 			private $brands = [];
@@ -37,6 +38,15 @@
 			    foreach ($datas as $dt)
 			     {
 			    	 echo "<option value='".$dt['cat_id']."'>".$dt['cat_name']."</option>";
+			    }
+			}
+
+			public function getEmployeeType()
+			{
+			    $datas = $this->getRawData($this->emplyeeTypeTable)->fetchAll();
+			    foreach ($datas as $dt)
+			     {
+			    	 echo "<option value='".$dt['et_id']."'>".$dt['name']."</option>";
 			    }
 			}
 			public function getUsersByRole($roleid)

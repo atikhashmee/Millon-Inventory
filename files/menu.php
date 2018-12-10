@@ -160,8 +160,16 @@
                             <li class="has-submenu">
                                 <a href="home.php"><i class="ti-home"></i>Dashboard</a>
                             </li>
+                            
+
                             <li class="has-submenu">
-                                <a href="addnew_users.php"><i class="fa fa-user-o"></i>Person</a>
+                                <a href="#"><i class="ti-crown"></i>Registration</a>
+                                <ul class="submenu">
+                          <li><a href="addnew_users.php">Person</a></li>
+                         <li><a  href="accounce_charts.php">Account </a></li>
+                         
+                                    
+                                </ul>
                             </li>
 
                             <li class="has-submenu">
@@ -181,14 +189,15 @@
                          <li><a  href="employeesalerymodule.php">Employee Salery</a></li>
 
                          <li><a  href="privilige-system.php">Privilige System</a></li>
+                         <li><a  href="employee-type.php">Employee Type</a></li>
                
           
                                         </ul>
                                     </li>
                                     <li>
                                         <ul>
-                                  <li><a  href="accounce_heads.php">Account Category</a></li>
-                                  <li><a  href="accounce_charts.php">Account </a></li>
+                                  <!-- <li><a  href="accounce_heads.php">Account Category</a></li> -->
+                                  
                                   <li><a  href="expensecategory.php">Expense category</a></li>
                                              
           

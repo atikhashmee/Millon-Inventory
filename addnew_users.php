@@ -41,7 +41,7 @@
                      <div class="row">
                         <div class="col">
                            <div class="form-group">
-                              <select class="form-control" name="usertypeforsearch">
+                            <select class="form-control" name="usertypeforsearch">
                                  <option value="">Chose a user type</option>
                                  <option value="1">Customer</option>
                                  <option value="2">Supplier</option>
@@ -76,14 +76,21 @@
                         <option value="4">Employee</option>
                      </select>
                   </div>
-                  <div class="form-group" id="formshow" style="display: none;">
-                     <label for="sel1">Select a employee type:</label>
-                     <select class="form-control" name="emtype">
-                        <option> Choose option</option>
-                        <option value="acc1">Accounts</option>
-                        <option value="ss2">Sales Man</option>
+                  <div id="formshow" style="display: none;">
+                    
+                      
+                     
+                    <select class="form-control" name="emtype" id="emtype">
+                        <option value="">Employee type</option>
+                        <?=$dm->getEmployeeType()?>
                      </select>
+
+                  
+                  <a href="employee-type.php" class="btn btn-outline-info"><i class="fa fa-hashtag"></i></a>
+                    
+                   
                   </div>
+                  
                   <div class="form-group">
                      <label for="email">Name:</label>
                      <input class="form-control" id="name" name="name" placeholder="both name(s) e.g Jon Doe" required="required" type="text">

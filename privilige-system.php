@@ -54,12 +54,40 @@
                     </div>
                 </div>
                 <!-- end page title end breadcrumb -->
+
+                
      <div class="row">
        <div class="col">
           <div class="card card-body">
             <form action="" method="post">
+              
+                          <div class="form-group">
+                     <label for="sel1">Select list:</label>
+                     <select class="form-control" id="usertype" name="usertype" onchange="mynextdata()" style="width: 50%;">
+                        <option> Choose option</option>
+                        <option value="1">Customer</option>
+                        <option value="2">Supplier</option>
+                        <option value="3">Customer & supplier</option>
+                        <option value="4">Employee</option>
+                     </select>
+                  </div>
+                  <div id="formshow" style="display: none;">
+                    
+                      
+                     
+                    <select class="form-control" name="emtype" id="emtype">
+                        <option value="">Employee type</option>
+                        <?=$dm->getEmployeeType()?>
+                     </select>
+
+                  
+                  <a href="employee-type.php" class="btn btn-outline-info"><i class="fa fa-hashtag"></i></a>
+                    
+                   
+                  </div>
+                        
               <div class="form-group">
-                <select name="userid" id="userid" onchange="updateuserinformation()" class="form-control" style="width: 50%;">
+              <select name="userid" id="userid" onchange="updateuserinformation()" class="form-control" style="width: 50%;">
                       <option value="">Select a user</option>
                      <?php 
                         $cat  =  $db->joinQuery("SELECT * FROM `users` ")->fetchAll();
@@ -145,6 +173,21 @@
 
 <?php include 'files/footer.php'; ?>
 <script>
+
+ function mynextdata() {
+       var dd = document.getElementById('usertype').value;
+       var ddd =  document.getElementById("opendingforemployee");
+       var formshow = document.getElementById('formshow');
+       if (dd === "4") {
+           formshow.style.display = 'inline-block';
+           ddd.style.display = "none";
+       } else {
+           formshow.style.display = 'none';
+       }
+   }
+
+
+
 
 
    var valuearray = <?=json_encode($priviligearray);?>;

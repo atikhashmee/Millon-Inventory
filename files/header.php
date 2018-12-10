@@ -47,9 +47,38 @@
                                echo $rbas->getdatatest();
                                echo "</pre>";*/
                                $settingsquery = $db->joinQuery("SELECT * FROM `settings` WHERE `adminid`='".$_SESSION['u_id']."'");
+                               $setdata = $settingsquery->fetch(PDO::FETCH_ASSOC);
 
-                                $setdata = $settingsquery->fetch(PDO::FETCH_ASSOC);
-                            ?>
+                               /*
+                                  Select the users to find out there due and credits
+                               */
+             $users =  $db->selectAll("users")->fetchAll();
+             $customersb = [];
+             $suppliersb = [];
+             foreach ($users as $ur) {
+                 if ($ur['user_role'] == '1') {
+                    $customersb[$ur['u_id']] = $fn->getCustomerPurchasedAmount($ur['u_id']) - $fn->getCustomerPayments($ur['u_id']);
+                 }
+                  if ($ur['user_role'] == '2') {
+                    $suppliersb[$ur['u_id']] = $fn->getSupllierdueby($ur['u_id']) - $fn->getSupplierPayment($ur['u_id']);
+                 }
+             }
+
+             /*echo "<pre>";
+             print_r($customersb);
+             print_r($suppliersb);
+             echo "</pre>";*/
+
+
+             /*   product stock finding */
+
+             $pro = $db->selectAll('product_info')->fetchAll();
+             $prod = [];
+             foreach ($pro as $p) 
+             {
+                 $prod[$p['pro_id']] = $fn->getStockByProId($p['pro_id']);
+             }
+        ?>
 
 
 <!DOCTYPE html>
@@ -84,6 +113,9 @@
         <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
         <!-- alertify plugin -->
         <link href="assets/plugins/alertify/css/alertify.css" rel="stylesheet" type="text/css">
+
+        <!-- search select -->
+         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
 
         <!-- jquery datepicker -->
          <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">

@@ -54,6 +54,9 @@
         <script src="assets/plugins/alertify/js/alertify.js"></script>
         <script src="assets/pages/alertify-init.js"></script>
 
+        <!-- search select link -->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+
         <!-- App js -->
         <script src="assets/js/app.js"></script>
 

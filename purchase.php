@@ -57,9 +57,9 @@
             </div>
             <div class="col">
                <div class="form-group">
-                  <label  for="name">Product<span class="required">*</span></label>
+                <label  for="name">Product<span class="required">*</span></label>
                   <select class="form-control" name="product" id="product">
-                    
+                    <option value="">Select a product</option>
                   </select>
                </div>
             </div>
@@ -221,6 +221,8 @@
  });
   
   </script>
+  <link href="assets/plugins/alertify/css/alertify.css" rel="stylesheet" type="text/css">
+<script src="assets/plugins/alertify/js/alertify.js"></script>
 <script type="text/javascript">
    var brnds = <?php echo  json_encode($dm->getBrandListByIds());?>;
    var sizzz = <?php echo  json_encode($dm->getSizeListByIds());?>;
@@ -253,7 +255,7 @@
             xyz.then((obj) =>
             {
               //console.log(obj);
-              var text = "";
+              var text = "<option value=''>Select a product</option>";
                 obj.forEach((element)=>{
                     if (element.product_cat === event.target.value)
                      {
@@ -417,7 +419,7 @@
 
 
      },true);
-
+     /*remove the element as they are removed from the list*/
      function removeitem(obj) {
          var proid = obj.getAttribute("data-pr");
          var rowid = obj.getAttribute("data-inc");
@@ -425,6 +427,19 @@
          var element = document.getElementById('trcontent_'+rowid);
          element.style.display = 'none';
       }
-  
+
+      /*supplier balance calculation here*/
+      var supplier = <?=json_encode($suppliersb);?>;
+      document.getElementById("suppliername").addEventListener("change",function(ev){
+           alertify.alert("<h3 class='font-18'>Supplier due</h3><hr><p> "+supplier[ev.target.value]+"</p>");
+      });
+
+      /*update product quantity*/
+      var prodd = <?=json_encode($prod);?>;
+      document.getElementById("product").addEventListener("change",function(e)
+      {
+        
+         document.getElementById("quntity").value = prodd[e.target.value];
+      });
    
 </script>

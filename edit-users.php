@@ -39,10 +39,10 @@
                   </div>
                   <div class="form-group" id="formshow" style="display: none;">
                      <label for="sel1">Select list:</label>
+                     <input type="hidden" name="dbetypename" value="<?=$userdata['employeetype']?>">
                      <select class="form-control" name="emtype">
                         <option value=""> Choose option</option>
-                        <option value="acc1">Accounts</option>
-                        <option value="ss2">Sales Man</option>
+                         <?=$dm->getEmployeeType()?>
                      </select>
                   </div>
                   <div class="form-group">

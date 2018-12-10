@@ -10,7 +10,7 @@ if (isset($_GET['del-id']))
         $getstatus = $db->selectAll('supplierpayment',"pay_id='".$_GET['del-id']."'")->fetch(PDO::FETCH_ASSOC);
         if ($getstatus['status'] == 'Cheque')
          {
-                 $db->delete("cheque","parent_table_id='pts_".$_GET['del-id']."'");
+               $db->delete("cheque","parent_table_id='pts_".$_GET['del-id']."'");
          }
            
        if ($db->delete("supplierpayment","pay_id='".$_GET['del-id']."'"))
@@ -76,7 +76,7 @@ if (isset($_GET['del-id']))
                         <div class="form-group">
                            <label for="name">Supplier  Name  <span class="required">*</span>
                            </label>
-                           <select class="form-control" name="suppliername">
+                           <select class="form-control" name="suppliername" id="suppliername">
                               <option value="">Choose option</option>
                               <?php 
                                  $cat  =  $db->joinQuery("SELECT * FROM `users` WHERE `user_role` ='3' OR user_role = '2'")->fetchAll();
@@ -325,6 +325,8 @@ if (isset($_GET['del-id']))
    </div>
 </div>
 <?php include 'files/footer.php'; ?>
+<link href="assets/plugins/alertify/css/alertify.css" rel="stylesheet" type="text/css">
+<script src="assets/plugins/alertify/js/alertify.js"></script>
 <script>
    // check the radio button to show the cheque payment method
    function chequeoptioncheck(){
@@ -337,4 +339,9 @@ if (isset($_GET['del-id']))
      }
    
    }
+
+     var supplier = <?=json_encode($suppliersb);?>;
+      document.getElementById("suppliername").addEventListener("change",function(ev){
+           alertify.alert("<h3 class='font-18'>Supplier due</h3><hr><p> "+supplier[ev.target.value]+"</p>");
+      });
 </script>

@@ -33,7 +33,7 @@ $rbas->setPageName(9)->run();
                     </div>
                 </div>
                 <!-- end page title end breadcrumb -->
-                <div class="card card-body">
+  <div class="card card-body">
    <form  method="post" >
       <div class="row">
          <div class="col">
@@ -45,7 +45,7 @@ $rbas->setPageName(9)->run();
          </div>
          <div class="col">
             <div class="form-group">
-               <label for="name">Select a category  <span class="required">*</span>
+               <label for="name">Select a Category<span class="required">*</span>
                </label>
                <select class="form-control" name="expensecate">
                   <option value="">Choose option</option>
@@ -82,16 +82,28 @@ $rbas->setPageName(9)->run();
          <div class="col">
             <div class="form-group" style="position: relative; top:20px; text-align: center;">
     <div class="custom-control custom-radio">
-      <input type="radio" id="customRadio1" name="islabor" value="no" class="custom-control-input" checked="">
+      <input type="radio" id="customRadio1" name="isemployee" value="no" class="custom-control-input" checked="" onchange="chequeoptioncheck()">
       <label class="custom-control-label" for="customRadio1">Others</label>
     </div>
 
     <div class="custom-control custom-radio">
-      <input type="radio" id="customRadio2" name="islabor" value="yes"class="custom-control-input">
-      <label class="custom-control-label" for="customRadio2">Labour</label>
+      <input type="radio" id="customRadio2" name="isemployee" value="yes" class="custom-control-input" onchange="chequeoptioncheck()">
+      <label class="custom-control-label" for="customRadio2">Employee Bill</label>
     </div>
    
   </div>
+         </div>
+         <div class="col" id="chequeoption" style="display: none;">
+            <div class="form-group row" style="position: absolute; top: 29px;">
+               <select class="form-control col" name="employeetypeid">
+                  <option value="">Employee Type</option>
+                  <?=$dm->getEmployeeType()?>
+               </select>
+                <select class="form-control col" name="employeeid">
+                  <option value="">Employee Name</option>
+                  <?=$dm->getUsersByRole(4)?>
+               </select>
+            </div>
          </div>
          <div class="col">
             <div class="form-group">
@@ -100,23 +112,7 @@ $rbas->setPageName(9)->run();
                <input id="amount" class="form-control"  name="amount"  required="required" type="text">
             </div>
          </div>
-         <div class="col">
-            <div class="form-group">
-               <label  for="name">Employee Name  <span class="required">*</span>
-               </label>
-               <select class="form-control" name="employeeid">
-                  <option value="">Choose option</option>
-                  <?php 
-                     $cat  =  $db->joinQuery("SELECT * FROM `users` WHERE `user_role` ='4'")->fetchAll();
-                     foreach ($cat as $cater) { ?>
-                  <option value="<?=$cater['u_id']?>"><?=$cater['name']?></option>
-                  <?php
-                     }
-                     
-                     ?>
-               </select>
-            </div>
-         </div>
+         
       </div>
       <div class="form-group">
          
@@ -129,16 +125,31 @@ $rbas->setPageName(9)->run();
    <?php 
       if (isset($_POST['saveexpenditure']))
        {
-      
-            $data = array(
-              'expendituredate' =>$_POST['expensedate'],
-              'expensecatid' =>$_POST['expensecate'],
-              'accountsid' =>$_POST['accountsid'],
-              'amount' =>$_POST['amount'],
-              'employeeid' =>$_POST['employeeid'],
-              'islabor' =>$_POST['islabor'],
-              'addedby' => $_SESSION['u_id']
+
+            if ($_POST['isemployee'] == "yes") 
+            {
+             $data = array(
+              'expendituredate' => $_POST['expensedate'],
+              'expensecatid'    => $_POST['expensecate'],
+              'accountsid'      => $_POST['accountsid'],
+              'amount'          => $_POST['amount'],
+              'employeeid'      => $_POST['employeeid'],
+              'employeetype'    => $_POST['employeetypeid'],
+              'addedby'         => $_SESSION['u_id']
                );
+            }
+            else
+            {
+              $data = array(
+              'expendituredate' => $_POST['expensedate'],
+              'expensecatid'    => $_POST['expensecate'],
+              'accountsid'      => $_POST['accountsid'],
+              'amount'          => $_POST['amount'],
+              'addedby'         => $_SESSION['u_id']
+               );
+            }
+      
+            
             
           if (!empty($_POST['expensedate']))
            {
@@ -302,3 +313,15 @@ $rbas->setPageName(9)->run();
    </div>
 </div>
 <?php include 'files/footer.php'; ?>
+<script>
+  function chequeoptioncheck(){
+        var divid  = document.getElementById('chequeoption');
+       var radio  =  document.getElementById('customRadio2');
+        if (radio.checked === true){
+          divid.style.display = 'inline-block';
+        }else {
+          divid.style.display = 'none';
+        }
+   
+      }
+</script>

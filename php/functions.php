@@ -115,10 +115,24 @@
 			                   }
 
 
-
+			    public function getCustomerPayments($customerid)
+			    {
+			    	  $sql ="SELECT `recievedate`, `cusotmer_id`, `amounts`,`bycashcheque`,`carreier` FROM `recevecollection` WHERE bycashcheque ='Cash' AND `cusotmer_id`='{$customerid}'
+			             UNION
+			        SELECT `expiredate`,`customerid`, `amount`, `fromtable`,`carrier` FROM `cheque` WHERE fromtable='add' AND`customerid`='{$customerid}'
+			        UNION 
+			           SELECT `selldate`, `customerid`,`payment_taka`, `token`,`sellby` FROM `sell` WHERE TRIM(payment_taka) <> '' AND `customerid`='{$customerid}'";
+			           $data = $this->joinQuery($sql)->fetchAll();
+			           $sum =0;
+			           foreach ($data as $val) 
+			           {
+			           $sum+= (int)$val['amounts'];  
+			           }
+           		return $sum;
+			    }
 				public function getCustomerPurchasedAmount($customerid)
 				{
-					$customers_opening = $this->joinQuery("SELECT `opening_balance` FROM `users` WHERE `u_id`='".$_POST['cutomername']."'")->fetch(PDO::FETCH_ASSOC);
+					$customers_opening = $this->joinQuery("SELECT `opening_balance` FROM `users` WHERE `u_id`='{$customerid}'")->fetch(PDO::FETCH_ASSOC);
               $opening = $customers_opening['opening_balance'];
               $sum = $opening;
 					 $sql ="SELECT `selldate`, `billchallan`, `productid`, `quantity`, `price`,`weight`,`transport`,`vat`,`discount`,`token` FROM `sell` WHERE `customerid`='{$customerid}'
@@ -138,6 +152,21 @@
 				}
 
 
+				public function getSupplierPayment($supplierid)
+				{
+					 $sql ="SELECT  `pay_date`, `sup_id`, `amnts`, `carier`,  `status` FROM `supplierpayment` WHERE `sup_id`='{$supplierid}'
+			             UNION
+			        SELECT `expiredate`,`customerid`, `amount`, `fromtable`,`carrier` FROM `cheque` WHERE fromtable='minus' AND approve ='1' AND`customerid`='{$supplierid}'
+			        UNION 
+			           SELECT  `purchasedate`, `supplier`,  `payment_taka`, `token`,`purchaseentryby` FROM `purchase` WHERE TRIM(payment_taka) <> '' AND `supplier`='{$supplierid}'";
+
+               $data = $this->joinQuery($sql)->fetchAll();
+               $sum =0;
+               foreach ($data as $val) {  
+                    $sum+= (int)$val['amnts'];  
+                }
+                return $sum;
+				}
 				public function getSupllierdueby($supplier)
 				{
 					$customers_opening = $this->joinQuery("SELECT `opening_balance` FROM `users` WHERE `u_id`='{$supplier}'")->fetch(PDO::FETCH_ASSOC);
@@ -235,6 +264,38 @@ $data =  $this->joinQuery($sql)->fetchAll();
 					array_push($myval, $qry['qtotal']);
 					array_push($myval, $qry['paysum']);
 					return $myval;
+				}
+
+				/* get the stock report by the product id */
+				public function getStockByProId($proid)
+				{
+					 $openini = $this->joinQuery("SELECT `opening_stock` FROM `product_info` WHERE `pro_id`='{$proid}'")->fetch(PDO::FETCH_ASSOC);
+					 $stock = $openini['opening_stock'];
+					$sql  = "
+	SELECT `billchallan`,`selldate`, `token`, `productid`, `quantity` FROM `sell` WHERE `productid`='{$proid}' 
+	UNION
+	SELECT `billchallan`, `purchasedate`,`token`,`productid`, `quantity` FROM `purchase` WHERE `productid`='{$proid}'
+	UNION
+	SELECT `memono`, `return_date`, `token`,`productid`,`quntity` FROM `sell_return` WHERE `productid`='{$proid}'
+	UNION
+	SELECT `memono`, `return_date`,`token`,`productid`,`quntity`  FROM `purchase_return` WHERE `productid`='{$proid}'";
+			 $query =  $this->joinQuery($sql)->fetchAll();
+			 foreach ($query as $qu) {
+			     if ($qu['token']=="p") {
+                                $stock+= $qu['quantity'];
+                          }else if ($qu['token']=="s") {
+                               $stock-= $qu['quantity'];
+                          } else if ($qu['token']=="sr") {
+                               $stock+= $qu['quantity'];
+                          }else if ($qu['token']=="pr") {
+                               $stock-= $qu['quantity'];
+                          }
+			 }
+
+	  
+
+
+			 	return $stock;
 				}
 			}
 				

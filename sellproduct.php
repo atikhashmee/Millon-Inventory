@@ -1,15 +1,8 @@
 <?php include 'files/header.php'; ?>
 <?php include 'files/menu.php';
-
 $rbas->setPageName(3)->run();
-   
-
  ?>
-<link href='https://fonts.googleapis.com/css?family=Trykker' rel='stylesheet'>
-<style>
-body {
-    font-family: 'Trykker';
-}
+
 </style>
 <div class="container">
    <div class="row">
@@ -35,10 +28,15 @@ body {
                   <div class="row">
                      <div class="col">
                               <div class="form-group">
-                                 <label for="name">Sell by<span class="required">*</span></label>
+                                 <label for="name">Select Marketing<span class="required">*</span></label>
                               <select class="form-control" name="sellby" id="sellby">
-                                    <option>Choose option</option>
-                                    <?=$dm->getUsersByRole(4)?>
+                                 <option value="">Marketing</option>
+                                     <?php
+                     $query1 = $db->joinQuery("SELECT * FROM `users` WHERE `user_role`='4' AND employeetype='4'");
+                     while($row=$query1->fetch())
+                     { ?>
+                  <option value="<?=$row['u_id']?>"><?=$row['name']?></option>
+                  <?php  } ?>
                                  </select>
                               </div>
                               <div class="form-group">
@@ -255,6 +253,9 @@ body {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <!-- jquery datepicker -->
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+        <link href="assets/plugins/alertify/css/alertify.css" rel="stylesheet" type="text/css">
+<script src="assets/plugins/alertify/js/alertify.js"></script>
 <script>
   $( function() {
     $( "#datesell" ).datepicker({
@@ -311,7 +312,7 @@ body {
      id: id },
    })
    .done(function(res) {
-   var text = "";
+   var text = "<option value=''>select a product</option>";
    var data = JSON.parse(res);
    var dll = "";
    for(var j = 0; j < data.length; j++){
@@ -576,6 +577,20 @@ body {
          var element = document.getElementById('trcontent_'+rowid);
          element.style.display = 'none';
       }
+
+      /*update product quantity*/
+      var prodd = <?=json_encode($prod);?>;
+      document.getElementById("product").addEventListener("change",function(e)
+      {
+        
+         document.getElementById("quntity").value = prodd[e.target.value];
+      });
+
+       /*customers calculation done here*/
+        var customers = <?=json_encode($customersb);?>;
+      document.getElementById("cutomername").addEventListener("change",function(ev){
+           alertify.alert("<h3 class='font-18'>Customer due</h3><hr><p> "+customers[ev.target.value]+"</p>");
+      });
 
 
    

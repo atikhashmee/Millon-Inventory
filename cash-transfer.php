@@ -113,10 +113,10 @@
                      </div>
                   </div>
                   <div class="form-group">
-                     <div class="col-md-6 col-md-offset-3">
-                        <button type="submit" class="btn btn-primary">Cancel</button>
-                        <button id="savetransfer" name="savetransfer" type="submit" class="btn btn-success">Submit</button>
-                     </div>
+                     
+                        <button type="submit" class="btn btn-outline-danger ">Cancel <i class="fa fa-times"></i></button>
+                        <button id="savetransfer" name="savetransfer" type="submit" class="btn btn-outline-primary">Save <i class="fa fa-floppy-o"></i> </button>
+                    
                   </div>
                </form>
             </div>
@@ -216,13 +216,29 @@
                  
                   <td><?=$val['carreier']?></td>
                   <td><?=$val['bycashcheque']?></td>
-                  <td> <a class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"></a>
-    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
-      <a class="dropdown-item" href="edit-users.php?edit=<?=$val['u_id']?>">Edit</a>
-      <a class="dropdown-item" href="addnew_users.php?del-id=<?=$val['u_id']?>" onclick="return confirm('Are you sure?')">Delete</a>
-    </div>
-  </a></td>
+                  <td> <div class="dropdown">
+  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-gear"></i>
+  </button>
+  <div class="dropdown-menu">
+    <?php 
+         if ($rbas->getView()) {
+              echo '<a class="dropdown-item" href="#">View <i class="fa fa-eye"></i></a>';
+         }
+         if ($rbas->getUpdate()) {
+              echo '<a class="dropdown-item" href="#">Edit <i class="fa fa-pencil"></i></a>';
+         }
+         if ($rbas->getDelete()) { ?>
+              <a class="dropdown-item" href="recieve-collection.php?del-id=<?=$val['recol_id']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
+      <?php   }
+         if ($rbas->getPrint()) {
+              echo '<a class="dropdown-item" href="#">Print</a>';
+         }
+    ?>
+    
+    
+  </div>
+</div></td>
                </tr>
                <?php   }
                   ?>
