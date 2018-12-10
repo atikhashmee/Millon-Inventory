@@ -154,7 +154,7 @@
 
 				public function getSupplierPayment($supplierid)
 				{
-					 $sql ="SELECT  `pay_date`, `sup_id`, `amnts`, `carier`,  `status` FROM `supplierpayment` WHERE `sup_id`='{$supplierid}'
+					 $sql ="SELECT  `pay_date`, `sup_id`, `amnts`, `carier`,  `status` FROM `supplierpayment` WHERE `status`='Cash' AND `sup_id`='{$supplierid}'
 			             UNION
 			        SELECT `expiredate`,`customerid`, `amount`, `fromtable`,`carrier` FROM `cheque` WHERE fromtable='minus' AND approve ='1' AND`customerid`='{$supplierid}'
 			        UNION 
@@ -172,18 +172,27 @@
 					$customers_opening = $this->joinQuery("SELECT `opening_balance` FROM `users` WHERE `u_id`='{$supplier}'")->fetch(PDO::FETCH_ASSOC);
               $opening = $customers_opening['opening_balance'];
               $sum = $opening;
-					  $sql ="SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`, `discount`, `token` FROM `purchase` WHERE `supplier`='{$supplier}'
-             UNION
-              SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `discount`, `token` FROM `purchase_return` WHERE `supplierId`='{$supplier}' ORDER by purchasedate";
+					  $sql ="SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase` WHERE `supplier`='{$supplier}'
+                         UNION
+                   SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `comission`, `discount`, `token` FROM `purchase_return` WHERE `supplierId`='{$supplier}'";
 
 
                $ss =  $this->joinQuery($sql)->fetchAll();
 				  foreach ($ss as $val) {
-				  	$tot = (((int)$val['price'] * (int)$val['quantity']) + (int)$val['weight'] + (int)$val['transport']);
+
+				  	$bc = new Bc();
+                    $bc->setAmount(((int)$val['price'] * (int)$val['quantity']));
+                    $bc->setWeight($val['weight']);
+                    $bc->setTransport($val['transport']);
+                    $bc->setVat($val['vat']);
+                    $bc->setDiscount($val['discount']);
+                    $bc->setComission($val['comission']);
+
+				  	
 				  	if ($val['token']=="pr") {
-                        $sum -= $tot;
+                        $sum -= $bc->getResult();
                     }else if($val['token']=="p"){
-                       $sum += $tot;
+                       $sum += $bc->getResult();
                     }
 				  }
 				  return $sum;

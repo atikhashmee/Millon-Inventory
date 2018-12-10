@@ -172,41 +172,7 @@
                                 </ul>
                             </li>
 
-                            <li class="has-submenu">
-                                <a href="#"><i class="ti-light-bulb"></i>Settings</a>
-                                <ul class="submenu megamenu">
-                                    <li>
-                                        <ul>
-                                         <li><a  href="category.php">Product Category</a></li>
-                                         <li><a  href="brand.php">Product Brand</a></li>
-                                         <li><a  href="size.php">Product Size</a></li>
-                                         <li><a  href="salerykeys.php">Salery keys</a></li>
-                                        </ul>
-                                    </li> 
-                                    <li>
-                                        <ul>
-                                    <li><a  href="employee-target.php">Employee Target</a></li>
-                         <li><a  href="employeesalerymodule.php">Employee Salery</a></li>
-
-                         <li><a  href="privilige-system.php">Privilige System</a></li>
-                         <li><a  href="employee-type.php">Employee Type</a></li>
-               
-          
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <ul>
-                                  <!-- <li><a  href="accounce_heads.php">Account Category</a></li> -->
-                                  
-                                  <li><a  href="expensecategory.php">Expense category</a></li>
-                                             
-          
-         
-                                        </ul>
-                                    </li>
-                                   
-                                </ul>
-                            </li> 
+                           
                           <!--   <li class="has-submenu">
                               <a href="#"><i class="ti-light-bulb"></i>User Interface</a>
                               <ul class="submenu megamenu">
@@ -321,6 +287,42 @@
            
           
           
+                                             
+          
+         
+                                        </ul>
+                                    </li>
+                                   
+                                </ul>
+                            </li> 
+
+                             <li class="has-submenu">
+                                <a href="#">More <i class="fa fa-angle-down"></i></a>
+                                <ul class="submenu megamenu">
+                                    <li>
+                                        <ul>
+                                         <li><a  href="category.php">Product Category</a></li>
+                                         <li><a  href="brand.php">Product Brand</a></li>
+                                         <li><a  href="size.php">Product Size</a></li>
+                                         <li><a  href="salerykeys.php">Salery keys</a></li>
+                                        </ul>
+                                    </li> 
+                                    <li>
+                                        <ul>
+                                    <li><a  href="employee-target.php">Employee Target</a></li>
+                         <li><a  href="employeesalerymodule.php">Employee Salery</a></li>
+
+                         <li><a  href="privilige-system.php">Privilige System</a></li>
+                         <li><a  href="employee-type.php">Employee Type</a></li>
+               
+          
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <ul>
+                                  <!-- <li><a  href="accounce_heads.php">Account Category</a></li> -->
+                                  
+                                  <li><a  href="expensecategory.php">Expense category</a></li>
                                              
           
          

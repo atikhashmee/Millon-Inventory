@@ -58,7 +58,7 @@
 			    	$db->insert("purchase",$data);
 			    	  
 			    }
-			 /* echo "<pre>";
+			  /*echo "<pre>";
 			   print_r($_GET['allotherinfo']);
 			  print_r($_GET);
 			  echo "</pre>";*/

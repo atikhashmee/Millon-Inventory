@@ -53,7 +53,7 @@
    <div class="col">
    <?php 
    
-         $sql =  "SELECT  `paymentdate`, `supplierid`, `amounts`, `bycashcheque`,`carreier`  FROM `paymenttosupplier` WHERE bycashcheque = 'Cash' 
+         $sql =  "SELECT `pay_date`, `sup_id`, `amnts`, `carier`, `status` FROM `supplierpayment` WHERE `status`='Cash' 
            UNION 
           SELECT `expiredate`,`customerid`, `amount`, `fromtable`,`carrier` FROM `cheque` WHERE fromtable='minus' AND approve ='1'
            UNION 
@@ -65,7 +65,7 @@
               //search by only name
               if (!empty($_POST['suppliername'])) {
 
-                $sql ="SELECT  `paymentdate`, `supplierid`, `amounts`, `bycashcheque`,`carreier`  FROM `paymenttosupplier` WHERE bycashcheque = 'Cash'  AND `supplierid`='".$_POST['suppliername']."'
+                $sql ="SELECT `pay_date`, `sup_id`, `amnts`, `carier`, `status` FROM `supplierpayment` WHERE `status`='Cash'  AND `sup_id`='".$_POST['suppliername']."'
              UNION
         SELECT `expiredate`,`customerid`, `amount`, `fromtable`,`carrier` FROM `cheque` WHERE fromtable='minus' AND approve ='1' AND`customerid`='".$_POST['suppliername']."'
         UNION 
@@ -82,6 +82,7 @@
               ?>
               <div class="bg-light card card-body" style=" background: #060202 !important;">
                 <h4 style="color: white">Supplier Name : <?php  echo $fn->getUserName($_POST['suppliername']); ?></h4>
+                <p>Opening Balance : <?=$opening?></p>
                 
               </div>
               <?php 
@@ -102,7 +103,7 @@
                <th>#</th>
                <th>Date</th>
                <th>Amount</th>
-               <th>Total</th>
+               
                <th>Carrier/Purchased by</th>
                <th>Status</th>
                
@@ -114,18 +115,18 @@
                $i=0;
                $sum = 0;
                   foreach ($data as $val) {  $i++;
-                    $sum+= (int)$val['amounts'];  
+                    $sum += (int)$val['amnts'];  
                    ?>
             <tr>
                <th scope="row"><?=$i?></th>
-               <td><?=$val['paymentdate']?></td>
-               <td><?=$val['amounts']?></td>
-               <td><?=$sum?></td>
-                <td><?=$val['carreier']?></td>
+               <td><?=$val['pay_date']?></td>
+               <td><?=$val['amnts']?></td>
+               
+                <td><?=$val['carier']?></td>
                 <td><?php 
-                 if ($val['bycashcheque']=="minus") {
+                 if ($val['status']=="minus") {
                      echo "Cheque Collection";
-                  } else if ($val['bycashcheque']=="p") {
+                  } else if ($val['status']=="p") {
                     echo "Payment on purchase";
                   } else {
                     echo "Cash Collection";

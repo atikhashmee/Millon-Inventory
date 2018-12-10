@@ -5,9 +5,11 @@
                               include("php/functions.php");
                               include("php/dbmodels.php");
                               include("php/privilige_funtionality.php");
+                              include("php/basic_calculation.php");
                               $db = new Db();
                               $fn = new Functions();
                               $dm = new DbModels();
+                              
                               session_start();
 /*  defined data heads for the role base access system  */
 

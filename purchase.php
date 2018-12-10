@@ -20,6 +20,7 @@
    <div class="card-body">
       <form class="form-horizontal form-label-left" method="post" 
          name="allotherinfo" id="allotherinfo">
+         <input type="hidden" name="atik">
          <div class="row">
             <div class="col">
                <div class="form-group">
@@ -38,7 +39,7 @@
                   <button type="button" id="generateinvoice" class="btn btn-outline-info col-md-2"><i class="fa fa-hashtag"></i></button>
                </div>
                <div class="form-group row">
-                  <input type="hidden" name="atik">
+                  
                   <label  for="name">Date of Purchase <span class="required">*</span></label>
                   <input type="text"  name="datepurchase" id="datepurchase"  class="form-control col-md-10">
                </div>
@@ -325,6 +326,7 @@
    
      var tex = confirm("Are you sure ? ");
        if (tex ===  true) {
+           console.log($("#allotherinfo").serialize());
             $.ajax({
             url:'ajax/add_new_purchase_info.php?item='+JSON.stringify(defaultModule.purchaseitem)+"&allotherinfo="+$("#allotherinfo").serialize(),
             type: 'GET',
@@ -333,7 +335,7 @@
           .done(function(res) {
             console.log(res);
             alert("Product Purchase Has been done");
-            window.location.href="purchase.php";
+           // window.location.href="purchase.php";
    
           })
           .fail(function() {

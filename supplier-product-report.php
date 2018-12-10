@@ -62,9 +62,9 @@
    <!-- users view section starts here -->
    <div class="col">
    <?php 
-         $sql =  "SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`, `discount`, `token` FROM `purchase`
+         $sql =  "SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase`
             UNION
-           SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `discount`, `token` FROM `purchase_return` ORDER by purchasedate";
+           SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `comission`,`discount`, `token` FROM `purchase_return` ORDER by purchasedate";
 
                   $opening = 0;
 
@@ -77,33 +77,33 @@
 
               if (!empty($_POST['suppliername'])) {
 
-                $sql ="SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`, `discount`, `token` FROM `purchase` WHERE `supplier`='".$_POST['suppliername']."'
+                $sql ="SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase` WHERE `supplier`='".$_POST['suppliername']."'
              UNION
-              SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `discount`, `token` FROM `purchase_return` WHERE `supplierId`='".$_POST['suppliername']."' ORDER by purchasedate";
+              SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `comission`, `discount`, `token` FROM `purchase_return` WHERE `supplierId`='".$_POST['suppliername']."' ORDER by purchasedate";
 
               }
 
                 //search by name and product name
               if (!empty($_POST['suppliername']) && !empty($_POST['product'])) {
-                $sql ="SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`, `discount`, `token` FROM `purchase` WHERE supplier='".$_POST['suppliername']."' AND productid='".$_POST['product']."'
+                $sql ="SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase` WHERE supplier='".$_POST['suppliername']."' AND productid='".$_POST['product']."'
                  UNION 
-                 SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `discount`, `token` FROM `purchase_return` WHERE supplierId ='".$_POST['suppliername']."' AND productid='".$_POST['product']."' ORDER by purchasedate";
+                 SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase_return` WHERE supplierId ='".$_POST['suppliername']."' AND productid='".$_POST['product']."' ORDER by purchasedate";
               }
 
               //search by customer name ,  and date
 
                if (!empty($_POST['suppliername']) &&  !empty($_POST['start']) && !empty($_POST['to']) ) {
-                $sql ="SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`, `discount`, `token` FROM `purchase` WHERE supplier='".$_POST['suppliername']."'  AND purchasedate BETWEEN '".$_POST['start']."' AND '".$_POST['to']."'
+                $sql ="SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase` WHERE supplier='".$_POST['suppliername']."'  AND purchasedate BETWEEN '".$_POST['start']."' AND '".$_POST['to']."'
                  UNION 
-                 SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `discount`, `token` FROM `purchase_return` WHERE supplierId='".$_POST['suppliername']."' AND return_date BETWEEN '".$_POST['start']."' AND '".$_POST['to']."' ORDER by purchasedate";
+                 SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase_return` WHERE supplierId='".$_POST['suppliername']."' AND return_date BETWEEN '".$_POST['start']."' AND '".$_POST['to']."' ORDER by purchasedate";
               }
 
                 //search by customer name , product name , and date
 
                 if (!empty($_POST['cutomername']) && !empty($_POST['product']) && !empty($_POST['start']) && !empty($_POST['to']) ) {
-                $sql ="SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`, `discount`, `token` FROM `purchase` WHERE sell.customerid='".$_POST['cutomername']."' AND sell.productid='".$_POST['product']."' AND sell.selldate BETWEEN '".$_POST['start']."' AND '".$_POST['to']."'
+                $sql ="SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase` WHERE sell.customerid='".$_POST['cutomername']."' AND sell.productid='".$_POST['product']."' AND sell.selldate BETWEEN '".$_POST['start']."' AND '".$_POST['to']."'
                  UNION 
-                 SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `discount`, `token` FROM `purchase_return` WHERE sell_return.customerid='".$_POST['cutomername']."' AND sell_return.productid='".$_POST['product']."' AND sell_return.return_date BETWEEN '".$_POST['start']."' AND '".$_POST['to']."' ORDER by selldate";
+                 SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `comission`,`discount`, `token` FROM `purchase_return` WHERE sell_return.customerid='".$_POST['cutomername']."' AND sell_return.productid='".$_POST['product']."' AND sell_return.return_date BETWEEN '".$_POST['start']."' AND '".$_POST['to']."' ORDER by selldate";
               }  
 
               
@@ -151,9 +151,13 @@
                $i=0;
                $sum = $opening;
                   foreach ($data as $val) {  $i++;
-                      $tot = (((int)$val['price'] * (int)$val['quantity']) + (int)$val['weight'] + (int)$val['transport']);
-                      
-                      
+                    $bc = new Bc();
+                    $bc->setAmount(((int)$val['price'] * (int)$val['quantity']));
+                    $bc->setWeight($val['weight']);
+                    $bc->setTransport($val['transport']);
+                    $bc->setVat($val['vat']);
+                    $bc->setDiscount($val['discount']);
+                    $bc->setComission($val['comission']);
                    ?>
             <tr>
                <th scope="row"><?=$i?></th>
@@ -165,7 +169,7 @@
                 <?=$val['price']?>--
                 <?=$val['weight']?>--
                 <?=$val['transport']?>--
-                <?=$val['vat']?>--<?=$val['discount']?>
+                <?=$val['vat']?>--<?=$val['discount']?>--<?=$val['comission']?>
                  <p style="margin: 0px; padding: 0px">Status = <?php 
                     if ($val['token']=="pr") {
                         echo "Product returned";
@@ -177,18 +181,18 @@
                <td><?php 
 
                       if ($val['token']=="pr") {
-                        echo "-".$tot;
+                        echo "-".$bc->getResult();
                     }else if($val['token']=="p"){
-                       echo "+".$tot;
+                       echo "+".$bc->getResult();
                     }
 
                ?></td>
                <td><?php 
 
                       if ($val['token']=="pr") {
-                        echo $sum -= $tot;
+                        echo $sum -= $bc->getResult();
                     }else if($val['token']=="p"){
-                       echo $sum += $tot;
+                       echo $sum += $bc->getResult();
                     }
 
                ?></td>
