@@ -3,98 +3,108 @@
    {
     "priv_id" : 1,
     "priv_name":"Products",
-    "subdata" : ["Access","create","view","update","delete"]
+    "subdata" : ["create","view","update","delete"]
    },
    {
     "priv_id" : 2,
     "priv_name":"Purchase",
-    "subdata" : ["Access","create","view","delete","print"]
+    "subdata" : ["create","view","delete","print"]
    },
    {
     "priv_id" : 3,
     "priv_name":"Purchase Return",
-    "subdata"  : ["Access","create","view","delete","print"]
+    "subdata"  : ["create","view","delete","print"]
    },
    {
     "priv_id"  : 4,
     "priv_name":"Sale",
-    "subdata"  : ["Access","create","view"]
+    "subdata"  : ["create","view"]
    },
 
    {
     "priv_id" : 5,
     "priv_name":"Sale Return",
-    "subdata" : ["Access","create","view","delete","print"]
+    "subdata" : ["create","view","delete","print"]
    },
    {
     "priv_id" : 6,
     "priv_name":"Recieve-Collection",
-    "subdata" : ["Access","create","view","delete","print"]
+    "subdata" : ["create","view","delete","print"]
    },
    {
     "priv_id" : 7,
     "priv_name":"Payment-to-supplier",
-    "subdata" : ["Access","create","view","delete","print"]
+    "subdata" : ["create","view","delete","print"]
    },
    {
     "priv_id" : 8,
     "priv_name":"Cash Transer",
-    "subdata" : ["Access","create","view","delete","print"]
+    "subdata" : ["create","view","delete","print"]
    },
    {
     "priv_id" : 9,
     "priv_name":"Expense",
-    "subdata" : ["Access","create","view","delete","print"]
+    "subdata" : ["create","view","delete","print"]
    },
    {
     "priv_id" : 10,
     "priv_name":"Product-Category",
-    "subdata" : ["Access","create","update","delete"]
+    "subdata" : ["create","update","delete"]
    },
    {
     "priv_id" : 11,
     "priv_name":"Product-Brand",
-    "subdata" : ["Access","create","update","delete"]
+    "subdata" : ["create","update","delete"]
    },
    {
     "priv_id" : 12,
     "priv_name":"Product-Size",
-    "subdata" : ["Access","create","update","delete"]
+    "subdata" : ["create","update","delete"]
    },
    {
     "priv_id" : 13,
     "priv_name":"Salery-keys",
-    "subdata" : ["Access","create","update","delete"]
+    "subdata" : ["create","update","delete"]
    },
    {
     "priv_id" : 14,
     "priv_name":"Employee-Traget",
-    "subdata" : ["Access","create","view","delete","print"]
+    "subdata" : ["create","view","delete","print"]
    },
    {
     "priv_id" : 15,
     "priv_name":"Employee-Salery",
-    "subdata" : ["Access","create","view","delete","print"]
+    "subdata" : ["create","view","delete","print"]
    },
    {
     "priv_id" : 16,
     "priv_name":"Account-category",
-    "subdata" : ["Access","create","update","delete"]
+    "subdata" : ["create","update","delete"]
    },
    {
     "priv_id" : 17,
     "priv_name":"Account-Name",
-    "subdata" : ["Access","create","update","delete"]
+    "subdata" : ["create","update","delete"]
    },
    {
     "priv_id" : 18,
     "priv_name":"Expense-category",
-    "subdata" : ["Access","create","update","delete"]
+    "subdata" : ["create","update","delete"]
    },
    {
     "priv_id" : 19,
     "priv_name":"Users",
-    "subdata" : ["Access","create","view","update","delete"]
+    "subdata" : ["create","view","update","delete"]
+   },
+   {
+    "priv_id" : 20,
+    "priv_name":"Employee-Type",
+    "subdata" : ["create","view","update","delete"]
+   },
+   {
+    "priv_id" : 21,
+    "priv_name":"Bank-reconcilation",
+    "subdata" : ["create","view","update","delete"]
    }
 
 

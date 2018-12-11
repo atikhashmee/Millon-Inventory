@@ -56,11 +56,11 @@
         		xyz.then((obj) =>
         		{
         			console.log(obj);
-        			var text = "";
+        			var text = "<option value=''>Select Brand</option>";
         			  obj.forEach((element)=>{
         			  	  if (element.cate_id === event.target.value)
         			  	   {
-        			  	   	text += "<option value='"+element.brand_id+"'>"+element.brand_name+"</option>";
+        			  	   	text +="<option value='"+element.brand_id+"'>"+element.brand_name+"</option>";
         			  	   }
         			  });
 					document.getElementById("brands").innerHTML = text;

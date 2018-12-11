@@ -6,11 +6,15 @@
                               include("php/dbmodels.php");
                               include("php/privilige_funtionality.php");
                               include("php/basic_calculation.php");
+
+                              include("php/menu_privilige.php");
                               $db = new Db();
                               $fn = new Functions();
                               $dm = new DbModels();
                               
                               session_start();
+
+                              
 /*  defined data heads for the role base access system  */
 
 
@@ -36,7 +40,10 @@
     $str  = file_get_contents("json/privilige.json");
     $ss = json_decode($str,true);
 
-    /*echo "<pre>";
+    /*class that controlling menu acess privilige*/
+    $mp = new MPS($_SESSION['role']);  
+
+   /* echo "<pre>";
     print_r($ss);
     echo "</pre>";*/
 

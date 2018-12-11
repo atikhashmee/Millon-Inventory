@@ -22,7 +22,7 @@
         $varray  = [];
         foreach ($qry as $ke)
          {
-             array_push($varray ,  [
+             array_push($varray , [
               "userid"   => $ke['user_id'],
               "pagename" => $ke['pagename'],
               "roles"    => $ke['roles']
@@ -103,12 +103,6 @@
               
               <tbody>
               <?php 
-
-                 /* echo "<pre>";
-    print_r($ss['priviliges']);
-
-    echo "</pre>";*/
-
                   for ($i=0,$j=1; $i <count($ss['priviliges']); $i++,$j++)
                    {  ?>
                           <tr>

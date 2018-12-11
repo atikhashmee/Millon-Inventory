@@ -58,7 +58,7 @@
         		xyz.then((obj) =>
         		{
         			console.log(obj);
-        			var text = "";
+        			var text = "<option value=''>Select Size</option>";
         			  obj.forEach((element)=>{
         			  	  if (element.brandid === event.target.value)
         			  	   {

@@ -13,7 +13,7 @@
            	  private $userid;
            	  private $pagename;
 
-           	  private $access = false;
+           	  
            	  private $create = false;
            	  private $view   = false;
            	  private $update = false;
@@ -71,15 +71,13 @@
 				 		   if ($rolesdata[$qval['roles']] == "print") {
 				 		   	   $this->print = true;
 				 		   }
-				 		   if ($rolesdata[$qval['roles']] == "Access") {
-				 		   	   $this->access = true;
-				 		   }
+				 		  
 
 
 				 	   }
 				 	}
 				 	else {  //if there is no rules then he will have the access of everything 
-						  $this->access = false;
+						  
 						  $this->create = true;
 			           	  $this->view   = true;
 			           	  $this->update = true;
@@ -96,7 +94,8 @@
 				 public function getPageProperty()
 				 {
 				 	for ($i=0; $i <count($GLOBALS['ss']['priviliges']) ; $i++) { 
-				 		if ($this->pagename == $GLOBALS['ss']['priviliges'][$i]['priv_id']) {
+				 		if ($this->pagename == $GLOBALS['ss']['priviliges'][$i]['priv_id']) 
+				 		    {
 				 			  return $GLOBALS['ss']['priviliges'][$i]['subdata'];
 				 		    }
 				 	}
@@ -155,25 +154,7 @@
 
 				    
 
-					    /**
-					     * @return mixed
-					     */
-					    public function getAccess()
-					    {
-					        return $this->access;
-					    }
-
-					    /**
-					     * @param mixed $access
-					     *
-					     * @return self
-					     */
-					    public function setAccess($access)
-					    {
-					        $this->access = $access;
-
-					        return $this;
-					    }
+					    
 }
 
 		?>

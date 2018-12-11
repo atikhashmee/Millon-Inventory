@@ -77,16 +77,13 @@
                      </select>
                   </div>
                   <div id="formshow" style="display: none;">
-                    
-                      
-                     
                     <select class="form-control" name="emtype" id="emtype">
                         <option value="">Employee type</option>
                         <?=$dm->getEmployeeType()?>
                      </select>
 
                   
-                  <a href="employee-type.php" class="btn btn-outline-info"><i class="fa fa-hashtag"></i></a>
+                  <a href="employee-type.php" class="btn btn-outline-info"><i class="fa fa-plus"></i></a>
                     
                    
                   </div>

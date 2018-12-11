@@ -9,7 +9,7 @@ $rbas->setPageName(4)->run();
 <?php 
    if (isset($_GET['del-id'])) {
            if ($db->delete("sell","billchallan = '".$_GET['del-id']."'")) {?>
-<script> alert('Data has been deleted'); window.location.href='sellproduct.php'; </script>
+<script> alert('Data has been deleted'); window.location.href='product-sale-history.php'; </script>
 <?php   }
    }
    
