@@ -135,16 +135,26 @@
 					$customers_opening = $this->joinQuery("SELECT `opening_balance` FROM `users` WHERE `u_id`='{$customerid}'")->fetch(PDO::FETCH_ASSOC);
               $opening = $customers_opening['opening_balance'];
               $sum = $opening;
-					 $sql ="SELECT `selldate`, `billchallan`, `productid`, `quantity`, `price`,`weight`,`transport`,`vat`,`discount`,`token` FROM `sell` WHERE `customerid`='{$customerid}'
+					 $sql ="SELECT `selldate`, `billchallan`, `productid`, `quantity`, `price`,`weight`,`transport`,`vat`,`discount`,
+					 `comission`,`token` FROM `sell` WHERE `customerid`='{$customerid}'
              UNION
-              SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `discount`, `token` FROM `sell_return` WHERE `customerid`='{$customerid}'";
+              SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `discount`,`comission`, `token` FROM `sell_return` WHERE `customerid`='{$customerid}'";
                $ss =  $this->joinQuery($sql)->fetchAll();
 				  foreach ($ss as $val) {
-				  	$tot = (((int)$val['price'] * (int)$val['quantity']) + (int)$val['weight'] + (int)$val['transport']);
+				  	
+
+				  	$bc = new Bc();
+                    $bc->setAmount(((int)$val['price'] * (int)$val['quantity']));
+                    $bc->setWeight($val['weight']);
+                    $bc->setTransport($val['transport']);
+                    $bc->setVat($val['vat']);
+                    $bc->setDiscount($val['discount']);
+                    $bc->setComission($val['comission']);
+
 				  	if ($val['token']=="sr") {
-                        $sum -= $tot;
+                        $sum -= $bc->getResult();
                     }else if($val['token']=="s"){
-                       $sum += $tot;
+                       $sum += $bc->getResult();
                     }
 				  }
 				  return $sum;

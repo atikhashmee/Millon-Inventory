@@ -328,7 +328,9 @@
                   })
                   .done(function(res) {
                     console.log(res);
+
                     $("#feedbacktext").text(res);
+                    window.location.reload();
                   })
                   .fail(function() {
                     console.log("error");

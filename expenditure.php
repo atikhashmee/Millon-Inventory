@@ -15,6 +15,26 @@ $rbas->setPageName(9)->run();
               }
          }
 
+
+         /*all the employee list by employe type*/
+         $emptype =[];
+         $emplyes = $db->joinQuery("SELECT `employeetype` FROM `users` WHERE `user_role`='4'")->fetchAll();
+         foreach ($emplyes as $et) 
+         {
+            $myval = [];
+             $employees=  $db->selectAll("users","employeetype='".$et['employeetype']."'")->fetchAll();
+             foreach ($employees as $es) {
+                array_push($myval,[
+                      $es['u_id'] => $es['name']
+              ]);
+             }
+
+              $emptype[$et['employeetype']] =$myval;
+        }
+          /*echo "<pre>";
+          print_r($emptype);
+          echo "</pre>";*/
+
  ?>
 <div class="container">
     <div class="row">
@@ -95,13 +115,13 @@ $rbas->setPageName(9)->run();
          </div>
          <div class="col" id="chequeoption" style="display: none;">
             <div class="form-group row" style="position: absolute; top: 29px;">
-               <select class="form-control col" name="employeetypeid">
+               <select class="form-control col" name="employeetypeid" id="employeetypeid" onchange="getEmployeebytype()">
                   <option value="">Employee Type</option>
                   <?=$dm->getEmployeeType()?>
                </select>
-                <select class="form-control col" name="employeeid">
-                  <option value="">Employee Name</option>
-                  <?=$dm->getUsersByRole(4)?>
+                <select class="form-control col" name="employeeid" id="employeeid">
+                  
+                  
                </select>
             </div>
          </div>
@@ -324,4 +344,20 @@ $rbas->setPageName(9)->run();
         }
    
       }
+
+        /*fetch employee according to their type*/
+      var etype = <?=json_encode($emptype);?>;
+      
+      function getEmployeebytype() {
+        var va = document.getElementById("employeetypeid").value;
+        
+        var text = "<option value=''>Employee Name</option>";
+        etype[va].forEach((item)=>{
+            text += "<option value='"+Object.keys(item)+"'>"+Object.values(item)+"</option>";
+        });
+
+        document.getElementById("employeeid").innerHTML=text;
+      }
+
+
 </script>

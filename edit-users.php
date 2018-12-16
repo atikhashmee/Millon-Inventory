@@ -81,7 +81,7 @@
             'email' => $_POST['email'], 
             'contact_number' => $_POST['number'], 
             'address' => $_POST['address'], 
-            'employeetype' => empty($_POST['emtype'])?0:$_POST['emtype'], 
+            'employeetype' => empty($_POST['emtype'])?$userdata['employeetype']:$_POST['emtype'], 
             'opening_balance' => $_POST['openingbalance'], 
             'created_at' => date("Y-m-d") 
             );

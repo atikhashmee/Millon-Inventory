@@ -28,6 +28,7 @@ $rbas->setPageName(3)->run();
                   <div class="row">
                      <div class="col">
                               <div class="form-group">
+                                 <input type="hidden" name="atik">
                                  <label for="name">Select Marketing<span class="required">*</span></label>
                               <select class="form-control" name="sellby" id="sellby">
                                  <option value="">Marketing</option>
@@ -56,7 +57,7 @@ $rbas->setPageName(3)->run();
                            <button type="button" onclick="gBCN()" class="btn btn-outline-info col-md-2"><i class="fa fa-hashtag"></i></button>
                         </div>
                          
-                              <input type="hidden" id="atik" name="atik" class="form-control">
+                              
                               <div class="form-group row">
                               <label for="name">Date of Sell <span class="required">*</span></label>
                                  <input type="text" id="datesell" name="datesell" class="form-control col-md-10">

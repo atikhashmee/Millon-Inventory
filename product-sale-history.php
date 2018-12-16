@@ -93,7 +93,7 @@ $rbas->setPageName(4)->run();
          }
          if ($rbas->getDelete()) {
              ?>
-              <a class="dropdown-item" href="product-sale-history.php?del-id=<?=$val['brand_id']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
+              <a class="dropdown-item" href="product-sale-history.php?del-id=<?=$sel['billchallan']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
       <?php 
          }
          if ($rbas->getPrint()) {

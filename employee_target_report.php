@@ -60,7 +60,7 @@
             <div class="row">
               <div class="col">
                 <select class="form-control" name="employeeid">
-                   <option value="">Select an Employee</option>
+                   <option value="">Select a marketing</option>
                   <?php 
                     //fetching only users who are given target
                   $ids = [];

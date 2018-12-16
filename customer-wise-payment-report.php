@@ -33,10 +33,16 @@
                 </div>
               
                  
-              <div class="col"><input type="date" class="form-control" name="start"></div>
-              <div class="col"><input type="date" class="form-control" name="to"></div>
               <div class="col">
-                <button type="submit"  name="filter" class="btn btn-outline-primary">  Search <i class="fa fa-search"></i></button>
+                <input type="date" class="form-control" name="start">
+              </div>
+              <div class="col">
+                <input type="date" class="form-control" name="to">
+              </div>
+              <div class="col">
+                <button type="submit"  name="filter" class="btn btn-outline-primary">
+                  Search <i class="fa fa-search"></i>
+                </button>
               </div>
             </div>
           </form>
