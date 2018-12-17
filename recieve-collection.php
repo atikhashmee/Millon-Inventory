@@ -182,15 +182,15 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
                     }
                     else 
                     {
-                      $chequecash = ($_POST['customRadio']=="yes")?"Cheque":"Cash";
+                    $chequecash = ($_POST['customRadio']=="yes")?"Cheque":"Cash";
                        $data = array(
                          'recievedate' => $_POST['recievedate'], 
                          'cusotmer_id' => $_POST['customerid'], 
-                         'amounts' => $_POST['amount'],
-                         'carreier' => $_POST['carrier'], 
-                         'adjustment' => $_POST['adjustment'],
-                         'addedby' =>   $_SESSION['u_id'],
-                         'bycashcheque' =>  $chequecash
+                         'amounts'     => $_POST['amount'],
+                         'carreier'    => $_POST['carrier'], 
+                         'adjustment'  => $_POST['adjustment'],
+                         'addedby'     => $_SESSION['u_id'],
+                         'bycashcheque'=> "rac_".$chequecash
                           );
                       $parentid = 0;
                        if ($db->insert("recevecollection",$data)) 

@@ -1,6 +1,16 @@
 <?php include 'files/header.php'; ?>
 <?php include 'files/menu.php';
  ?>
+
+
+ <style>
+ /* description in the table column */
+   .description{
+    font-size: 16px;
+    padding: 5px;
+
+   }
+ </style>
 <div class="container">
    <div class="row">
                     <div class="col-sm-12">
@@ -52,11 +62,18 @@
 
    <div class="col">
       <?php 
-         $sql =  "SELECT `selldate`, `customerid`, `payment_taka`, `token` FROM `sell` WHERE `payment_taka` IS NOT NULL AND TRIM(`payment_taka`) <> ''
-UNION 
-SELECT `recievedate`, `cusotmer_id`, `amounts`, `bycashcheque` FROM `recevecollection`
-UNION 
-SELECT `expiredate`, `customerid`, `amount`, `fromtable` FROM `cheque` WHERE `approve`='1'";
+         $sql = "SELECT `selldate`, `customerid`, `payment_taka`, `token` FROM `sell` WHERE `payment_taka` IS NOT NULL AND TRIM(`payment_taka`) <> '' UNION 
+         SELECT `recievedate`, `cusotmer_id`, `amounts`, `bycashcheque` FROM `recevecollection` WHERE `bycashcheque` = 'rac_Cash' 
+         UNION 
+         SELECT `pay_date`, `sup_id`, `amnts`, `status` FROM `supplierpayment` WHERE `status`='pts_Cash' 
+         UNION 
+         SELECT `expiredate`, `customerid`, `amount`, `fromtable` FROM `cheque` WHERE `approve`='1' 
+         UNION 
+         SELECT `expendituredate`, `accountsid`, `amount`, `token` FROM `expenditure` 
+         UNION 
+         SELECT `payment_date`, `employeeid`,`amount_pay`, `token` FROM `e_payment_salery` 
+         UNION 
+         SELECT `purchasedate`, `supplier`, `payment_taka`, `token` FROM `purchase`";
          
          
            //echo $sql;
@@ -94,27 +111,88 @@ SELECT `expiredate`, `customerid`, `amount`, `fromtable` FROM `cheque` WHERE `ap
                <td><?=$val['selldate']?></td>
                <td><?=$fn->getUserName($val['customerid'])?></td>
                <td><?php 
-                    if ($val['token'] == "s") {
-                      echo 'Product sold out';
-                    }else if ($val['token'] == "add") {
-                      echo 'Cheque withdrawn';
-                    }else if ($val['token'] == "Cash") {
-                      echo 'Collection';
-                    }else if ($val['token'] == "minus") {
-                      echo 'Payment';
+               $tkn = trim($val['token']);
+               //echo $tkn."</br>";
+                  if (substr($tkn, 0,3) == "pts" && substr($tkn,4,4) == "Cash") 
+                    {
+                      echo '<p class="description">Payment Paid to supplier <a href="#">'.$fn->getUserName($val['customerid']).'</a></p>';
+                    }
+                    if (substr($tkn, 0,3) == "rac" && substr($tkn,4,4) == "Cash") 
+                    {
+                      echo '<p class="description">Payment collection from customer <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
+                    }
+                   else  if (substr($tkn, 0,1) == "s" && substr($tkn,2,4)  == "Cash") 
+                    {
+                      echo '<p class="description">Product sold payment from customer <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
+                    }
+                    else if (substr($tkn, 0,1) == "p" && substr($tkn,2,4)  == "Cash") 
+                    {
+                      echo '<p class="description">Purchase Payment to supplier <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
+                    }
+                    else if ($tkn == "add") 
+                    {
+                      echo '<p class="description">Cheque has been withdrawn from the customer <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
+                    } 
+                    else if (substr($tkn, 0,7) == "expense") 
+                    {
+                      $tkens = explode("_", $tkn);
+                      echo '<p class="description">Bill paid for <a href="#">'.$fn->expenseCategory($tkens[1]).'</a> </p>';
+                    }
+                    else if (substr($tkn, 0,5) == "stuff") 
+                    {
+                      $tkens = explode("_", $tkn);
+                      echo '<p class="description">Bill paid for <a href="#">'.$fn->expenseCategory($tkens[1]).'</a> to employee <a href="#">'.$fn->getUserName($tkens[2]).'</a> </p>';
+                    }
+                    
+                    else if ($tkn == "minus") 
+                    {
+                      echo '<p class="description">Cheque Payment to supplier <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
+                    }
+                    else if ($tkn == "salerypayment") 
+                    {
+                      echo '<p class="description">Salery Payment to Employee <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
                     }
                ?></td>
                <td><?=$val['payment_taka']?></td>
                <td>
                  <?php 
-                    if ($val['token'] == "s") {
-                      echo $sum += $val['payment_taka']; 
-                    }else if ($val['token'] == "add") {
-                      echo $sum += $val['payment_taka']; 
-                    }else if ($val['token'] == "Cash") {
-                      echo $sum += $val['payment_taka']; 
-                    }else if ($val['token'] == "minus") {
-                      echo $sum -= $val['payment_taka']; 
+                 $amounts = $val['payment_taka'];
+                    if (substr($tkn, 0,3) == "pts" && substr($tkn,4,4) == "Cash") 
+                    {
+                      echo $sum -= $amounts;
+                    }
+                    if (substr($tkn, 0,3) == "rac" && substr($tkn,4,4) == "Cash") 
+                    {
+                      echo $sum += $amounts;
+                    }
+                   else  if (substr($tkn, 0,1) == "s" && substr($tkn,2,4)  == "Cash") 
+                    {
+                      echo $sum += $amounts;
+                    }
+                    else if (substr($tkn, 0,1) == "p" && substr($tkn,2,4)  == "Cash") 
+                    {
+                     echo $sum -= $amounts;
+                    }
+                    else if ($tkn == "add") 
+                    {
+                      echo $sum += $amounts;
+                    } 
+                    else if (substr($tkn, 0,7) == "expense") 
+                    {
+                      echo $sum -= $amounts;
+                    }
+                    else if (substr($tkn, 0,5) == "stuff") 
+                    {
+                      echo $sum -= $amounts;
+                    }
+                    
+                    else if ($tkn == "minus") 
+                    {
+                      echo $sum -= $amounts;
+                    }
+                    else if ($tkn == "salerypayment") 
+                    {
+                      echo $sum -= $amounts;
                     }
                ?>
                </td>

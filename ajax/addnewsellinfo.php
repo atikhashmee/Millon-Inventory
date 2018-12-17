@@ -27,6 +27,7 @@
                  $datass = json_decode($_GET['item']);
 			   if ($_GET['cashcheque']=="yes") {
                   $chquedata = array(
+                  	'parent_table_id'  => "s_".$_GET['billchallan'],
                     'accountno' => $_GET['chequeno'],
                     'customerid' => $_GET['cutomername'],
                     'bankname' => $_GET['accounts'],
@@ -41,7 +42,7 @@
                  
                   
                 }
-   
+   $chequecash = ($_GET['cashcheque']=="yes")?"Cheque":"Cash";
 			   for ($i=0; $i <count($datass); $i++) { 
 			    	 $data = array(
 			    	 	'selldate' => $_GET['datesell'],
@@ -51,12 +52,15 @@
 			    	 	'transport' => $_GET['transport'],
 			    	 	'vat' => $_GET['vat'],
 			    	 	'payment_taka' => $_GET['nowpayment'],
+			    	 	'payment_status' =>$chequecash,
 			    	 	'comission' => $_GET['comision'],
 			    	 	'discount' =>  $_GET['discount'],
 			    	 	'customerid' => $_GET['cutomername'],
 			    	 	'productid' => $datass[$i]->pname,
 			    	 	'quantity' => $datass[$i]->quntity,
-			    	 	'price' => $datass[$i]->price
+			    	 	'price' => $datass[$i]->price,
+			    	 	'entryby' => $_SESSION['u_id'],
+			    	 	'token'   => "s_".$chequecash
 			    	 	 );
 
 			    	 echo "<pre>";

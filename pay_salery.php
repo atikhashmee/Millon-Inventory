@@ -139,9 +139,10 @@
         
    			 $data = array(
    				'payment_date' => $_POST['paydate'],
-   				'amount_pay' =>$_POST['payamount'],
-   				'payment_due' => $_POST['due'],
-   				'employeeid' => $_GET['eid']
+   				'amount_pay'   => $_POST['payamount'],
+   				'payment_due'  => $_POST['due'],
+          'employeeid'   => $_GET['eid'],
+   				'token'        => "salerypayment"
    				 );
    		if ($db->insert("e_payment_salery",$data)) 
          {     ?>

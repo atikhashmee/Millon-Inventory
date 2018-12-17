@@ -153,7 +153,7 @@
 
 				  	if ($val['token']=="sr") {
                         $sum -= $bc->getResult();
-                    }else if($val['token']=="s"){
+                    }else if(substr(trim($val['token']),0,1)=="s"){
                        $sum += $bc->getResult();
                     }
 				  }
@@ -201,7 +201,7 @@
 				  	
 				  	if ($val['token']=="pr") {
                         $sum -= $bc->getResult();
-                    }else if($val['token']=="p"){
+                    }else if(substr(trim($val['token']),0,1)=="p"){
                        $sum += $bc->getResult();
                     }
 				  }

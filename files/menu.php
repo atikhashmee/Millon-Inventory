@@ -66,7 +66,7 @@
                      aria-haspopup="false" aria-expanded="false">
                   <img src="assets/images/users/avatar-1.jpg" alt="user" class="rounded-circle">
                   </a>
-                  <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                      <a class="dropdown-item" href="changepassword.php"><i class="dripicons-user text-muted"></i>Password</a>
                      <?php 
                         if ($_SESSION['role'] == 0) 
@@ -197,6 +197,7 @@
                            <li><a  href="employee_target_report.php"> Employee Target Report</a></li>
                            <li><a  href="labour_payment_statement.php"> See the labour payment</a></li>
                            <li><a  href="employee_salery_report.php"> Salery Report</a></li>
+                           <li><a  href="gross-profit.php">Gross Profit</a></li>
                         </ul>
                      </li>
                   </ul>

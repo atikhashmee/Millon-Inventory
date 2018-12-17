@@ -161,7 +161,7 @@
                  <p style="margin: 0px; padding: 0px">Status = <?php 
                     if ($val['token']=="sr") {
                         echo "Product returned";
-                    }else if($val['token']=="s"){
+                    }else if(substr(trim($val['token']),0,1)=="s"){
                        echo "Product Purchesed";
                     }
                ?></p> </td>
@@ -169,14 +169,14 @@
                <td><?php 
                       if ($val['token']=="sr") {
                         echo "-".$bc->getResult();;
-                    }else if($val['token']=="s"){
+                    }else if(substr(trim($val['token']),0,1)=="s"){
                        echo "+".$bc->getResult();;
                     }
                ?></td>
                <td><?php 
                       if ($val['token']=="sr") {
                         echo $sum -= $bc->getResult();;
-                    }else if($val['token']=="s"){
+                    }else if(substr(trim($val['token']),0,1)=="s"){
                        echo $sum += $bc->getResult();;
                     }
                ?></td>

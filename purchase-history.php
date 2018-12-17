@@ -7,10 +7,25 @@
 ?>
 
 <?php 
-   if (isset($_GET['del-id'])) {
-           if ($db->delete("purchase","billchallan = '".$_GET['del-id']."'")) {?>
-<script> alert('Data has been deleted'); window.location.href='purchase-history.php'; </script>
-<?php   }
+   if (isset($_GET['del-id'])) 
+   {
+
+
+
+           if ($db->delete("purchase","billchallan = '".$_GET['del-id']."'")) 
+            { 
+               $getstatus = $db->selectAll('supplierpayment',"pay_id='".$_GET['del-id']."'")->fetch(PDO::FETCH_ASSOC);
+                  if ($getstatus['status'] == 'Cheque')
+                   {
+                         $db->delete("cheque","parent_table_id='pts_".$_GET['del-id']."'");
+                   }
+              ?>
+            <script> 
+            alert('Data has been deleted'); 
+            window.location.href='purchase-history.php'; 
+            </script>
+            <?php  
+           }
    }
    
 

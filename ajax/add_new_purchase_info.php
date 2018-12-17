@@ -10,13 +10,14 @@
 
 			   if ($_GET['cashcheque']=="yes") {
                   $chquedata = array(
-                    'accountno' => $_GET['chequeno'],
-                     'customerid' => $_GET['suppliername'],
-                    'bankname' => $_GET['accounts'],
+                    'parent_table_id'  => "p_".$_GET['billchallan'],
+                    'accountno'  => $_GET['chequeno'],
+                    'customerid' => $_GET['suppliername'],
+                    'bankname'   => $_GET['accounts'],
                     'expiredate' => $_GET['expredate'],
-                    'amount' => $_GET['cheqamount'],
-                    'userid' => $_SESSION['u_id'],
-                    'fromtable' => "minus"
+                    'amount'     => $_GET['cheqamount'],
+                    'userid'     => $_SESSION['u_id'],
+                    'fromtable'  => "minus"
                   );
                    if ($db->insert("cheque",$chquedata)) {
                    echo "<h1 style='color:blue'>Cheque has been saved</h1>";
@@ -33,23 +34,25 @@
                    $db->delete('purchase',"`billchallan`='".$_GET['billchallan']."'");
                 }
                 /*end of product update*/
-
+$chequecash = ($_GET['cashcheque']=="yes")?"Cheque":"Cash";
    
 			   for ($i=0; $i <count($datass); $i++) { 
 			    	 $data = array(
 			    	 	'purchasedate' => $_GET['datepurchase'],
-			    	 	'billchallan' => $_GET['billchallan'],
-			    	 	'weight' => $_GET['weght'],
-			    	 	'transport' => $_GET['transport'],
-			    	 	'vat' => $_GET['vat'],
-			    	 	'comission' => $_GET['comision'],
-			    	 	'discount' => $_GET['discount'],
+			    	 	'billchallan'  => $_GET['billchallan'],
+			    	 	'weight'       => $_GET['weght'],
+			    	 	'transport'    => $_GET['transport'],
+			    	 	'vat'          => $_GET['vat'],
+			    	 	'comission'    => $_GET['comision'],
+			    	 	'discount'     => $_GET['discount'],
 			    	 	'payment_taka' => $_GET['nowpayment'],
+			    	 	'payment_status' =>$chequecash,
 			    	 	'purchaseentryby' => $_SESSION['u_id'],
-			    	 	'supplier' => $_GET['suppliername'],
-			    	 	'productid' => $datass[$i]->pname,
-			    	 	'quantity' => $datass[$i]->quntity,
-			    	 	'price' => $datass[$i]->price
+			    	 	'supplier'     => $_GET['suppliername'],
+			    	 	'productid'    => $datass[$i]->pname,
+			    	 	'quantity'     => $datass[$i]->quntity,
+			    	 	'price'        => $datass[$i]->price,
+			    	 	'token'        => "p_".$chequecash
 			    	 	 );
 
 			    	 echo "<pre>";

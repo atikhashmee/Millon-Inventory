@@ -155,7 +155,8 @@ $rbas->setPageName(9)->run();
               'amount'          => $_POST['amount'],
               'employeeid'      => $_POST['employeeid'],
               'employeetype'    => $_POST['employeetypeid'],
-              'addedby'         => $_SESSION['u_id']
+              'addedby'         => $_SESSION['u_id'],
+              'token'           => "stuff_".$_POST['expensecate']."_".$_POST['employeeid']
                );
             }
             else
@@ -165,7 +166,8 @@ $rbas->setPageName(9)->run();
               'expensecatid'    => $_POST['expensecate'],
               'accountsid'      => $_POST['accountsid'],
               'amount'          => $_POST['amount'],
-              'addedby'         => $_SESSION['u_id']
+              'addedby'         => $_SESSION['u_id'],
+              'token'         => "expense_".$_POST['expensecate']
                );
             }
       

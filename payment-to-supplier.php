@@ -196,11 +196,11 @@ if (isset($_GET['del-id']))
             
                              $data = array(
                               'pay_date' => $_POST['paymentdat'],
-                              'sup_id' => $_POST['suppliername'],
-                              'amnts' => $_POST['amount'],
-                              'carier' =>$_POST['carrier'],
-                              'inputby' => $_SESSION['u_id'],
-                              'status' =>  $chequecash
+                              'sup_id'   => $_POST['suppliername'],
+                              'amnts'    => $_POST['amount'],
+                              'carier'   => $_POST['carrier'],
+                              'inputby'  => $_SESSION['u_id'],
+                              'status'   => "pts_".$chequecash
                                );
                      $parentid = 0;
                      if ($db->insert("supplierpayment",$data)) 
