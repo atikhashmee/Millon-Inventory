@@ -34,6 +34,7 @@
                     'expiredate' => $_GET['expredate'],
                     'amount' => $_GET['chequeamount'],
                     'userid' => $_SESSION['u_id'],
+                    'carrier'     => $_SESSION['u_id'],
                     'fromtable' => "add"
                   );
                    if ($db->insert("cheque",$chquedata)) {

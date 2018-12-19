@@ -171,18 +171,18 @@
                 <?=$val['transport']?>--
                 <?=$val['vat']?>--<?=$val['discount']?>--<?=$val['comission']?>
                  <p style="margin: 0px; padding: 0px">Status = <?php 
-                    if ($val['token']=="pr") {
+                    if (trim($val['token']) =="pr") {
                         echo "Product returned";
-                    }else if(substr(trim($val['token']),0,1)  =="p"){
+                    }else if(trim($val['token'])=="p_Cash" || trim($val['token'])=="p_Cheque"){
                        echo "Product Purchesed";
                     }
                ?></p> </td>
                
                <td><?php 
 
-                      if ($val['token']=="pr") {
+                      if ( trim($val['token']) =="pr") {
                         echo "-".$bc->getResult();
-                    }else if(substr(trim($val['token']),0,1)=="p"){
+                    }else if(trim($val['token'])=="p_Cash" || trim($val['token'])=="p_Cheque"){
                        echo "+".$bc->getResult();
                     }
 
@@ -191,7 +191,7 @@
 
                       if ($val['token']=="pr") {
                         echo $sum -= $bc->getResult();
-                    }else if(substr(trim($val['token']),0,1)=="p"){
+                    }else if(trim($val['token'])=="p_Cash" || trim($val['token'])=="p_Cheque"){
                        echo $sum += $bc->getResult();
                     }
 

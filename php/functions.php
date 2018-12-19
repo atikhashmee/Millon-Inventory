@@ -117,11 +117,11 @@
 
 			    public function getCustomerPayments($customerid)
 			    {
-			    	  $sql ="SELECT `recievedate`, `cusotmer_id`, `amounts`,`bycashcheque`,`carreier` FROM `recevecollection` WHERE bycashcheque ='Cash' AND `cusotmer_id`='{$customerid}'
+			    	  $sql ="SELECT `recievedate`, `cusotmer_id`, `amounts`,`bycashcheque`,`carreier` FROM `recevecollection` WHERE bycashcheque ='rac_Cash' AND `cusotmer_id`='{$customerid}'
 			             UNION
 			        SELECT `expiredate`,`customerid`, `amount`, `fromtable`,`carrier` FROM `cheque` WHERE fromtable='add' AND`customerid`='{$customerid}'
 			        UNION 
-			           SELECT `selldate`, `customerid`,`payment_taka`, `token`,`sellby` FROM `sell` WHERE TRIM(payment_taka) <> '' AND `customerid`='{$customerid}'";
+			           SELECT `selldate`, `customerid`,`payment_taka`, `token`,`sellby` FROM `sell` WHERE `token`= 's_Cash' AND `customerid`='{$customerid}'";
 			           $data = $this->joinQuery($sql)->fetchAll();
 			           $sum =0;
 			           foreach ($data as $val) 
@@ -151,10 +151,12 @@
                     $bc->setDiscount($val['discount']);
                     $bc->setComission($val['comission']);
 
-				  	if ($val['token']=="sr") {
-                        $sum -= $bc->getResult();
-                    }else if(substr(trim($val['token']),0,1)=="s"){
-                       $sum += $bc->getResult();
+				  	
+
+                     if ($val['token']=="sr") {
+                         $sum -= $bc->getResult();
+                    }else if(trim($val['token'])=="s_Cash" || trim($val['token'])=="s_Cheque"){
+                        $sum += $bc->getResult();
                     }
 				  }
 				  return $sum;
@@ -164,11 +166,11 @@
 
 				public function getSupplierPayment($supplierid)
 				{
-					 $sql ="SELECT  `pay_date`, `sup_id`, `amnts`, `carier`,  `status` FROM `supplierpayment` WHERE `status`='Cash' AND `sup_id`='{$supplierid}'
+					 $sql ="SELECT  `pay_date`, `sup_id`, `amnts`, `carier`,  `status` FROM `supplierpayment` WHERE `status`='pts_Cash' AND `sup_id`='{$supplierid}'
 			             UNION
 			        SELECT `expiredate`,`customerid`, `amount`, `fromtable`,`carrier` FROM `cheque` WHERE fromtable='minus' AND approve ='1' AND`customerid`='{$supplierid}'
 			        UNION 
-			           SELECT  `purchasedate`, `supplier`,  `payment_taka`, `token`,`purchaseentryby` FROM `purchase` WHERE TRIM(payment_taka) <> '' AND `supplier`='{$supplierid}'";
+			           SELECT  `purchasedate`, `supplier`,  `payment_taka`, `token`,`purchaseentryby` FROM `purchase` WHERE `token` = 'p_Cash' AND `supplier`='{$supplierid}'";
 
                $data = $this->joinQuery($sql)->fetchAll();
                $sum =0;
@@ -197,11 +199,9 @@
                     $bc->setVat($val['vat']);
                     $bc->setDiscount($val['discount']);
                     $bc->setComission($val['comission']);
-
-				  	
-				  	if ($val['token']=="pr") {
+                    if ($val['token']=="pr") {
                         $sum -= $bc->getResult();
-                    }else if(substr(trim($val['token']),0,1)=="p"){
+                    }else if(trim($val['token'])=="p_Cash" || trim($val['token'])=="p_Cheque"){
                        $sum += $bc->getResult();
                     }
 				  }
@@ -299,14 +299,22 @@ $data =  $this->joinQuery($sql)->fetchAll();
 	UNION
 	SELECT `memono`, `return_date`,`token`,`productid`,`quntity`  FROM `purchase_return` WHERE `productid`='{$proid}'";
 			 $query =  $this->joinQuery($sql)->fetchAll();
-			 foreach ($query as $qu) {
-			     if ($qu['token']=="p") {
+			 foreach ($query as $qu) 
+			 {
+			     if (trim($qu['token']) =="p_Cash" || trim($qu['token'])=="p_Cheque") 
+                             {
                                 $stock+= $qu['quantity'];
-                          }else if ($qu['token']=="s") {
+                          }
+                          else if (trim($qu['token'])=="s_Cash" || trim($qu['token'])=="s_Cheque") 
+                          {
                                $stock-= $qu['quantity'];
-                          } else if ($qu['token']=="sr") {
+                          }
+                           else if (trim($qu['token'])=="sr") 
+                           {
                                $stock+= $qu['quantity'];
-                          }else if ($qu['token']=="pr") {
+                           }
+                          else if (trim($qu['token'])=="pr") 
+                          {
                                $stock-= $qu['quantity'];
                           }
 			 }

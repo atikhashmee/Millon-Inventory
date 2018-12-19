@@ -53,11 +53,12 @@
    <div class="col">
    <?php 
    
-         $sql =  "SELECT `pay_date`, `sup_id`, `amnts`, `carier`, `status` FROM `supplierpayment` WHERE `status`='Cash' 
+         $sql =  "SELECT `pay_date`, `sup_id`, `amnts`, `status`, `carier` FROM `supplierpayment` WHERE `status`='pts_Cash'
+          UNION 
+          SELECT `expiredate`,`customerid`, `amount`, `fromtable`,`carrier` FROM `cheque`
+           WHERE fromtable='minus' AND approve ='1' 
            UNION 
-          SELECT `expiredate`,`customerid`, `amount`, `fromtable`,`carrier` FROM `cheque` WHERE fromtable='minus' AND approve ='1'
-           UNION 
-           SELECT  `purchasedate`, `supplier`,  `payment_taka`, `token`,`purchaseentryby` FROM `purchase` WHERE TRIM(payment_taka) <> ''";
+           SELECT `purchasedate`, `supplier`, `payment_taka`, `token`,`purchaseentryby` FROM `purchase` WHERE `token`='p_cash'";
 
            $duebalance = 0;
          if (isset($_POST['filter'])) {
@@ -65,11 +66,12 @@
               //search by only name
               if (!empty($_POST['suppliername'])) {
 
-                $sql ="SELECT `pay_date`, `sup_id`, `amnts`, `carier`, `status` FROM `supplierpayment` WHERE `status`='Cash'  AND `sup_id`='".$_POST['suppliername']."'
+                $sql ="SELECT `pay_date`, `sup_id`, `amnts`, `status`, `carier` FROM `supplierpayment` WHERE `status`='pts_Cash'  AND `sup_id`='".$_POST['suppliername']."'
              UNION
-        SELECT `expiredate`,`customerid`, `amount`, `fromtable`,`carrier` FROM `cheque` WHERE fromtable='minus' AND approve ='1' AND`customerid`='".$_POST['suppliername']."'
+        SELECT `expiredate`,`customerid`, `amount`, `fromtable`,`carrier` FROM `cheque`
+           WHERE fromtable='minus' AND approve ='1' AND `customerid`='".$_POST['suppliername']."'
         UNION 
-           SELECT  `purchasedate`, `supplier`,  `payment_taka`, `token`,`purchaseentryby` FROM `purchase` WHERE TRIM(payment_taka) <> '' AND `supplier`='".$_POST['suppliername']."'";
+           SELECT `purchasedate`, `supplier`, `payment_taka`, `token`,`purchaseentryby` FROM `purchase` WHERE `token`='p_cash' AND `supplier`='".$_POST['suppliername']."'";
               }
 
 
@@ -124,9 +126,9 @@
                
                 <td><?=$val['carier']?></td>
                 <td><?php 
-                 if ($val['status']=="minus") {
+                 if ( trim($val['status']) =="minus") {
                      echo "Cheque Collection";
-                  } else if ($val['status']=="p") {
+                  } else if ( trim($val['status']) =="pts_Cash") {
                     echo "Payment on purchase";
                   } else {
                     echo "Cash Collection";

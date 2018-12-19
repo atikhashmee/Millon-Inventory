@@ -561,7 +561,7 @@ $rbas->setPageName(3)->run();
            {
              
               
-                  sum  -= disc;
+                  sum  -=  disc;
                   sum  +=  wight;
                   sum  += tranport;
                   sum  += ((valu/100)*totalprice);

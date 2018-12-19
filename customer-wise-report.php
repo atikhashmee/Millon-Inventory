@@ -64,7 +64,10 @@
    <!-- users view section starts here -->
    <div class="col">
    <?php 
-         $sql =  "SELECT `selldate`, `billchallan`, `productid`, `quantity`, `price`,`weight`,`transport`,`vat`,`discount`,`comission`,`token` FROM `sell` UNION SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `discount`,`comission`, `token` FROM `sell_return` ORDER by selldate";
+         $sql =  "SELECT `selldate`, `billchallan`, `productid`, `quantity`, `price`,`weight`,`transport`,`vat`,`discount`,`comission`,`token` FROM `sell` 
+         UNION
+          SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `discount`,`comission`, `token` FROM `sell_return` 
+          ORDER by selldate";
                   $opening = 0;
          if (isset($_POST['filter'])) {
               //search by only name
@@ -142,8 +145,6 @@
                     $bc->setVat($val['vat']);
                     $bc->setDiscount($val['discount']);
                     $bc->setComission($val['comission']);
-                      
-                      
                    ?>
             <tr>
                <th scope="row"><?=$i?></th>
@@ -159,9 +160,12 @@
                 <?=$val['transport']?>--
                 <?=$val['vat']?>--<?=$val['discount']?>
                  <p style="margin: 0px; padding: 0px">Status = <?php 
-                    if ($val['token']=="sr") {
+                    if (trim($val['token'])=="sr") 
+                    {
                         echo "Product returned";
-                    }else if(substr(trim($val['token']),0,1)=="s"){
+                    }
+                    else if(trim($val['token'])=="s_Cash" || trim($val['token'])=="s_Cheque")
+                    {
                        echo "Product Purchesed";
                     }
                ?></p> </td>
@@ -169,15 +173,15 @@
                <td><?php 
                       if ($val['token']=="sr") {
                         echo "-".$bc->getResult();;
-                    }else if(substr(trim($val['token']),0,1)=="s"){
-                       echo "+".$bc->getResult();;
+                    }else if(trim($val['token'])=="s_Cash" || trim($val['token'])=="s_Cheque"){
+                       echo "+".$bc->getResult();
                     }
                ?></td>
                <td><?php 
                       if ($val['token']=="sr") {
-                        echo $sum -= $bc->getResult();;
-                    }else if(substr(trim($val['token']),0,1)=="s"){
-                       echo $sum += $bc->getResult();;
+                        echo $sum -= $bc->getResult();
+                    }else if(trim($val['token'])=="s_Cash" || trim($val['token'])=="s_Cheque"){
+                       echo $sum += $bc->getResult();
                     }
                ?></td>
                

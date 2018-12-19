@@ -118,24 +118,39 @@ SELECT `memono`, `return_date`,`token`,`productid`,`quntity`  FROM `purchase_ret
                           <td><?=$qu['selldate']?></td>
                           <td><?=$qu['productid']?></td>
 
-                          <td><?php if ($qu['token']=="p") {
+                          <td><?php 
+                         if (trim($qu['token']) =="p_Cash" || trim($qu['token'])=="p_Cheque") 
+                          {
                                echo "Product is purchased";
-                          }else if ($qu['token']=="s") {
+                          }
+                          else if (trim($qu['token'])=="s_Cash" || trim($qu['token'])=="s_Cheque") 
+                          {
                              echo "Product is sold out";
-                          }else if ($qu['token']=="sr") {
+                          }
+                          else if ( trim($qu['token']) =="sr") 
+                          {
                              echo "Sell Return";
-                          }else if ($qu['token']=="pr") {
+                          }
+                          else if ( trim($qu['token']) =="pr") 
+                          {
                              echo "Purchase Return";
                           } ?></td>
                           <td><?=$qu['quantity']?></td>
                           <td><?php 
-                             if ($qu['token']=="p") {
+                             if (trim($qu['token']) =="p_Cash" || trim($qu['token'])=="p_Cheque") 
+                             {
                               echo  $total+= $qu['quantity'];
-                          }else if ($qu['token']=="s") {
+                          }
+                          else if (trim($qu['token'])=="s_Cash" || trim($qu['token'])=="s_Cheque") 
+                          {
                              echo  $total-= $qu['quantity'];
-                          } else if ($qu['token']=="sr") {
+                          }
+                           else if (trim($qu['token'])=="sr") 
+                           {
                              echo  $total+= $qu['quantity'];
-                          }else if ($qu['token']=="pr") {
+                          }
+                          else if (trim($qu['token'])=="pr") 
+                          {
                              echo  $total-= $qu['quantity'];
                           }
                           ?></td>

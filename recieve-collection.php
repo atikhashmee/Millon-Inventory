@@ -10,7 +10,7 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
              $getstatus = $db->selectAll('recevecollection',"recol_id='".$_GET['del-id']."'")->fetch(PDO::FETCH_ASSOC);
              if ($getstatus['bycashcheque'] == 'Cheque')
                {
-                 $db->delete("cheque","parent_table_id='rac_".$_GET['del-id']."'");
+                $db->delete("cheque","parent_table_id='rac_".$_GET['del-id']."'");
                }
              if ($db->delete("recevecollection","recol_id='".$_GET['del-id']."'") )
               {       

@@ -17,6 +17,7 @@
                     'expiredate' => $_GET['expredate'],
                     'amount'     => $_GET['cheqamount'],
                     'userid'     => $_SESSION['u_id'],
+                    'carrier'     => $_SESSION['u_id'],
                     'fromtable'  => "minus"
                   );
                    if ($db->insert("cheque",$chquedata)) {

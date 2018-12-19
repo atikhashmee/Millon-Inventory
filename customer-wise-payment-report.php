@@ -58,20 +58,20 @@
    <div class="col">
    <?php 
    
-         $sql =  "SELECT `recievedate`, `cusotmer_id`, `amounts`,`bycashcheque`,`carreier` FROM `recevecollection` WHERE bycashcheque ='Cash' 
+         $sql =  "SELECT `recievedate`, `cusotmer_id`, `amounts`,`bycashcheque`,`carreier` FROM `recevecollection` WHERE bycashcheque ='rac_Cash' 
            UNION 
           SELECT `expiredate`,`customerid`, `amount`, `fromtable`,`carrier` FROM `cheque` WHERE fromtable='add' 
            UNION 
-           SELECT `selldate`, `customerid`,`payment_taka`, `token`,`sellby` FROM `sell` WHERE TRIM(payment_taka) <> '' ";
+           SELECT `selldate`, `customerid`,`payment_taka`, `token`,`sellby` FROM `sell` WHERE `token` = 's_Cash' ";
            $duebalance = 0;
          if (isset($_POST['filter'])) {
               //search by only name
               if (!empty($_POST['cutomername'])) {
-                $sql ="SELECT `recievedate`, `cusotmer_id`, `amounts`,`bycashcheque`,`carreier` FROM `recevecollection` WHERE bycashcheque ='Cash' AND `cusotmer_id`='".$_POST['cutomername']."'
+                $sql ="SELECT `recievedate`, `cusotmer_id`, `amounts`,`bycashcheque`,`carreier` FROM `recevecollection` WHERE bycashcheque ='rac_Cash'  AND `cusotmer_id`='".$_POST['cutomername']."'
              UNION
         SELECT `expiredate`,`customerid`, `amount`, `fromtable`,`carrier` FROM `cheque` WHERE fromtable='add' AND`customerid`='".$_POST['cutomername']."'
         UNION 
-           SELECT `selldate`, `customerid`,`payment_taka`, `token`,`sellby` FROM `sell` WHERE TRIM(payment_taka) <> '' AND `customerid`='".$_POST['cutomername']."'";
+           SELECT `selldate`, `customerid`,`payment_taka`, `token`,`sellby` FROM `sell` WHERE `token` = 's_Cash' AND `customerid`='".$_POST['cutomername']."'";
               }
              
               // fetching customer opening balnce to add up the total transaction
@@ -124,7 +124,7 @@
                 <td><?php 
                  if ($val['bycashcheque']=="add") {
                      echo "Cheque Collection";
-                  } else if ($val['bycashcheque']=="s") {
+                  } else if (trim($val['bycashcheque'])=="s_Cash") {
                     echo "Payment on purchase";
                   } else {
                     echo "Cash Collection";
