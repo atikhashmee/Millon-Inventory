@@ -62,7 +62,8 @@
 
    <div class="col">
       <?php 
-         $sql = "SELECT `selldate`, `customerid`, `payment_taka`, `token` FROM `sell` WHERE `payment_taka` IS NOT NULL AND TRIM(`payment_taka`) <> '' UNION 
+         $sql = "SELECT `selldate`, `customerid`, `payment_taka`, `token` FROM `sell` WHERE `token` = 's_Cash'
+          UNION 
          SELECT `recievedate`, `cusotmer_id`, `amounts`, `bycashcheque` FROM `recevecollection` WHERE `bycashcheque` = 'rac_Cash' 
          UNION 
          SELECT `pay_date`, `sup_id`, `amnts`, `status` FROM `supplierpayment` WHERE `status`='pts_Cash' 
@@ -73,7 +74,7 @@
          UNION 
          SELECT `payment_date`, `employeeid`,`amount_pay`, `token` FROM `e_payment_salery` 
          UNION 
-         SELECT `purchasedate`, `supplier`, `payment_taka`, `token` FROM `purchase`";
+         SELECT `purchasedate`, `supplier`, `payment_taka`, `token` FROM `purchase` where `token` = 'p_Cash' ";
          
          
            //echo $sql;
@@ -104,7 +105,6 @@
                $i=0;
                $sum = $opening_balance['opening_balance'];
                   foreach ($data as $val) {  $i++;
-                      
                    ?>
             <tr>
                <th scope="row"><?=$i?></th>
@@ -113,19 +113,19 @@
                <td><?php 
                $tkn = trim($val['token']);
                //echo $tkn."</br>";
-                  if (substr($tkn, 0,3) == "pts" && substr($tkn,4,4) == "Cash") 
+                  if ($tkn == "pts_Cash") 
                     {
                       echo '<p class="description">Payment Paid to supplier <a href="#">'.$fn->getUserName($val['customerid']).'</a></p>';
                     }
-                    if (substr($tkn, 0,3) == "rac" && substr($tkn,4,4) == "Cash") 
+                    if ($tkn == "rac_Cash") 
                     {
                       echo '<p class="description">Payment collection from customer <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
                     }
-                   else  if (substr($tkn, 0,1) == "s" && substr($tkn,2,4)  == "Cash") 
+                   else  if ($tkn == "s_Cash") 
                     {
                       echo '<p class="description">Product sold payment from customer <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
                     }
-                    else if (substr($tkn, 0,1) == "p" && substr($tkn,2,4)  == "Cash") 
+                    else if ($tkn == "p_Cash") 
                     {
                       echo '<p class="description">Purchase Payment to supplier <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
                     }
@@ -157,19 +157,19 @@
                <td>
                  <?php 
                  $amounts = $val['payment_taka'];
-                    if (substr($tkn, 0,3) == "pts" && substr($tkn,4,4) == "Cash") 
+                    if ($tkn == "pts_Cash") 
                     {
                       echo $sum -= $amounts;
                     }
-                    if (substr($tkn, 0,3) == "rac" && substr($tkn,4,4) == "Cash") 
+                    if ($tkn == "rac_Cash") 
                     {
                       echo $sum += $amounts;
                     }
-                   else  if (substr($tkn, 0,1) == "s" && substr($tkn,2,4)  == "Cash") 
+                   else  if ($tkn == "s_Cash") 
                     {
                       echo $sum += $amounts;
                     }
-                    else if (substr($tkn, 0,1) == "p" && substr($tkn,2,4)  == "Cash") 
+                    else if ($tkn== "p_Cash") 
                     {
                      echo $sum -= $amounts;
                     }

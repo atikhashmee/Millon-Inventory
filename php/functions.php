@@ -324,6 +324,82 @@ $data =  $this->joinQuery($sql)->fetchAll();
 
 			 	return $stock;
 				}
+
+
+
+				/*
+				gross profit calculation starts here
+				*/
+
+				public function cashAmount()
+				{
+					$sql = "SELECT `selldate`, `customerid`, `payment_taka`, `token` FROM `sell` WHERE `token` = 's_Cash'
+          UNION 
+         SELECT `recievedate`, `cusotmer_id`, `amounts`, `bycashcheque` FROM `recevecollection` WHERE `bycashcheque` = 'rac_Cash' 
+         UNION 
+         SELECT `pay_date`, `sup_id`, `amnts`, `status` FROM `supplierpayment` WHERE `status`='pts_Cash' 
+         UNION 
+         SELECT `expiredate`, `customerid`, `amount`, `fromtable` FROM `cheque` WHERE `approve`='1' 
+         UNION 
+         SELECT `expendituredate`, `accountsid`, `amount`, `token` FROM `expenditure` 
+         UNION 
+         SELECT `payment_date`, `employeeid`,`amount_pay`, `token` FROM `e_payment_salery` 
+         UNION 
+         SELECT `purchasedate`, `supplier`, `payment_taka`, `token` FROM `purchase` where `token` = 'p_Cash' ";
+             $data = $this->joinQuery($sql)->fetchAll();
+             $opening_balance  =  $this->joinQuery("SELECT `opening_balance` FROM `charts_accounts` WHERE `chart_name`='Cash'")->fetch(PDO::FETCH_ASSOC);
+              $sum = $opening_balance['opening_balance'];
+              
+             foreach ($data as $val) 
+             {		
+             		$tkn = trim($val['token']);
+             	   $amounts = $val['payment_taka'];
+                    if ($tkn == "pts_Cash") 
+                    {
+                       $sum -= $amounts;
+                    }
+                    if ($tkn == "rac_Cash") 
+                    {
+                       $sum += $amounts;
+                    }
+                   else  if ($tkn == "s_Cash") 
+                    {
+                       $sum += $amounts;
+                    }
+                    else if ($tkn== "p_Cash") 
+                    {
+                      $sum -= $amounts;
+                    }
+                    else if ($tkn == "add") 
+                    {
+                       $sum += $amounts;
+                    } 
+                    else if (substr($tkn, 0,7) == "expense") 
+                    {
+                       $sum -= $amounts;
+                    }
+                    else if (substr($tkn, 0,5) == "stuff") 
+                    {
+                       $sum -= $amounts;
+                    }
+                    
+                    else if ($tkn == "minus") 
+                    {
+                       $sum -= $amounts;
+                    }
+                    else if ($tkn == "salerypayment") 
+                    {
+                       $sum -= $amounts;
+                    }
+             }
+
+             return $sum;
+
+
+				}
+
+
+
 			}
 				
 		?>
