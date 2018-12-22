@@ -1,15 +1,7 @@
 <?php include 'files/header.php'; ?>
 <?php include 'files/menu.php';?>
 <?php 
-   if (isset($_GET['del-id'])) {
-           if ($db->delete("sell","billchallan = '".$_GET['del-id']."'")) {?>
-<script> alert('Data has been deleted'); window.location.href='sellproduct.php'; </script>
-<?php   }
-   }
-   
-   
-   
-   
+
    $salehistory = $db->joinQuery('SELECT DISTINCT`customerid`,`selldate`,`billchallan`,`payment_taka`,`sellby` FROM `sell` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
    
    /* echo "<pre>";
@@ -51,13 +43,24 @@
 
                         </div>
                            <div class="form-group">
-                            <select class="form-control" name="cutomername" id="cutomername">
-                              <option value="<?=$salehistory['customerid']?>">Select a Customer</option>
-                              <?=$dm->getUsersByRole(1)?>
-                           </select>
+                             <select class="form-control" name="sellby" id="sellby">
+                                 <option value="">Marketing</option>
+                                     <?php
+                     $query1 = $db->joinQuery("SELECT * FROM `users` WHERE `user_role`='4' AND employeetype='4'");
+                     while($row=$query1->fetch())
+                     { ?>
+                  <option value="<?=$row['u_id']?>"><?=$row['name']?></option>
+                  <?php  } ?>
+                                 </select>
                         </div>
                         <div class="form-group">
-                            <input type="date" class="form-control" name="datesell" value="<?=$salehistory['selldate']?>">
+                                 <label  for="name">Customer Name<span class="required">*</span>
+                                 </label>
+                                    <input type="hidden" name="cutomername" id="cutomername" value="<?=$salehistory['customerid']?>">
+                                 <input type="text" class="form-control" id="cusidnadname" name="cusidnadname">
+                              </div>
+                        <div class="form-group">
+       <input type="text" class="form-control" id="datesell" name="datesell" value="<?=$salehistory['selldate']?>">
                         </div>
                         </div>
                         <div class="col-6 text-right">
@@ -66,7 +69,8 @@
                               <br>
                               Invoice No: <?=$salehistory['billchallan']?><br>
                               Sale Date :  <?=date("Y-M-d",strtotime($salehistory['selldate']))?> </br>
-                              Customer : <?=$fn->getUserName($salehistory['customerid'])?>
+                              Customer : <?=$fn->getUserName($salehistory['customerid'])?></br>
+                              Marketing : <?=$fn->getUserName($salehistory['sellby'])?>
 
                            </address>
                         </div>
@@ -104,16 +108,17 @@
                                  </select>
                               </div>
                            </div>
-                           <div class="col-md-2">
-                              <div class="form-group">
-                                 <label  for="name">Price <span class="required">*</span></label>
-                                 <input id="price" class="form-control"  name="price"  id="price"  type="text">
-                              </div>
-                           </div>
+                           
                            <div class="col-md-2">
                               <div class="form-group">
                                  <label  for="name">Quantity<span class="required">*</span> </label>
                                  <input id="quntity" class="form-control"  name="quntity" id="quntity"  onblur="gettotalpric()"  type="text">
+                              </div>
+                           </div>
+                           <div class="col-md-2">
+                              <div class="form-group">
+                                 <label  for="name">Price <span class="required">*</span></label>
+                                 <input id="price" class="form-control"  name="price"  id="price"  type="text">
                               </div>
                            </div>
                            <div class="col-md-2">
@@ -246,7 +251,17 @@
 <!-- end row -->
 </div>
 <?php include 'files/footer.php'; ?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        
 <script>
+
+   $( function() 
+   {
+    $( "#datesell" ).datepicker({
+  dateFormat: "yy-mm-dd"
+});
+  });
   
     <?php 
       $brand = $db->selectAll("p_brand");
@@ -290,7 +305,7 @@
       id: id },
     })
     .done(function(res) {
-    var text = "";
+    var text = "<option value=''>select a product</option>";
     var data = JSON.parse(res);
     var dll = "";
     for(var j = 0; j < data.length; j++){
@@ -362,7 +377,7 @@
     var price       =  $("#price").val();
     if (getValue("productcat").length === 0) 
     {
-      alert("select a product");
+      msg("select a product",'al');
     }
     else 
     {
@@ -371,11 +386,12 @@
         $("#productqunatityhidden").val(quantity);
         $("#productpricehideen").val(price);
         purchaseitem.push(new productobj(cutomername,pname,quantity,price)); //pushing every item to the cart so that i can retrive and modified in the cart 
+
       $("#mycartlists").append('<tr id="trcontent_'+incr+'"> <td>'+prod[pname]+'</td> <td class="text-center">'+price+'</td>  <td class="text-center">'+quantity+'</td><td class="totatlbalnceshow text-right">'+price*quantity+'</td> <td class="text-right"><button type="button" data-pr="'+pname+'" data-inc="'+incr+'" onclick="removeitem(this)" class="btn btn-outline-danger">X</button></td></tr>');
         totalsum += parseInt((price*quantity));
       $("#subtotalbeforecommsion").val(totalsum); // value gets updated everytime a new item get added to the cart
     }else {
-      alert("This product is already in the cart");
+      msg("This product is already in the cart",'al');
     }
 
     }
@@ -385,40 +401,49 @@
  
    
    
-      function savePurchaseinfo(){
-       
-         var tex = confirm("Are you sure ?");
-        if (tex ===  true) {
-         /*console.log($("#allotherinfo").serialize());
-         console.log(JSON.stringify(purchaseitem));*/
-             $.ajax({
-             url: 'ajax/addnewsellinfo.php?item='+JSON.stringify(purchaseitem)+"&allinfo="+$("#allotherinfo").serialize(),
-             type: 'GET',
-           
-           })
-           .done(function(res) {
-             console.log(res);
-           //  alert('res');
-             alert("Sale History has been updated");
-             window.location.href="product-sale-history.php";
-           })
-           .fail(function() {
-             console.log("error");
-           })
-           .always(function() {
-             console.log("complete");
-           });
-        }else{
-          alert("You discard the sale ");
-        }
-    
-      
-    
-    
-      
-    
-          
-            //console.log(purchaseitem+"= "+$("#allinfo").serialize())
+      function savePurchaseinfo()
+      {
+        alertify.confirm("Are you sure?", function (ev) 
+        {
+            ev.preventDefault();
+              $.ajax({
+            url: 'ajax/addnewsellinfo.php?item='+JSON.stringify(purchaseitem)+"&allinfo="+$("#allotherinfo").serialize(),
+            type: 'GET',
+            dataType:'json'
+          })
+          .done(function(res) 
+          {
+            console.log(res);
+            res.forEach(function(item)
+            { 
+              
+               if (Object.keys(item)[0]  === "success") 
+               {
+                  msg(Object.values(item)[0],'su',1);
+                  //window.location.reload();
+               }
+               else if (Object.keys(item)[0] === "err") 
+               {
+                  msg(Object.values(item)[0],'err',1);
+
+               }
+               else if (Object.keys(item)[0]  === "check") 
+               {
+                  msg(Object.values(item)[0],'su',1);
+                  //window.location.reload();
+               }
+            });
+          })
+          .fail(function() {
+            console.log("error");
+          })
+          .always(function() {
+            console.log("complete");
+          });
+        }, function(ev) {
+            ev.preventDefault();
+            alertify.error("You've clicked Cancel");
+        });
     
       }
    
@@ -437,10 +462,10 @@
             }
             else 
             {
-              alert("Sorry !! You can't empty the list");
+              msg("Sorry !! You can't empty the list",'al');
             }
             
-            console.log(purchaseitem);
+            //console.log(purchaseitem);
             
             //alert(index);
       }
@@ -508,5 +533,33 @@
            $("#grandtotalaftercommision").val(sum);
 
      },true);
+
+
+
+   /*  start  fetch data for autocomplete  */
+   var customers = <?=json_encode($dm->getUsersByR(1));?>;
+   //console.log(customers);
+    /*fetching customer dues by their ID */
+   var cus = <?=json_encode($customersb);?>;
+   $("#cusidnadname").autocomplete({
+      source : customers,
+      change : function(event,ui)
+      {
+         document.getElementById(event.target.id).value = ui.item.label;
+         document.getElementById('cutomername').value = ui.item.value;
+           alertify.alert("<h3 class='font-18'>Customer due</h3><hr><p> "+cus[ui.item.value]+"</p>");
+      }
+   });
+   /*end of autocomplete */
+
+
+   /*update product quantity*/
+      var prodd = <?=json_encode($prod);?>;
+      document.getElementById("product").addEventListener("change",function(e)
+      {
+        
+         document.getElementById("quntity").value = prodd[e.target.value];
+      });
+
     
 </script>

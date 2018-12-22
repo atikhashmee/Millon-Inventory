@@ -152,6 +152,11 @@
 
         <!-- jquery datepicker -->
          <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+         <!-- Alertify js -->
+        <script src="assets/plugins/alertify/js/alertify.js"></script>
+        <script src="assets/pages/alertify-init.js"></script>
        
 
          
@@ -164,4 +169,22 @@
     <body>
 
         <!-- Loader -->
-        <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
+        <div id="preloader">
+          <div id="status">
+            <div class="spinner">
+            </div>
+          </div>
+        </div>
+
+
+
+    <!-- to show the warning before deleting any item from the database -->
+        <div id="wholehtmlfordelete" style="display: none;">
+    <div class="card card-body">
+        <ul class="list-group">
+          <li class="list-group-item">Cras justo odio</li>
+          <li class="list-group-item">Dapibus ac facilisis in</li>
+          
+        </ul>
+    </div>
+  </div>

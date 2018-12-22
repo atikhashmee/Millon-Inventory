@@ -6,6 +6,9 @@
 
 		require_once("dboperation.php");
 		require_once("functions.php");
+		
+
+
 
 		class DbModels extends Db
 		{
@@ -58,6 +61,21 @@
 			    }
 			}
 
+			public function getUsersByR($roleid)
+			{
+			    $datas = $this->selectAll($this->userTableName,"user_role='".$roleid."'")->fetchAll();
+			    $myarray = [];
+			    foreach ($datas as $dt)
+			     {
+			    	array_push($myarray, [
+			    		"label"=>$dt['name'],
+			    		"value"=>$dt['u_id']
+			    	]);
+			    }
+			    return $myarray;
+			}
+
+			
 			public function getBrands()
 			{
 				$datas = $this->getRawData($this->brandTableName)->fetchAll();
@@ -133,10 +151,12 @@
 
 
 			
-
+           
 
 
 
 		}
+
+
 
 ?>

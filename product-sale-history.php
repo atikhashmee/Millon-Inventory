@@ -9,15 +9,14 @@ $rbas->setPageName(4)->run();
 <?php 
    if (isset($_GET['del-id'])) {
            if ($db->delete("sell","billchallan = '".$_GET['del-id']."'")) {?>
-<script> alert('Data has been deleted'); window.location.href='product-sale-history.php'; </script>
+<script> alert('Data has been deleted'); 
+window.location.href='product-sale-history.php'; </script>
 <?php   }
    }
    
-
-   
-   
-   
    ?>
+  
+
 <div class="container">
    <div class="row">
                     <div class="col-sm-12">
@@ -93,11 +92,14 @@ $rbas->setPageName(4)->run();
          }
          if ($rbas->getDelete()) {
              ?>
-              <a class="dropdown-item" href="product-sale-history.php?del-id=<?=$sel['billchallan']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
-      <?php 
+              <a class="dropdown-item" href="#" onclick="deleteItem('product-sale-history','<?=$sel['billchallan']?>')">Delete <i class="fa fa-times"></i></a>
+           <?php 
          }
-         if ($rbas->getPrint()) {
-              echo '<a class="dropdown-item" href="#">Print</a>';
+         if ($rbas->getPrint()) 
+         {
+              ?>
+              <a class="dropdown-item" href="#" >Print</a>
+              <?php
          }
     ?>
     

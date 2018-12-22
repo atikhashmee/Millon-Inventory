@@ -1,7 +1,7 @@
 <?php include 'files/header.php'; ?>
 <?php include 'files/menu.php';
-$rbas->setPageName(3)->run();
- ?>
+$rbas->setPageName(4)->run(); ?>
+
 
 </style>
 <div class="container">
@@ -42,12 +42,10 @@ $rbas->setPageName(3)->run();
                               </div>
                               <div class="form-group">
                                  <label  for="name">Customer Name<span class="required">*</span>
-                                 </label>
-                                 <select class="form-control" name="cutomername" id="cutomername" onchange="checkTheCurrenDue()">
-                                    <option value="">Choose option</option>
-                                    <?=$dm->getUsersByRole(1)?>
-                                 </select>
+                                    <input type="hidden" name="cutomername" id="cutomername">
+                                 <input type="text" class="form-control" id="cusidnadname" name="cusidnadname">
                               </div>
+                             
                      </div>
                      <div class="col"></div>
                      <div class="col">
@@ -62,13 +60,6 @@ $rbas->setPageName(3)->run();
                               <label for="name">Date of Sell <span class="required">*</span></label>
                                  <input type="text" id="datesell" name="datesell" class="form-control col-md-10">
                               </div>
-                           
-                        <!-- <ul class="list-group" id="listgroup">
-                           </ul> -->
-                        <!--         <input type="hidden" name="productnameid[]" id="productnameid">
-                           <input type="hidden" name="productqunatityhidden[]" id="productqunatityhidden">
-                           <input type="hidden" name="productpricehideen[]" id="productpricehideen"> -->
-                       
                      </div>
                   </div>
 
@@ -96,14 +87,14 @@ $rbas->setPageName(3)->run();
                            <div class="col">
                               <div class="form-group">
                                  <label  for="name">Quantity<span class="required">*</span> </label>
-                                 <input id="quntity" class="form-control"  name="quntity" id="quntity"  type="text">
+                                 <input id="quntity" class="form-control"  name="quntity" id="quntity"  type="number" min="1">
                               </div>
                            </div>
 
                            <div class="col">
                               <div class="form-group">
                                  <label  for="name">Price <span class="required">*</span></label>
-                                 <input id="price" class="form-control"  name="price" onblur="gettotalpric()" id="price"  type="text">
+                                 <input id="price" class="form-control"  name="price" onblur="gettotalpric()" id="price"  type="number" min="1">
                               </div>
                            </div>
 
@@ -197,7 +188,7 @@ $rbas->setPageName(3)->run();
                         <div id="cashoption">
                            <div class="form-group">
                               <label for="">Paid</label>
-                              <input type="text" class="form-control" id="nowpayment" name="nowpayment" onblur="nowwpayment()">
+                              <input type="text" class="form-control" id="nowpayment" name="nowpayment">
                            </div>
                            <div class="form-group">
                               <label for="">Due Balance</label>
@@ -240,7 +231,7 @@ $rbas->setPageName(3)->run();
                            <label for="">Grand Total</label>
                            <input type="text" class="form-control" id="grandtotalaftercommision">
                         </div>
-                        <button type="button" class="btn btn-lg btn-outline-primary" name="savepurchaseinfo" onclick="savePurchaseinfo()">Save <i class="fa fa-floppy-o"></i> </button>
+                        <button type="button" class="btn btn-lg btn-outline-primary" name="savepurchaseinfo" id="savepurchaseinfo" onclick="savePurchaseinfo()">Save <i class="fa fa-floppy-o"></i> </button>
             <button class="btn btn-lg btn-outline-primary">Print Invoice <i class="fa fa-print"></i></button>
                      </div>
                   </div>
@@ -295,14 +286,84 @@ $rbas->setPageName(3)->run();
       
       
       ?>
-   
+
+
+         
    var brnds = <?php echo json_encode($branddd);?>;
    var sizzz = <?php echo json_encode($sizsesss);?>;
    var prod = <?php echo json_encode($products);?>;
-    /*alert(brnds[1]);
-    alert(sizzz[1]);*/
-    /*console.log("All the product list"+sizzz);
-    console.log("All the product list"+prod);*/
+
+
+   /*  start  fetch data for autocomplete  */
+   var customers = <?=json_encode($dm->getUsersByR(1));?>;
+   //console.log(customers);
+    /*fetching customer dues by their ID */
+   var cus = <?=json_encode($customersb);?>;
+   $("#cusidnadname").autocomplete({
+      source : customers,
+      change : function(event,ui)
+      {
+         document.getElementById(event.target.id).value = ui.item.label;
+         document.getElementById('cutomername').value = ui.item.value;
+           alertify.alert("<h3 class='font-18'>Customer due</h3><hr><p> "+cus[ui.item.value]+"</p>");
+      }
+   });
+   /*end of autocomplete */
+
+   function checkCustomerExist(cutoid) 
+   {
+      for (var i = 0; i < customers.length; i++) 
+      {
+         if (customers[i].value === cutoid) 
+         {
+            return 1;
+         }
+         
+      }
+      return -1;
+   }
+
+   /* check if the customer is giving all money or not */
+   function messeageShow(event) 
+   {
+      var cusid = document.getElementById("cutomername").value;
+      var grandtotal  = document.getElementById("grandtotalaftercommision").value;
+      if (checkCustomerExist(cusid) === -1 &&  parseFloat(event.target.value)< 
+         parseFloat(grandtotal)) 
+      {
+         
+         
+         
+             $("#billbalance").val(0);
+             $("#billbalance").attr("readonly","true");
+             $("#savepurchaseinfo").attr('disabled',"true");
+            alertify.alert("<h3 class='font-18 text-danger'>Warning !</h3><hr><p> You can not lower the money amount. <a href=''>Add this</a> </p>");
+         
+
+        
+      }
+      else if (checkCustomerExist(cusid) === -1 &&  parseFloat(event.target.value)>= 
+         parseFloat(grandtotal)) 
+      {
+        
+          $("#billbalance").val( parseFloat(grandtotal) - parseFloat(event.target.value) )
+            $("#billbalance").attr("readonly","true");
+           
+           $("#savepurchaseinfo").removeAttr('disabled');
+      }
+      else
+      {
+
+
+         $("#billbalance").attr("readonly","true");
+         $("#savepurchaseinfo").removeAttr('disabled');
+          $("#billbalance").val( parseFloat(grandtotal) - parseFloat(event.target.value) )
+      }
+      
+   }
+
+   $("#nowpayment").on('blur',messeageShow);
+  
    
    function  getProduct() {
    var id = document.getElementById("productcat").value;
@@ -324,8 +385,7 @@ $rbas->setPageName(3)->run();
    text +="<option value='"+data[j].pro_id+"'>"+brnds[data[j].brand_id]+"-"+ dll +"</option>";
    }
    $("#product").html(text);
-   // console.log(data[0].p_id);
-   $("#cuquntity").val("6");
+   
    })
    .fail(function() {
    console.log("error");
@@ -349,7 +409,7 @@ $rbas->setPageName(3)->run();
 
    if (getValue("productcat").length === 0) 
    {
-      alert("select a product ");
+      msg("select a product",'al');
    }
    else 
    {
@@ -359,11 +419,11 @@ $rbas->setPageName(3)->run();
        $("#productqunatityhidden").val(quantity);
        $("#productpricehideen").val(price);
        purchaseitem.push(new productobj(cutomername,pcategory,pname,quantity,price)); //pushing every item to the cart so that i can retrive and modified in the cart 
-     $("#mycartlists").append('<tr id="trcontent_'+incr+'"> <td>'+prod[pname]+'</td>  <td>'+quantity+'</td>   <td>'+price+'</td> <td class="totatlbalnceshow">'+price*quantity+'</td> <td><button type="button" data-pr="'+pname+'" data-inc="'+incr+'" class="btn btn-outline-danger" onclick="removeitem(this)">X</button></td> </tr>');
+     $("#mycartlists").append('<tr id="trcontent_'+incr+'"> <td>'+prod[pname]+'</td>  <td>'+quantity+'</td>   <td>'+price+'</td> <td class="totatlbalnceshow" id="multiplyprice_'+incr+'">'+price*quantity+'</td> <td><button type="button" data-pr="'+pname+'" data-inc="'+incr+'" class="btn btn-outline-danger" onclick="removeitem(this)">X</button></td> </tr>');
        totalsum += parseInt((price*quantity));
      $("#subtotalbeforecommsion").val(totalsum); // value gets updated everytime a new item get added to the cart
    }else {
-     alert("This product is already in the cart");
+     msg("This product is already in the cart",'al');
    }
 
    }
@@ -396,43 +456,59 @@ $rbas->setPageName(3)->run();
    }
    
    
-  
+
    
-   
-   
-     function nowwpayment(){   //billl payment after calculating the total
-         $("#billbalance").val( $("#grandtotalaftercommision").val() - $("#nowpayment").val() )
-     }
-   
-   
-   
-   
-   
-   
-     function savePurchaseinfo(){
+     function savePurchaseinfo()
+     {
    
        if ($("#billchallan").val().length === 0) {
-            alert('Bill/challan no is empty');
+            msg('Bill/challan no is empty','al');
        }
        else if (getValue("cutomername").length === 0) 
        {
-           alert("Select a customer");
+           msg("Select a customer",'al');
+       }else if (getValue("sellby").length === 0) 
+       {
+           msg("Select a Marketing",'al');
        }
        else 
        {
-   
-        var tex = confirm("Are you sure ? ");
-       if (tex ===  true) {
-            $.ajax({
+
+         alertify.confirm("Are you sure ?", function (ev) {
+            ev.preventDefault();
+              $.ajax({
             url: 'ajax/addnewsellinfo.php?item='+JSON.stringify(purchaseitem)+"&allinfo="+$("#allotherinfo").serialize(),
             type: 'GET',
-          
+            dataType:"json"
+
+           
+            
           })
           .done(function(res) {
-            console.log(res);
-          //  alert('res');
-            alert("Product has been sold out ");
-            window.location.href="sellproduct.php";
+            res.forEach(function(item)
+            { 
+              
+               if (Object.keys(item)[0]  === "success") 
+               {
+                  msg(Object.values(item)[0],'su',1);
+                  //window.location.reload();
+               }
+               else if (Object.keys(item)[0] === "err") 
+               {
+                  msg(Object.values(item)[0],'err',1);
+
+               }
+               else if (Object.keys(item)[0]  === "check") 
+               {
+                  msg(Object.values(item)[0],'su',1);
+                  //window.location.reload();
+               }
+            });
+
+           
+             
+            
+         
           })
           .fail(function() {
             console.log("error");
@@ -440,49 +516,20 @@ $rbas->setPageName(3)->run();
           .always(function() {
             console.log("complete");
           });
-       }else{
-         alert("You discard the purchase ");
-       }
+        }, function(ev) {
+            ev.preventDefault();
+            alertify.error("You've clicked Cancel");
+        });
    
-       }
-   
-   
-   
-     
-   
-         
-           //console.log(purchaseitem+"= "+$("#allinfo").serialize())
-   
-     }
-   
-   
-   
-   
-     // check the ccustomer due 
-   
-     function checkTheCurrenDue(){
-       var cusid  =  document.getElementById('cutomername').value;
-   
-           $.ajax({
-             url: 'ajax/checkcurrentdue.php?custom_id='+cusid,
-             type: 'POST',
-            
-           })
-           .done(function(res) {
-             document.getElementById('cuduemoney').value = res;
-             console.log("success");
-           })
-           .fail(function() {
-             console.log("error");
-           })
-           .always(function() {
-             console.log("complete");
-           });
            
-   
+       }
    
      }
    
+   
+   
+   
+    
         
      // check the radio button to show the cheque payment method
       function chequeoptioncheck(){
@@ -512,7 +559,7 @@ $rbas->setPageName(3)->run();
      function getValue(id) {
       return document.getElementById(id).value;
     }
-   document.getElementById("calculatepart").addEventListener("keyup",event=>{
+   document.getElementById("calculatepart").addEventListener("blur",event=>{
           var totalprice =  parseFloat(getValue("subtotalbeforecommsion"));
           var sum = totalprice;
          
@@ -574,7 +621,14 @@ $rbas->setPageName(3)->run();
     function removeitem(obj) {
          var proid = obj.getAttribute("data-pr");
          var rowid = obj.getAttribute("data-inc");
+
+        var  price = document.getElementById("multiplyprice_"+rowid).innerHTML;
+           totalsum -= parseInt((price));
+          $("#subtotalbeforecommsion").val(totalsum);
          purchaseitem.splice(purchaseitem.map(el => el.pname).indexOf(proid),1);
+
+       
+
          var element = document.getElementById('trcontent_'+rowid);
          element.style.display = 'none';
       }
@@ -587,11 +641,7 @@ $rbas->setPageName(3)->run();
          document.getElementById("quntity").value = prodd[e.target.value];
       });
 
-       /*customers calculation done here*/
-        var customers = <?=json_encode($customersb);?>;
-      document.getElementById("cutomername").addEventListener("change",function(ev){
-           alertify.alert("<h3 class='font-18'>Customer due</h3><hr><p> "+customers[ev.target.value]+"</p>");
-      });
+      
 
 
    

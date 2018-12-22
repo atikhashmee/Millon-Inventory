@@ -59,6 +59,50 @@
 
         <!-- App js -->
         <script src="assets/js/app.js"></script>
+        <script>
+            
+            /* messge showing throughtout the website */
+             function msg(msg,token,rel=0) 
+            {
+              var m = ""
+               if (token === "su") 
+               {
+         m += "<h3 class='font-18'>Message <img src='assets/images/rightsign.png' height='30px' width='30px' /></h3><hr><p> "+msg+"</p>";
+               }
+               else if (token === "err") 
+               {
+         m += "<h3 class='font-18'>Problem <img src='assets/images/crosssign.png' height='30px' width='30px' /></h3><hr><p> "+msg+"</p>";
+               }
+               else if (token === "al") 
+               {
+         m += "<h3 class='font-18'>Warning<img src='assets/images/Alert_Symbol.png' height='30px' width='30px' /></h3><hr><p> "+msg+"</p>";
+               }
+               if (rel === 1) 
+               {
+                    alertify.alert(m,function(e){
+                    e.preventDefault();
+                    window.location.reload();
+                    });
+               }
+               else 
+               {
+                    alertify.alert(m);
+               }
+        
+            }
+
+            function deleteItem(pagename,id) 
+            {
+                  alertify.confirm("Are you sure ?", function (ev) {
+                  ev.preventDefault();
+         //var hbody = document.getElementById("wholehtmlfordelete").innerHTML;
+                    // msg(hbody,'al');
+                    window.location.href=pagename+'.php?del-id='+id;
+                   },function(ev){
+                    ev.preventDefault();
+                   });
+            }
+        </script>
 
     </body>
 

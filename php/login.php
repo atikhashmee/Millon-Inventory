@@ -21,7 +21,7 @@
 								$_SESSION['u_id']     = $data['u_id'];
 								$_SESSION['e_type']   = $data['employeetype'];
 								$_SESSION['start']    = time();
-								$_SESSION['expire']    = $_SESSION['start'] + (1 * 60);
+								$_SESSION['expire']    = $_SESSION['start'] + (30 * 60);
 
 								?><script>
 						         window.location.href='../home.php';

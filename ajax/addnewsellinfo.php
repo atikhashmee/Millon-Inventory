@@ -6,20 +6,19 @@
 			include '../php/dboperation.php';
 			$db = new Db();
 			session_start();
+			$msg = array();
 
 			if (isset($_GET['allinfo'])) {
 
 			
 
-               /* if (empty($_GET['billchallan'])) {
-                	echo 'Bill/challan no is not given';
-                	exit();
-                }*/
-                /* to perform an update operation we are deleting the previous product and inserting newly update product*/
+               
+                /* to perform an update operation we are deleting the previous product and inserting newly updated product*/
 
                 $dd =  $db->joinQuery("SELECT COUNT(*) as rowexist FROM `sell` WHERE `billchallan`='".$_GET['billchallan']."'")->fetch(PDO::FETCH_ASSOC);
-                if ($dd['rowexist']>0) {
-                     $db->delete('sell',"`billchallan`='".$_GET['billchallan']."'");
+                if ($dd['rowexist']>0) 
+                {
+                    $db->delete('sell',"`billchallan`='".$_GET['billchallan']."'");
                 }
                 /*end of product update*/
                 
@@ -38,13 +37,16 @@
                     'fromtable' => "add"
                   );
                    if ($db->insert("cheque",$chquedata)) {
-                   echo "<h1 style='color:blue'>Cheque has been saved</h1>";
+                   	array_push($msg, ["check"=>"Cheque has been saved"]);
+                   
+                   //echo "<h1 style='color:blue'>Cheque has been saved</h1>";
                  }
                  
                   
                 }
    $chequecash = ($_GET['cashcheque']=="yes")?"Cheque":"Cash";
-			   for ($i=0; $i <count($datass); $i++) { 
+			   for ($i=0; $i <count($datass); $i++) 
+			   { 
 			    	 $data = array(
 			    	 	'selldate' => $_GET['datesell'],
 			    	 	'sellby' => $_GET['sellby'],
@@ -64,12 +66,24 @@
 			    	 	'token'   => "s_".$chequecash
 			    	 	 );
 
-			    	 echo "<pre>";
+			    	 /*echo "<pre>";
 			    	 print_r($data);
-			    	 echo "</pre>";
+			    	 echo "</pre>";*/
 			    	$db->insert("sell",$data);
 			    	  
 			    }
+
+			    if (count($datass) == $i) 
+			    {
+			    	array_push($msg, ["success"=>"Product has been sold out"]);
+			    	
+			    }
+			    else 
+			    {
+			    	array_push($msg, ["err"=>"problem occured"]);
+			    }
+
+			    echo json_encode($msg);
 				
 			}
 
