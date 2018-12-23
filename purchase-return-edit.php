@@ -1,25 +1,7 @@
 <?php include 'files/header.php'; ?>
 <?php include 'files/menu.php';
-   ?>
-<?php 
-   if (isset($_GET['del-id'])) {
-           if ($db->delete("sell","billchallan = '".$_GET['del-id']."'")) {?>
-<script> alert('Data has been deleted'); window.location.href='sellproduct.php'; </script>
-<?php   }
-   }
-   
-   
-   
-   
+
    $salehistory = $db->joinQuery('SELECT DISTINCT `memono`,`return_date`,`supplierId` FROM `purchase_return` WHERE `memono`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
-   
-   
-   
-   
-    
-   /*     echo "<pre>";
-   print_r($returndata);
-   echo "</pre>";*/
    
    ?>
 <div class="container">
@@ -170,7 +152,8 @@
    
 <?php include 'files/footer.php'; ?>
 <script type="text/javascript">
-  function savereturninfo(){
+  function savereturninfo()
+  {
       
    
            var obj = function(memo,prod,quntity,price,date){
@@ -187,6 +170,10 @@
              if (tr.length === 0) {
                alert("You have to add something to the list");
              }else {
+
+               alertify.confirm("Are you sure ?",function(ev)
+                   {
+                    ev.preventDefault();
    
    
                   $("tr.domclass").each(function(index, el) {
@@ -200,21 +187,44 @@
    
    
                   console.log(confirmlist);
+
+
    
                   $.ajax({
-                    url: 'ajax/insert-purchase-return.php?dclas='+JSON.stringify(confirmlist)+'&weight='+$("#weightamount").val()+'&transport='+$("#transportamount").val()+'&supplier='+$("#custohiddenname").val()+'&memo='+$("#memes").val()
+                    url: 'ajax/insert-purchase-return.php?dclas='+JSON.stringify(confirmlist)+'&weight='+$("#weightamount").val()+'&transport='+$("#transportamount").val()+'&supplier='+$("#custohiddenname").val()+'&memo='+$("#memes").val()+'&update=true'
                   })
                   .done(function(res) {
                     console.log(res);
-                    alert(res);
-                    window.location.href='purchase_return_history.php';
-                    //$("#feedbacktext").text(res);
+                    var res = JSON.parse(res);
+                    //console.log(res);
+                    res.forEach(function(item)
+                   { 
+              
+                     if (Object.keys(item)[0]  === "success") 
+                     {
+                        msg(Object.values(item)[0],'su',1);
+                        //window.location.reload();
+                     }
+                     else if (Object.keys(item)[0] === "error") 
+                     {
+                        msg(Object.values(item)[0],'err',1);
+
+                     }
+               
+                   });
                   })
                   .fail(function() {
                     console.log("error");
                   })
                   .always(function() {
                     console.log("complete");
+                  });
+
+                  },function(ev){
+                    ev.preventDefault();
+
+                    msg("You'v canceled",'err');
+
                   });
                   
                   

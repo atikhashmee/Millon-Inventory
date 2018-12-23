@@ -98,7 +98,7 @@
               <div class="col">
                 <div class="form-group">
             <label for="">Return Quantity</label>
-            <input type="text" class="form-control" id="productq" onblur="updatetherate()">
+            <input type="text" class="form-control" id="productq" onkeyup="updatetherate()">
             </div>
               </div>
               <div class="col">
@@ -150,15 +150,15 @@
               </div>
               <div class="form-group">
                 <label for="">Return Date</label>
-                <input type="date" class="form-control" id="returndate">
+                <input type="text" class="form-control" id="returndate">
               </div>
               <div class="form-group">
                 <label for="">Weight</label>
-                <input type="text" class="form-control" id="weightamount" onblur="updategrndtotal()">
+                <input type="number" min="0" class="form-control" id="weightamount" onblur="updategrndtotal()">
               </div>
               <div class="form-group">
                 <label for="">Transport</label>
-                <input type="text" class="form-control" id="transportamount" onblur="updategrndtotal()">
+                <input type="number" min="0"  class="form-control" id="transportamount" onblur="updategrndtotal()">
               </div>
               <div class="form-group">
                 <label for="">Grand Total</label>
@@ -169,7 +169,7 @@
               </div>
                
             </form>
-           <h3 id="feedbacktext" style="color: blue"></h3>
+          
          </div>
        </div>
             </div>
@@ -184,8 +184,19 @@
 
 <?php include 'files/footer.php'; ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript">
+<!-- jquery datepicker -->
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+<script>
+  $( function() {
+    $( "#returndate" ).datepicker({
+  dateFormat: "yy-mm-dd"
+}).datepicker("setDate", new Date());
+ });
+  
+  </script>
+<script type="text/javascript">
+var prod =  <?php echo  json_encode($dm->getProListByIds());?>;
 
       <?php 
         $users = [];
@@ -252,8 +263,13 @@
    
                console.log(res);
                var trvalus = "";
-               for (var i = 0; i < res.length; i++) {
-                   trvalus += "<tr><td id='proname_"+i+"'>" + res[i].productid + "</td> <td id='quntity_"+i+"'>" + res[i].quantity + "</td> <td id='price_"+i+"'>" + res[i].price + "</td><td>" + res[i].quantity * res[i].price + "</td> <td><button type='button' class='btn btn-primary' onclick='dataedit("+i+")'>Edit</button</td></tr>";
+               for (var i = 0; i < res.length; i++) 
+               {
+
+                
+
+                   trvalus += "<tr><td id='proname_"+i+"'>" + res[i].productid + "</td> <td id='quntity_"+i+"'>" + res[i].quantity + "</td> <td id='price_"+i+"'>" + res[i].price + "</td><td>" + res[i].quantity * res[i].price + "</td> <td><button type='button' class='btn btn-outline-primary'  onclick='dataedit("+i+")'><i class='fa fa-pencil'></i></button</td></tr>";
+                
                }
                document.getElementById('datalist').innerHTML = trvalus;
            })
@@ -266,13 +282,23 @@
    
    }
    
-   function dataedit(id) {
+   function dataedit(id) 
+   {
+
+      if (parseInt($("#quntity_"+id).text()) === 0) 
+      {
+        msg("Sorry !! this product is already 0",'al');
+      }
+      else
+      {
         $("#productn").val($("#proname_"+id).text());
         $("#totalquantity").val($("#quntity_"+id).text());
         $("#Totalamount").val( parseInt($("#price_"+id).text()) * parseInt($("#quntity_"+id).text()));
         $("#memonofordbs").val( $("#memos").val() );
         //$("#totalamount").val(  parseInt($("#price_"+id).text()) * parseInt($("#quntity_"+id).text()));
         $("#singleamount").val(parseInt($("#price_"+id).text()));
+      }
+        
    }
 
    var sum = 0;
@@ -307,11 +333,21 @@
                var confirmlist = [];
              var tr = document.getElementsByClassName("domclass");
              if (tr.length === 0) {
-               alert("You have to add something to the list");
-             }else {
+               msg("You have to add something to the list",'al');
+             }
+             else if ( $("#returndate").val() === "") 
+             {
+               msg("Please !! give a date",'al');
+             }
+             else
+              {
 
 
-                  $("tr.domclass").each(function(index, el) {
+                   alertify.confirm("Are you sure ?",function(ev)
+                   {
+                    ev.preventDefault();
+
+                    $("tr.domclass").each(function(index, el) {
                          var memono  = $(this).find('#memes').text();
                          var product  = $(this).find('#proname').text();
                          var quantity  = $(this).find('#quntity').text();
@@ -327,10 +363,27 @@
                     url: 'ajax/insert-sell-return.php?dclas='+JSON.stringify(confirmlist)+'&weight='+$("#weightamount").val()+'&transport='+$("#transportamount").val()+'&custo='+$("#custohiddenname").val()
                   })
                   .done(function(res) {
-                    console.log(res);
+                    //console.log(typeof res);
+                    var res = JSON.parse(res);
+                    //console.log(res);
+                    res.forEach(function(item)
+                   { 
+              
+                     if (Object.keys(item)[0]  === "success") 
+                     {
+                        msg(Object.values(item)[0],'su',1);
+                        //window.location.reload();
+                     }
+                     else if (Object.keys(item)[0] === "error") 
+                     {
+                        msg(Object.values(item)[0],'err',1);
 
-                    $("#feedbacktext").text(res);
-                    window.location.reload();
+                     }
+               
+                   });
+
+                   // $("#feedbacktext").text(res);
+                    //window.location.reload();
                   })
                   .fail(function() {
                     console.log("error");
@@ -338,6 +391,16 @@
                   .always(function() {
                     console.log("complete");
                   });
+
+
+
+                   },function(ev){
+                    ev.preventDefault();
+                    msg("You'v canceled",'err');
+                   });
+
+
+                  
                   
                   
              }
@@ -350,10 +413,11 @@
    // update the rate after changing the product quantity
    function updatetherate() {
     $("#updatequantity").val( 
-      $('#totalquantity').val() +" - " +$('#productq').val() +" = "+(parseInt($('#totalquantity').val()) - parseInt($('#productq').val())));
-    var returnedcal  = parseInt($("#singleamount").val()) * parseInt($("#productq").val());
+      $('#totalquantity').val() +" - " +$('#productq').val() +" = "+(parseInt($('#totalquantity').val()) || 0 - parseInt($('#productq').val())||0));
+
+    var returnedcal  = parseInt($("#singleamount").val())||0 * parseInt($("#productq").val())||0;
     $("#returnedamount").val(returnedcal);
-      var updaamount = parseInt($("#Totalamount").val()) - returnedcal;
+      var updaamount = parseInt($("#Totalamount").val()) || 0 - returnedcal;
     $("#updateamount").val( $("#Totalamount").val() +" - "+returnedcal +" = "+updaamount );
       
    }
@@ -362,6 +426,6 @@
         var wa =  parseInt($("#weightamount").val());
         var ta =  parseInt( $("#transportamount").val());
         var to =  parseInt( $("#tot").val());
-        $("#grndtot").val(wa + ta + to);
+        $("#grndtot").val(wa || 0 + ta || 0 + to||0);
     }
 </script>

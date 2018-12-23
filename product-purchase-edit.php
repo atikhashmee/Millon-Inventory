@@ -82,14 +82,8 @@
                               <div class="form-group">
                                  <label  for="name">Product<span class="required">*</span>
                                  </label>
-                                 <select class="form-control" name="product" id="product">
+                                 <select class="form-control" name="product" id="product" >
                                  </select>
-                              </div>
-                           </div>
-                           <div class="col-md-2">
-                              <div class="form-group">
-                                 <label  for="name">Price <span class="required">*</span></label>
-                                 <input id="price" class="form-control"  name="price"  id="price"  type="text">
                               </div>
                            </div>
                            <div class="col-md-2">
@@ -98,6 +92,13 @@
                                  <input id="quntity" class="form-control"  name="quntity" id="quntity"  onblur="gettotalpric()"  type="text">
                               </div>
                            </div>
+                           <div class="col-md-2">
+                              <div class="form-group">
+                                 <label  for="name">Price <span class="required">*</span></label>
+                                 <input id="price" class="form-control"  name="price"  onblur="gettotalpric()"  type="text">
+                              </div>
+                           </div>
+                           
                            <div class="col-md-2">
                               <div class="form-group">
                                  <label for="name">Total <span class="required">*</span>
@@ -273,7 +274,7 @@
       id: id },
     })
     .done(function(res) {
-    var text = "";
+    var text = "<option value=''>Select Product</option>";
     var data = JSON.parse(res);
     var dll = "";
     for(var j = 0; j < data.length; j++){
@@ -299,7 +300,7 @@
    
    
       function gettotalpric(){  // get the product price tlst after putting the quntoty and producdt price
-        $("#totallprice").val(parseInt($("#quntity").val()) * parseInt($("#price").val()))
+        $("#totallprice").val( ( parseInt($("#quntity").val()) || 1 ) * (parseInt($("#price").val()) ||1 ));
     }
    
    
@@ -336,6 +337,8 @@
     
     console.log(purchaseitem);
     var incr = i;
+
+
    function addtocart(){
     incr++;
     var cutomername = $("#suppliername").val();
@@ -344,9 +347,9 @@
     var quantity =  $("#quntity").val();
     var price =  $("#price").val();
 
-    if (getValue("productcat").length === 0) 
+    if ( getValue("product").length == 0) 
    {
-    alert("Select a product")
+    msg("Select a product",'al');
    }
    else 
    {
@@ -360,7 +363,7 @@
         totalsum += parseInt((price*quantity));
       $("#subtotalbeforecommsion").val(totalsum); // value gets updated everytime a new item get added to the cart
     }else {
-      alert("This product is already in the cart");
+      msg("This product is already in the cart",'al');
     }
   }
       
@@ -369,22 +372,38 @@
     
    
    
-      function savePurchaseinfo(){
-       
-         var tex = confirm("Are you sure ?");
-        if (tex ===  true) {
-         /*console.log($("#allotherinfo").serialize());
-         console.log(JSON.stringify(purchaseitem));*/
-             $.ajax({
-             url:'ajax/add_new_purchase_info.php?item='+JSON.stringify(purchaseitem)+"&allotherinfo="+$("#allotherinfo").serialize(),
+      function savePurchaseinfo()
+      {
+        alertify.confirm("Are you sure?",function(ev){
+          ev.preventDefault();
+          $.ajax({
+             url:'ajax/add_new_purchase_info.php?item='+JSON.stringify(purchaseitem)+"&allotherinfo="+$("#allotherinfo").serialize()+'&editdata=true',
              type: 'GET',
            
            })
-           .done(function(res) {
+           .done(function(res) 
+           {
              console.log(res);
-             //alert('res');
-             alert("Purchase History has been updated");
-             window.location.href="purchase-history.php";
+            var res = JSON.parse(res);
+             res.forEach(function(item)
+            { 
+              
+               if (Object.keys(item)[0]  === "success") 
+               {
+                  msg(Object.values(item)[0],'su',1);
+                  //window.location.reload();
+               }
+               else if (Object.keys(item)[0] === "err") 
+               {
+                  msg(Object.values(item)[0],'err',1);
+
+               }
+               else if (Object.keys(item)[0]  === "check") 
+               {
+                  msg(Object.values(item)[0],'su',1);
+                  //window.location.reload();
+               }
+            });
            })
            .fail(function() {
              console.log("error");
@@ -392,9 +411,12 @@
            .always(function() {
              console.log("complete");
            });
-        }else{
-          alert("You discard the sale ");
-        }
+        },function(ev){
+          ev.preventDefault();
+          msg("You've canceled it",'err');
+        })
+       
+         
     
       
     
@@ -496,6 +518,21 @@
 
 
      },true);
+
+
+      /*supplier balance calculation here*/
+      var supplier = <?=json_encode($suppliersb);?>;
+      document.getElementById("suppliername").addEventListener("change",function(ev){
+           alertify.alert("<h3 class='font-18'>Supplier due</h3><hr><p> "+supplier[ev.target.value]+"</p>");
+      });
+
+      /*update product quantity*/
+      var prodd = <?=json_encode($prod);?>;
+      document.getElementById("product").addEventListener("change",function(e)
+      {
+        
+         document.getElementById("quntity").value = prodd[e.target.value];
+      });
    
    
    

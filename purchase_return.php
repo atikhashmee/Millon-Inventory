@@ -139,7 +139,7 @@
               </div>
               <div class="form-group">
                 <label for="">Return Date</label>
-                <input type="date" class="form-control" id="returndate">
+                <input type="text" class="form-control" id="returndate">
               </div>
               <div class="form-group">
                 <label for="">Weight</label>
@@ -158,7 +158,7 @@
               </div>
                
             </form>
-         <h3 id="feedbacktext" style="color: blue"></h3>
+
          </div>
          </div>
       </div>
@@ -167,6 +167,17 @@
 
 <?php include 'files/footer.php'; ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- jquery datepicker -->
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+  $( function() {
+    $( "#returndate" ).datepicker({
+  dateFormat: "yy-mm-dd"
+}).datepicker("setDate", new Date());
+ });
+  
+  </script>
 <script type="text/javascript">
    <?php 
         $users = [];
@@ -234,7 +245,7 @@
                console.log(res);
                var trvalus = "";
                for (var i = 0; i < res.length; i++) {
-                   trvalus += "<tr><td id='proname_"+i+"'>" + res[i].productid + "</td> <td id='quntity_"+i+"'>" + res[i].quantity + "</td> <td id='price_"+i+"'>" + res[i].price + "</td><td>" + res[i].quantity * res[i].price + "</td> <td><button type='button' class='btn btn-outline-info' onclick='dataedit("+i+")'>Edit</button</td></tr>";
+                   trvalus += "<tr><td id='proname_"+i+"'>" + res[i].productid + "</td> <td id='quntity_"+i+"'>" + res[i].quantity + "</td> <td id='price_"+i+"'>" + res[i].price + "</td><td>" + res[i].quantity * res[i].price + "</td> <td><button type='button' class='btn btn-outline-info' onclick='dataedit("+i+")'><i class='fa fa-pencil'></i></button</td></tr>";
                }
                document.getElementById('datalist').innerHTML = trvalus;
            })
@@ -247,13 +258,22 @@
    
    }
    
-   function dataedit(id) {
+   function dataedit(id) 
+   {
+
+      if (parseInt($("#quntity_"+id).text()) === 0) 
+      {
+        msg("Sorry !! this product is already 0",'al');
+      }
+      else
+      {
         $("#productn").val($("#proname_"+id).text());
         $("#totalquantity").val($("#quntity_"+id).text());
         $("#Totalamount").val( parseInt($("#price_"+id).text()) * parseInt($("#quntity_"+id).text()));
         $("#memonofordbs").val( $("#memos").val() );
         //$("#totalamount").val(  parseInt($("#price_"+id).text()) * parseInt($("#quntity_"+id).text()));
         $("#singleamount").val(parseInt($("#price_"+id).text()));
+      }
    }
 
     var sum = 0;
@@ -288,9 +308,19 @@
                var confirmlist = [];
              var tr = document.getElementsByClassName("domclass");
              if (tr.length === 0) {
-               alert("You have to add something to the list");
-             }else {
-   
+               msg("You have to add something to the list",'al');
+             }
+             else if ( $("#returndate").val() === "") 
+             {
+               msg("Please !! give a date",'al');
+             }
+             else
+              {
+                
+
+                alertify.confirm("Are you sure ?",function(ev)
+                   {
+                    ev.preventDefault();
    
                   $("tr.domclass").each(function(index, el) {
                          var memono  = $(this).find('#memes').text();
@@ -309,7 +339,24 @@
                   })
                   .done(function(res) {
                     console.log(res);
-                    $("#feedbacktext").text(res);
+                     var res = JSON.parse(res);
+                    //console.log(res);
+                    res.forEach(function(item)
+                   { 
+              
+                     if (Object.keys(item)[0]  === "success") 
+                     {
+                        msg(Object.values(item)[0],'su',1);
+                        //window.location.reload();
+                     }
+                     else if (Object.keys(item)[0] === "error") 
+                     {
+                        msg(Object.values(item)[0],'err',1);
+
+                     }
+               
+                   });
+                    
                   })
                   .fail(function() {
                     console.log("error");
@@ -317,6 +364,11 @@
                   .always(function() {
                     console.log("complete");
                   });
+
+                   },function(ev){
+                    ev.preventDefault();
+                    msg("You'v canceled",'err');
+                   });
                   
                   
              }
@@ -325,12 +377,13 @@
    }
 
     // update the rate after changing the product quantity
-   function updatetherate() {
+   function updatetherate() 
+   {
     $("#updatequantity").val( 
-      $('#totalquantity').val() +" - " +$('#productq').val() +" = "+(parseInt($('#totalquantity').val()) - parseInt($('#productq').val())));
-    var returnedcal  = parseInt($("#singleamount").val()) * parseInt($("#productq").val());
+      $('#totalquantity').val() +" - " +$('#productq').val() +" = "+(parseInt($('#totalquantity').val()) ||0 - parseInt($('#productq').val()) ||0));
+    var returnedcal  =(parseInt($("#singleamount").val()) || 1)  * (parseInt($("#productq").val()) ||1) ;
     $("#returnedamount").val(returnedcal);
-      var updaamount = parseInt($("#Totalamount").val()) - returnedcal;
+      var updaamount = parseInt($("#Totalamount").val()) || 0 - returnedcal;
     $("#updateamount").val( $("#Totalamount").val() +" - "+returnedcal +" = "+updaamount );
       
    }
@@ -339,6 +392,6 @@
         var wa =  parseInt($("#weightamount").val());
         var ta =  parseInt( $("#transportamount").val());
         var to =  parseInt( $("#tot").val());
-        $("#grndtot").val(wa + ta + to);
+        $("#grndtot").val(wa || 0 + ta || 0 + to||0);
     }
 </script>

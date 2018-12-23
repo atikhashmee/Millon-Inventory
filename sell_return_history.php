@@ -82,7 +82,7 @@ if (isset($_GET['del-id']))
          }
          if ($rbas->getDelete()) {
               ?>
-              <a class="dropdown-item" href="sell_return_history.php?del-id=<?=$val['memono']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
+              <a class="dropdown-item" href="#" onclick="deleteItem('sell_return_history','<?=$val['memono']?>')">Delete <i class="fa fa-times"></i></a>
       <?php 
          }
          if ($rbas->getPrint()) {

@@ -5,10 +5,11 @@
 			include '../php/dboperation.php';
 			$db = new Db();
 			session_start();
-			  
 			  $datass = json_decode($_GET['item']);
-
-			   if ($_GET['cashcheque']=="yes") {
+			  $msg = array();
+			  if (!isset($_GET['editdata'])) 
+			  {
+			  	if ($_GET['cashcheque']=="yes") {
                   $chquedata = array(
                     'parent_table_id'  => "p_".$_GET['billchallan'],
                     'accountno'  => $_GET['chequeno'],
@@ -21,21 +22,35 @@
                     'fromtable'  => "minus"
                   );
                    if ($db->insert("cheque",$chquedata)) {
-                   echo "<h1 style='color:blue'>Cheque has been saved</h1>";
+                   array_push($msg, ["check"=>"Cheque has been saved"]);
                  }
-                 
-                  
                 }
+                
+			  }
+			   
 
                 	
                 /* to perform an update operation we are deleting the previous product and inserting newly update product*/
-
-                $dd =  $db->joinQuery("SELECT COUNT(*) as rowexist FROM `purchase` WHERE `billchallan`='".$_GET['billchallan']."'")->fetch(PDO::FETCH_ASSOC);
-                if ($dd['rowexist']>0) {
-                   $db->delete('purchase',"`billchallan`='".$_GET['billchallan']."'");
+                if (isset($_GET['editdata']) && $_GET['editdata'] == true) 
+                {
+                	 $dd =  $db->joinQuery("SELECT COUNT(*) as rowexist FROM `purchase` WHERE `billchallan`='".$_GET['billchallan']."'")->fetch(PDO::FETCH_ASSOC);
+		                if ($dd['rowexist']>0) 
+		                {
+		                   $db->delete('purchase',"`billchallan`='".$_GET['billchallan']."'");
+		                }
                 }
+
+
                 /*end of product update*/
-$chequecash = ($_GET['cashcheque']=="yes")?"Cheque":"Cash";
+                if (isset($_GET['editdata'])) 
+                {
+                	$chequecash = "Cheque";
+                }
+                else
+                {
+
+      $chequecash = ($_GET['cashcheque']=="yes")?"Cheque":"Cash";
+                }
    
 			   for ($i=0; $i <count($datass); $i++) { 
 			    	 $data = array(
@@ -56,12 +71,21 @@ $chequecash = ($_GET['cashcheque']=="yes")?"Cheque":"Cash";
 			    	 	'token'        => "p_".$chequecash
 			    	 	 );
 
-			    	 echo "<pre>";
-			    	 print_r($data);
-			    	 echo "</pre>";
+			    	
 			    	$db->insert("purchase",$data);
 			    	  
 			    }
+			    if (count($datass) == $i) 
+			    {
+			    array_push($msg, ["success"=>"Product has been purchased out"]);
+			    	
+			    }
+			    else 
+			    {
+			    	array_push($msg, ["err"=>"problem occured"]);
+			    }
+
+			    echo json_encode($msg);
 			  /*echo "<pre>";
 			   print_r($_GET['allotherinfo']);
 			  print_r($_GET);

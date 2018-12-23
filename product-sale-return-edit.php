@@ -1,14 +1,6 @@
 <?php include 'files/header.php'; ?>
 <?php include 'files/menu.php';
-   ?>
-<?php 
-   if (isset($_GET['del-id'])) 
-   {
-           if ($db->delete("sell","billchallan = '".$_GET['del-id']."'")) {?>
-<script> alert('Data has been deleted'); window.location.href='sellproduct.php'; </script>
-<?php   }
-   }
-   
+ 
    $salehistory = $db->joinQuery('SELECT DISTINCT `customerid`,`memono`,`return_date` FROM `sell_return` WHERE `memono`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
    
    ?>
@@ -90,8 +82,10 @@
                                      $cus =  $inv['customerid'];
                                      ?>
                               <tr class="domclass">
-                                 <td contenteditable="true" id="proname">
+                                 <td contenteditable="true">
+
                                     <?=$fn->getProductName(trim($inv['productid']))?>
+                                    <span id="proname" style="opacity: 0" ><?=$inv['productid']?></span>
                                  </td>
                                  <td class="text-center" contenteditable="true" id="price">
                                     <?=$inv['price']?>
@@ -147,7 +141,8 @@
 </div>
 <?php include 'files/footer.php'; ?>
 <script type="text/javascript">
-   function savereturninfo(){
+   function savereturninfo()
+   {
        
    
             var obj = function(memo,prod,quntity,price,date){
@@ -161,12 +156,17 @@
    
                 var confirmlist = [];
               var tr = document.getElementsByClassName("domclass");
-              if (tr.length === 0) {
-                alert("You have to add something to the list");
+              if (tr.length === 0) 
+              {
+                msg("You have to add something to the list",'al');
               }else {
-   
-   
-                   $("tr.domclass").each(function(index, el) {
+
+
+                alertify.confirm("Are you sure ?",function(ev)
+                   {
+                    ev.preventDefault();
+
+                      $("tr.domclass").each(function(index, el) {
                           var memono  = $('#memes').val();
                           var product  = $(this).find('#proname').text();
                           var quantity  = $(this).find('#quntity').text();
@@ -179,13 +179,28 @@
                    console.log(confirmlist);
    
                    $.ajax({
-                     url: 'ajax/insert-sell-return.php?dclas='+JSON.stringify(confirmlist)+'&weight='+$("#weightamount").val()+'&transport='+$("#transportamount").val()+'&custo='+$("#custohiddenname").val()
+                     url: 'ajax/insert-sell-return.php?dclas='+JSON.stringify(confirmlist)+'&weight='+$("#weightamount").val()+'&transport='+$("#transportamount").val()+'&custo='+$("#custohiddenname").val()+'&update=true'
                    })
                    .done(function(res) {
                      console.log(res);
-                     //$("#feedbacktext").text(res);
-                     alert(res);
-                     window.location.href='sell_return_history.php';
+                     var res = JSON.parse(res);
+                    //console.log(res);
+                    res.forEach(function(item)
+                   { 
+              
+                     if (Object.keys(item)[0]  === "success") 
+                     {
+                        msg(Object.values(item)[0],'su',1);
+                        //window.location.reload();
+                     }
+                     else if (Object.keys(item)[0] === "error") 
+                     {
+                        msg(Object.values(item)[0],'err',1);
+
+                     }
+               
+                   });
+                    
                    })
                    .fail(function() {
                      console.log("error");
@@ -193,7 +208,17 @@
                    .always(function() {
                      console.log("complete");
                    });
-                   
+
+
+                  },function(ev){
+                    ev.preventDefault();
+
+                    msg("You'v canceled",'err');
+
+                  });
+   
+   
+                                      
                    
               }
    

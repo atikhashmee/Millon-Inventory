@@ -157,6 +157,7 @@
          <!-- Alertify js -->
         <script src="assets/plugins/alertify/js/alertify.js"></script>
         <script src="assets/pages/alertify-init.js"></script>
+        
        
 
          
@@ -181,10 +182,13 @@
     <!-- to show the warning before deleting any item from the database -->
         <div id="wholehtmlfordelete" style="display: none;">
     <div class="card card-body">
-        <ul class="list-group">
-          <li class="list-group-item">Cras justo odio</li>
-          <li class="list-group-item">Dapibus ac facilisis in</li>
-          
-        </ul>
-    </div>
+      <h4><strong>Cautions</strong><img src="assets/images/Alert_Symbol.png" height='30px' width='30px'></h4>
+      <p>If you delete this, all the other information associated to this records will be deleted</p>
+      <a href="#">You still wanna go ahead and delete this?</a>
+        <!-- <ul class="list-group">
+              <li class="list-group-item">Cras justo odio</li>
+              <li class="list-group-item">Dapibus ac facilisis in</li>
+              
+            </ul>
+             -->    </div>
   </div>

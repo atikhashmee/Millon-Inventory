@@ -11,14 +11,28 @@
    {
 
 
+          /*  delete the sale return history also if they are exist */
+        $sr_dat = $db->joinQuery("SELECT COUNT(*) as totalnumber FROM `purchase_return` WHERE `memono`= '".$_GET['del-id']."'")->fetch(PDO::FETCH_ASSOC);
+        if ($sr_dat>0) 
+        {
+          $db->delete("purchase_return","`memono`= '".$_GET['del-id']."'");
+        }
+
+
+        /*
+          if the invoice has cheque information in the record
+        */
+
+         $sql = "SELECT COUNT(*) as yes FROM `purchase` WHERE `billchallan`='".$_GET['del-id']."' AND `token` ='p_Cheque'";
+         $qry =  $db->joinQuery($sql)->fetch(PDO::FETCH_ASSOC);
+         if ($qry['yes'] > 0) 
+         {
+           $db->delete("cheque","parent_table_id='p_".$_GET['del-id']."'");
+         }
 
            if ($db->delete("purchase","billchallan = '".$_GET['del-id']."'")) 
             { 
-               $getstatus = $db->selectAll('supplierpayment',"pay_id='".$_GET['del-id']."'")->fetch(PDO::FETCH_ASSOC);
-                  if ($getstatus['status'] == 'Cheque')
-                   {
-                         $db->delete("cheque","parent_table_id='pts_".$_GET['del-id']."'");
-                   }
+               
               ?>
             <script> 
             alert('Data has been deleted'); 
@@ -112,7 +126,7 @@
          }
          if ($rbas->getDelete()) {
               ?>
-              <a class="dropdown-item" href="purchase-history.php?del-id=<?=$pur['billchallan']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
+              <a class="dropdown-item" href="#" onclick="deleteItem('purchase-history','<?=$pur['billchallan']?>')">Delete <i class="fa fa-times"></i></a>
       <?php
          }
          if ($rbas->getPrint()) {

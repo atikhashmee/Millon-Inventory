@@ -60,8 +60,8 @@
         <!-- App js -->
         <script src="assets/js/app.js"></script>
         <script>
-            
-            /* messge showing throughtout the website */
+           
+          /* messge showing throughtout the website */
              function msg(msg,token,rel=0) 
             {
               var m = ""
@@ -91,13 +91,21 @@
         
             }
 
+        
             function deleteItem(pagename,id) 
             {
                   alertify.confirm("Are you sure ?", function (ev) {
                   ev.preventDefault();
-         //var hbody = document.getElementById("wholehtmlfordelete").innerHTML;
-                    // msg(hbody,'al');
-                    window.location.href=pagename+'.php?del-id='+id;
+                var hbody = document.getElementById("wholehtmlfordelete").innerHTML;
+                     alertify.confirm(hbody,function(e) 
+                     {
+                       window.location.href=pagename+'.php?del-id='+id;
+                     },function(e)
+                     {
+                       // alert("cacel");
+                     });
+                     //msg(hbody,'al');
+                   // window.location.href=pagename+'.php?del-id='+id;
                    },function(ev){
                     ev.preventDefault();
                    });

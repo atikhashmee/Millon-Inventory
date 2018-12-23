@@ -162,7 +162,7 @@
                    'amounts' => $_POST['amount'], 
                    'carreier' => $_POST['carrier'],
                    'addedby' => $_SESSION['u_id'],
-                   'bycashcheque' =>  $chequecash
+                   'bycashcheque' => "ct_".$chequecash."_".$_POST['from']."_".$_POST['to']
 
                  );
             
@@ -251,7 +251,7 @@
 <?php include 'files/footer.php'; ?>
 <script>
    // check the radio button to show the cheque payment method
-   function chequeoptioncheck(){
+   /*function chequeoptioncheck(){
      var divid  = document.getElementById('chequeoption');
     var radio  =  document.getElementById('customRadio2');
      if (radio.checked === true){
@@ -260,5 +260,5 @@
        divid.style.display = 'none';
      }
    
-   }
+   }*/
 </script>

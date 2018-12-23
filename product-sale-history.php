@@ -7,9 +7,31 @@ $rbas->setPageName(4)->run();
 
 
 <?php 
-   if (isset($_GET['del-id'])) {
+   if (isset($_GET['del-id'])) 
+   {
+    /*  delete the sale return history also if they are exist */
+        $sr_dat = $db->joinQuery("SELECT COUNT(*) as totalnumber FROM `sell_return` WHERE `memono` = '".$_GET['del-id']."'")->fetch(PDO::FETCH_ASSOC);
+        if ($sr_dat>0) 
+        {
+          $db->delete("sell_return","`memono` = '".$_GET['del-id']."'");
+        }
+
+        /*
+          if the invoice has cheque information in the record
+        */
+
+         $sql = "SELECT COUNT(*) as yes FROM `sell` WHERE `billchallan`='".$_GET['del-id']."' AND `token` ='s_Cheque'";
+         $qry =  $db->joinQuery($sql)->fetch(PDO::FETCH_ASSOC);
+         if ($qry['yes'] > 0) 
+         {
+           $db->delete("cheque","parent_table_id='s_".$_GET['del-id']."'");
+         }
+
            if ($db->delete("sell","billchallan = '".$_GET['del-id']."'")) {?>
-<script> alert('Data has been deleted'); 
+<script>
+ //msg("Records has been deleted",'su',1); 
+  alert('Data has been deleted'); 
+
 window.location.href='product-sale-history.php'; </script>
 <?php   }
    }

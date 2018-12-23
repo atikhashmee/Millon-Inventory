@@ -9,7 +9,7 @@
 
    					$cont = 0;
    					/* to perform an update operation we are deleting the previous product and inserting newly update product*/
-                  if (isset($_GET['memo']))
+                  if (isset($_GET['update']) && $_GET['update'] == true)
                   {
                   	   $dd =  $db->joinQuery("SELECT COUNT(*) as rowexist FROM `purchase_return` WHERE `memono`='".$_GET['memo']."'")->fetch(PDO::FETCH_ASSOC);
 	                if ($dd['rowexist']>0) {
@@ -42,11 +42,20 @@
 			    	  
 			    }
 
-			    if (count($datass) == $cont) {
-			    	echo "Product has been returned";
-			    }else{
-			    	echo "There has been a problem";
+			    $msg = [];
+
+			    if (count($datass) == $cont) 
+			    {
+			    	array_push($msg, ["success"=>"Product has been returned"]);
+			    	//echo "Product has been returned";
 			    }
+			    else
+			    {
+			    	array_push($msg, ["error"=>"Problem occured"]);
+
+			    	//echo "There has been a problem";
+			    }
+			    echo json_encode($msg);
 			  /*echo "<pre>";
 			   print_r($_GET['allotherinfo']);
 			  print_r($_GET);

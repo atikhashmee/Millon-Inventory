@@ -303,7 +303,7 @@
        }
        else 
        {
-         alert("This product is already in the cart");
+         msg("This product is already in the cart",'al');
        }
 
    }
@@ -315,26 +315,49 @@
    
       if ($("#billchallan").val().length === 0) 
        {
-            alert('Bill/challan no. is empty');
+            msg('Bill/challan no. is empty','al');
        }
        else if(getValue("suppliername").length===0)
        {
-           alert('Select a suppliername');
+           msg('Select a suppliername','al');
        }
        else 
        {
-   
-     var tex = confirm("Are you sure ? ");
-       if (tex ===  true) {
-           console.log($("#allotherinfo").serialize());
+        
+
+        alertify.confirm("Are you sure?",function(ev){
+          ev.preventDefault();
+
+              console.log($("#allotherinfo").serialize());
             $.ajax({
             url:'ajax/add_new_purchase_info.php?item='+JSON.stringify(defaultModule.purchaseitem)+"&allotherinfo="+$("#allotherinfo").serialize(),
             type: 'GET',
           
           })
-          .done(function(res) {
-            console.log(res);
-            alert("Product Purchase Has been done");
+          .done(function(res) 
+          {
+            var res = JSON.parse(res);
+             res.forEach(function(item)
+            { 
+              
+               if (Object.keys(item)[0]  === "success") 
+               {
+                  msg(Object.values(item)[0],'su',1);
+                  //window.location.reload();
+               }
+               else if (Object.keys(item)[0] === "err") 
+               {
+                  msg(Object.values(item)[0],'err',1);
+
+               }
+               else if (Object.keys(item)[0]  === "check") 
+               {
+                  msg(Object.values(item)[0],'su',1);
+                  //window.location.reload();
+               }
+            });
+            //console.log(res);
+           // alert("Product Purchase Has been done");
            // window.location.href="purchase.php";
    
           })
@@ -344,9 +367,15 @@
           .always(function() {
             console.log("complete");
           });
-       }else{
-         alert("You discard the purchase ");
-       }
+
+        },function(ev){
+          ev.preventDefault();
+          msg("You've dascarded the purchase",'err');
+        })
+     
+           
+
+       
    
      }
    

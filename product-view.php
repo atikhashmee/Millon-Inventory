@@ -6,6 +6,19 @@
 
          if (isset($_GET['del-id']))
           {
+
+            // delete information from purchase
+            $db->delete("purchase","productid='".$_GET['del-id']."'");
+            // delete the purchase return information
+            $db->delete("purchase_return","productid='".$_GET['del-id']."'");
+            // delete information from the sell 
+           $db->delete("sell","productid='".$_GET['del-id']."'");
+
+           // delete sell return
+           $db->delete("sell_return","productid='".$_GET['del-id']."'");
+
+
+
              if ($db->delete("product_info","pro_id='".$_GET['del-id']."'"))
               {
                  ?>
@@ -98,7 +111,7 @@
          }
          if ($rbas->getDelete()) {
               ?>
-              <a class="dropdown-item" href="product-view.php?del-id=<?=$val['pro_id']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
+              <a class="dropdown-item" href="#" onclick="deleteItem('product-view','<?=$val['pro_id']?>')">Delete <i class="fa fa-times"></i></a>
       <?php
          }
          if ($rbas->getPrint()) {

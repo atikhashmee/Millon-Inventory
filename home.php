@@ -5,11 +5,54 @@
 ?>
 
 
+
+<style>
+    /* homepage style css codes are written here */
+
+    .description{
+        font-size: 15px;
+    }
+    /* Tabs*/
+section {
+    padding: 60px 0;
+}
+
+section .section-title {
+    text-align: center;
+    color: #007b5e;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+}
+#tabs{
+    background: #007b5e;
+    color: #eee;
+}
+#tabs h6.section-title{
+    color: #eee;
+}
+
+#tabs .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: #f3f3f3;
+    background-color: transparent;
+    border-color: transparent transparent #f3f3f3;
+    border-bottom: 4px solid !important;
+    font-size: 20px;
+    font-weight: bold;
+}
+#tabs .nav-tabs .nav-link {
+    border: 1px solid transparent;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    color: #eee;
+    font-size: 20px;
+}
+</style>
+
        
             <div class="container">
 
                 <!-- Page-Title -->
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-sm-12">
                         <div class="page-title-box">
                             <div class="btn-group pull-right">
@@ -21,11 +64,11 @@
                             <h4 class="page-title">Dashboard</h4>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- end page title end breadcrumb -->
 
 
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-md-6 col-xl-3">
                         <div class="mini-stat clearfix bg-white">
                             <span class="mini-stat-icon bg-light"><i class="mdi mdi-cart-outline text-danger"></i></span>
@@ -33,7 +76,7 @@
                       <span class="counter text-danger"><?=number_format((float)$fn->myCashBalance(),2,'.',',')?></span>
                                 Cash 
                             </div>
-                            <!-- <p class="mb-0 m-t-20 text-muted">Total income: $22506 <span class="pull-right"><i class="fa fa-caret-up m-r-5"></i>10.25%</span></p> -->
+                            <p class="mb-0 m-t-20 text-muted">Total income: $22506 <span class="pull-right"><i class="fa fa-caret-up m-r-5"></i>10.25%</span></p>
                         </div>
                     </div>
                     <div class="col-md-6 col-xl-3">
@@ -72,37 +115,365 @@
                             <p class="mb-0 m-t-20 text-light">Total income: $22506 <span class="pull-right"><i class="fa fa-caret-up m-r-5"></i>10.25%</span></p>
                         </div>
                     </div>
-                </div>
+                </div> -->
+                <!-- start of cash report -->
                 <div class="row">
-                    <div class="col-md-6">
-                        
-                    </div>
-                    <div class="col-md-6">
-                        
+                    <div class="col-xl-12">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col"></div>
+                                    <div class="col">
+                                        
+                                        <h4>Bismillahir Rahmanir Rahim</h4>
+                                        <h5>Today : <?=date('l',strtotime(date('Y-m-d')))?> </h5>
+                                        <h5>Date : <?=date('d/m/Y',strtotime(date('Y-m-d')))?></h5>
+                                    </div>
+                                    <div class="col"></div>
+                                </div>
+
+                                <div class="table-responsive">
+                                     <?php 
+         
+         
+         
+            require 'php/reportquery.php';
+
+            $data =  cashReport(date('Y-m-d'));
+            /* get the previous day */
+            $time = time();
+ $previus =  date("Y-m-d", mktime(0,0,0,date("n", $time),date("j",$time)- 1 ,date("Y", $time)));
+
+         ?>
+        <table class="table table-hover table-bordered" id="datatable-buttons">
+         <thead>
+            <tr>
+               <th>#</th>
+               <th>Descrioption</th>
+               <th>Credit</th>
+               <th>Debit</th>
+               <th>Balance</th>
+            </tr>
+         </thead>
+         <!-- <tr>
+                
+                <td colspan="4" class="text-right">Pre cash</td>
+                <td><?=$opening_balance['opening_balance']?></td>
+            </tr> -->
+         <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Pre cash</td>
+                <td><?=previousDayCash($previus)?></td>
+            </tr>
+            
+            <?php 
+               $i=0;
+               $sum = previousDayCash($previus);
+                  foreach ($data as $val) {  $i++;
+                   ?>
+            <tr>
+               <td scope="row"><?=$i?></td>
+               
+              
+               <td><?php 
+               $tkn = trim($val['token']);
+               //echo $tkn."</br>";
+                  if ($tkn == "pts_Cash") 
+                    {
+                      echo '<p class="description">Payment Paid to supplier <a href="#">'.$fn->getUserName($val['customerid']).'</a></p>';
+                    }
+                    if ($tkn == "rac_Cash") 
+                    {
+                      echo '<p class="description">Payment collection from customer <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
+                    }
+                   else  if ($tkn == "s_Cash") 
+                    {
+                      echo '<p class="description">Product sold payment from customer <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
+                    }
+                    else if ($tkn == "p_Cash") 
+                    {
+                      echo '<p class="description">Purchase Payment to supplier <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
+                    }
+                    else if ($tkn == "add") 
+                    {
+                      echo '<p class="description">Cheque has been withdrawn from the customer <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
+                    } 
+                    else if (substr($tkn, 0,7) == "expense") 
+                    {
+                      $tkens = explode("_", $tkn);
+                      echo '<p class="description">Bill paid for <a href="#">'.$fn->expenseCategory($tkens[1]).'</a> </p>';
+                    }
+                    else if (substr($tkn, 0,5) == "stuff") 
+                    {
+                      $tkens = explode("_", $tkn);
+                      echo '<p class="description">Bill paid for <a href="#">'.$fn->expenseCategory($tkens[1]).'</a> to employee <a href="#">'.$fn->getUserName($tkens[2]).'</a> </p>';
+                    }
+                    else if (substr($tkn,0,7) == "ct_Cash") 
+                    {
+                      $tkens = explode("_", $tkn);
+                      echo '<p class="description">Money transfar from  <a href="#">'.$fn->Chartsaccounta($tkens[2]).'</a> to  <a href="#">'.$fn->Chartsaccounta($tkens[3]).'</a> </p>';
+                    }
+                    
+                    else if ($tkn == "minus") 
+                    {
+                      echo '<p class="description">Cheque Payment to supplier <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
+                    }
+                    else if ($tkn == "salerypayment") 
+                    {
+                      echo '<p class="description">Salery Payment to Employee <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
+                    }
+               ?></td>
+               <?php
+                   $amounts = $val['payment_taka'];
+                    if ($tkn == "pts_Cash") 
+                    {
+                        ?>
+                        <td></td>
+                        <td><?=$amounts?></td>
+                        <?php 
+                     
+                    }
+                   else if (substr($tkn,0,7) == "ct_Cash") 
+                    {
+                      $tkens = explode("_", $tkn);
+                      if ($tkens[2] == 1) 
+                      {
+                            ?>
+                            <td></td>
+                            <td><?=$amounts?></td>
+                            <?php 
+                      }
+                      else 
+                      {
+                            ?>
+                            <td><?=$amounts?></td>
+                            <td></td>
+                            <?php  
+                      }
+                      
+                    }
+                   else if ($tkn == "rac_Cash") 
+                    {
+                        ?>
+                        <td><?=$amounts?></td>
+                        <td></td>
+                        <?php 
+                    }
+                   else  if ($tkn == "s_Cash") 
+                    {
+                        ?>
+                        <td><?=$amounts?></td>
+                        <td></td>
+                        <?php 
+                    }
+                    else if ($tkn== "p_Cash") 
+                    {
+                        ?>
+                        <td></td>
+                        <td><?=$amounts?></td>
+                        <?php 
+                    }
+                    else if ($tkn == "add") 
+                    {
+                        ?>
+                        <td><?=$amounts?></td>
+                        <td></td>
+                        <?php 
+                    } 
+                    else if (substr($tkn, 0,7) == "expense") 
+                    {
+                        ?>
+                        <td></td>
+                        <td><?=$amounts?></td>
+                        <?php 
+                    }
+                    else if (substr($tkn, 0,5) == "stuff") 
+                    {
+                        ?>
+                        <td></td>
+                        <td><?=$amounts?></td>
+                        <?php 
+                    }
+                    
+                    else if ($tkn == "minus") 
+                    {
+                        ?>
+                        <td></td>
+                        <td><?=$amounts?></td>
+                        <?php 
+                    }
+                    else if ($tkn == "salerypayment") 
+                    {
+                       ?>
+                        <td></td>
+                        <td><?=$amounts?></td>
+                        <?php 
+                    }
+
+               ?>
+               
+               <td>
+                 <?php 
+                 $amounts = $val['payment_taka'];
+                    if ($tkn == "pts_Cash") 
+                    {
+                      echo $sum -= $amounts;
+                    }
+                    if ($tkn == "rac_Cash") 
+                    {
+                      echo $sum += $amounts;
+                    }
+                   else  if ($tkn == "s_Cash") 
+                    {
+                      echo $sum += $amounts;
+                    }
+                    else if ($tkn== "p_Cash") 
+                    {
+                     echo $sum -= $amounts;
+                    }
+                    else if ($tkn == "add") 
+                    {
+                      echo $sum += $amounts;
+                    } 
+                    else if (substr($tkn, 0,7) == "expense") 
+                    {
+                      echo $sum -= $amounts;
+                    }
+                    else if (substr($tkn, 0,5) == "stuff") 
+                    {
+                      echo $sum -= $amounts;
+                    }
+                    
+                    else if ($tkn == "minus") 
+                    {
+                      echo $sum -= $amounts;
+                    }
+                    else if ($tkn == "salerypayment") 
+                    {
+                      echo $sum -= $amounts;
+                    }
+                    else if (substr($tkn,0,7) == "ct_Cash") 
+                    {
+                      $tkens = explode("_", $tkn);
+                      if ($tkens[2] == 1) 
+                      {
+                           echo $sum -= $amounts;
+                      }
+                      else 
+                      {
+                            echo $sum += $amounts;  
+                      }
+                      
+                    }
+               ?>
+               </td>
+               </tr>
+            <?php   }
+               ?>
+              
+         </tbody>
+            <tr>
+               
+               <td colspan="4" class="text-right"> <h5>Total Cash Balance</h5> </td>
+               <td> <strong><?=number_format((float)$sum,2,'.',',')?></strong></td>
+             </tr>
+      </table>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
+             <!-- end of cash report -->
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card m-b-30">
                             <div class="card-body">
-                                <h4 class="mt-0 header-title">Email Sent</h4>
+                                <h4 class="mt-0 header-title">Today's sale</h4>
 
-                                <ul class="list-inline widget-chart m-t-20 text-center">
-                                    <li>
-                                        <h4 class=""><b>3652</b></h4>
-                                        <p class="text-muted m-b-0">Marketplace</p>
-                                    </li>
-                                    <li>
-                                        <h4 class=""><b>5421</b></h4>
-                                        <p class="text-muted m-b-0">Last week</p>
-                                    </li>
-                                    <li>
-                                        <h4 class=""><b>9652</b></h4>
-                                        <p class="text-muted m-b-0">Last Month</p>
-                                    </li>
-                                </ul>
+                                <nav>
+                 <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                        
 
-                                <div id="morris-area-example" style="height: 300px"></div>
+                        <?php
+                            $i=0;
+                            $categories = $db->selectAll("cateogory")->fetchAll();
+                            foreach ($categories as $cat) 
+                            {  
+
+                                $class = ($i==0)?"active":" ";
+                                ?>
+                                <a class="nav-item nav-link <?=$class?>" id="nav-<?=$cat['cat_id']?>-tab" data-toggle="tab" href="#nav-<?=$cat['cat_name']?>" role="tab" aria-controls="nav-<?=$cat['cat_name']?>" aria-selected="true"><?=$cat['cat_name']?></a>
+                                <?php
+                                $i++;
+                            }
+
+                        ?>
+                        
+                    </div>
+                </nav>
+                <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+                    <?php
+                        $j =0;
+                        foreach ($categories as $ca) 
+                        {
+                            $class = ($j==0)?"active":" ";
+                            ?>
+                            <div class="tab-pane fade show <?=$class?>" id="nav-<?=$cat['cat_name']?>" role="tabpanel" aria-labelledby="nav-<?=$cat['cat_name']?>-tab">
+                                <?php
+                                    if ($ca['cat_id'] == 1) 
+                                    {
+                                        ?>
+                                          <table class="table table-borderd" id="datatable">
+                                              <thead>
+                                                  <tr>
+                                                      <th>#</th>
+                                                      <th>Name</th>
+                                                      <th>Quantity</th>
+                                                  </tr>
+                                              </thead>
+                                              <tbody>
+                                                  <?php
+                                                    $sizes =  $db->joinQuery("SELECT DISTINCT `pro_size_name` FROM `p_size`")->fetchAll();
+                                                    foreach ($sizes as $sz) 
+                                                    {
+                                                        ?>
+                                                          <tr>
+                                                              <td>#</td>
+                                                              <td><?=$sz['pro_size_name']?></td>
+                                                              <td></td>
+                                                          </tr>
+                                                        <?php
+                                                    }
+                                                  ?>
+                                              </tbody>
+                                          </table>
+                                        <?php
+                                    }
+                                    else if ($ca['cat_id'] == 2)
+                                    {
+                                        ?>
+                                         <h3>hello world</h3>
+                                        <?php
+                                    }
+
+                                ?>
+                                    
+                            </div>
+                            <?php
+                            $j++;
+                        }
+
+                    ?>
+                    
+                    
+                    
+                    
+                </div>
                             </div>
                         </div>
                     </div>

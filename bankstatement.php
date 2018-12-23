@@ -82,7 +82,7 @@
          $opening_balance  =  $db->joinQuery("SELECT `opening_balance` FROM `charts_accounts` WHERE `chart_name`='Cash'")->fetch(PDO::FETCH_ASSOC);
          echo "<div class='card card-body'>";
          echo "<h5> Account type = Cash </h5>";
-         echo "<h5> Opening Balance = ".$opening_balance['opening_balance']."</h5>";
+        echo "<h5> Opening Balance = ".$opening_balance['opening_balance']."</h5>";
          echo "</div>";
          
          ?>
