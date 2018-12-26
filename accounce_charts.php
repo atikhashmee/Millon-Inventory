@@ -241,13 +241,6 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
    <div class="col">
       <?php 
          $sql =  "SELECT * FROM `charts_accounts`";
-         
-         if (isset($_POST['searchuser'])) {
-            $sql .=" WHERE `main_cat_id`='".$_POST['usertypeforsearch']."'";
-            
-         }
-         $sql .="ORDER BY `main_cat_id` DESC";
-           //echo $sql;
          $data = $db->joinQuery($sql)->fetchAll();
          
          ?>
@@ -284,9 +277,13 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
               echo '<a class="dropdown-item" href="accounce_charts.php?edit-id='.$val['charts_id'].'">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) {
-             ?>
-              <a class="dropdown-item" href="accounce_charts.php?del-id=<?=$val['charts_id']?>" onclick="return confirm('Are you sure?')">Delete<i class="fa fa-times"></i></a>
-      <?php 
+               if ($i != 1) 
+                {
+                   ?>
+                    <a class="dropdown-item" href="accounce_charts.php?del-id=<?=$val['charts_id']?>" onclick="return confirm('Are you sure?')">Delete<i class="fa fa-times"></i></a>
+                   <?php
+                }
+           
          }
          if ($rbas->getPrint()) {
               echo '<a class="dropdown-item" href="#">Print</a>';

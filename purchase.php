@@ -113,10 +113,11 @@
             <div class="col">
                <div id="chequeoption"  style="display: none;">
                   <div class="form-group">
-                     <label for="">Account</label>
+                     <label for="">Chose Account</label>
                      <select class="form-control" name="accounts" id="accounts">
+                      <option value=""> Select option</option>
                         <?php    
-                           $accounthead = $db->selectAll("charts_accounts")->fetchAll();
+                           $accounthead = $db->selectAll("charts_accounts","charts_id != 1")->fetchAll();
                            foreach ($accounthead as $ah) { ?>
                         <option value="<?=$ah['charts_id']?>"><?=$ah['chart_name']?></option>
                         <?php }

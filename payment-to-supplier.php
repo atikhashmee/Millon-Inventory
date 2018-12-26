@@ -120,38 +120,27 @@ if (isset($_GET['del-id']))
                   </div>
                   <div id="chequeoption" style="display: none;">
                      <div class="row">
+                      <div class="col">
+                           <div class="form-group">
+                              <label for="">Bank Name 
+                                <small>(type out bank names)</small> </label>
+                              <input type="text" class="form-control" name="accounts" id="accounts">
+                           </div>
+                        </div>
                         <div class="col">
                            <div class="form-group">
-                              <label  for="name"> Cheque  No
+                              <label  for="name"> Cheque/Account Number
+                              <p></p> 
                               </label>
                               <input id="chequeno" class="form-control" name="chequeno"   type="text">
                            </div>
                         </div>
+                        
                         <div class="col">
                            <div class="form-group">
-                              <label for="">Account</label>
-                              <select class="form-control" name="accounts" id="accounts">
-                                 <option value="">Select a bank</option>
-                                 <option>AB Bank Limited</option>
-                                 <option>Agrani Bank Limited</option>
-                                 <option>Al-Arafah Islami Bank Limited</option>
-                                 <option>Bangladesh Commerce Bank Limited</option>
-                                 <option>Bangladesh Development Bank Limited</option>
-                                 <option>Bangladesh Krishi Bank</option>
-                                 <option>Bank Al-Falah Limited</option>
-                                 <option>Bank Asia Limited</option>
-                                 <option>BASIC Bank Limited</option>
-                                 <option>BRAC Bank Limited</option>
-                                 <option>Citibank N.A</option>
-                                 <option>Commercial Bank of Ceylon Limited</option>
-                              </select>
-                           </div>
-                        </div>
-                        <div class="col">
-                           <div class="form-group">
-                              <label  for="name"> Issue Date
+                              <label  for="name"> Issue Date <p></p>
                               </label>
-                              <input id="issuedate" class="form-control" name="issuedate"   type="date">
+                              <input id="issuedate" class="form-control" name="issuedate" type="date">
                            </div>
                         </div>
                      </div>
@@ -268,9 +257,6 @@ if (isset($_GET['del-id']))
                   <th>Supplier</th>
                   <th>Amount</th>
                   <th>Carriar</th>
-                  <th>By</th>
-                  
-                  
                   <th>Action</th>
                </tr>
             </thead>
@@ -285,9 +271,6 @@ if (isset($_GET['del-id']))
                   <td><?=$fn->getUserName($val['sup_id'])?></td>
                   <td><?=$val['amnts']?></td>
                   <td><?=$val['carier']?></td>
-                  <td><?=$val['status']?></td>
-                  
-                  
                   <td>
                       <div class="dropdown">
   <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
@@ -328,6 +311,7 @@ if (isset($_GET['del-id']))
 <link href="assets/plugins/alertify/css/alertify.css" rel="stylesheet" type="text/css">
 <script src="assets/plugins/alertify/js/alertify.js"></script>
 <script>
+ 
    // check the radio button to show the cheque payment method
    function chequeoptioncheck(){
      var divid  = document.getElementById('chequeoption');

@@ -2,91 +2,205 @@
 
 
 <?php
+    
+    function cashRawQuery($start="",$end="")
+    {
+      $sql = [];
+       $sql[0] = "SELECT `selldate`, `customerid`, `payment_taka`, `token` FROM `sell` WHERE `token` = 's_Cash'";
 
+       $sql[1] =  "SELECT `recievedate`, `cusotmer_id`, `amounts`, `bycashcheque` FROM `recevecollection` WHERE `bycashcheque` = 'rac_Cash'";
+
+       $sql[2] = "SELECT `pay_date`, `sup_id`, `amnts`, `status` FROM `supplierpayment` WHERE `status`='pts_Cash'";
+
+       $sql[3] = "SELECT `expiredate`, `customerid`, `amount`, `fromtable` FROM `cheque` WHERE `approve`='1'";
+
+       $sql[4] = " SELECT `expendituredate`, `accountsid`, `amount`, `token` FROM `expenditure`";
+
+       $sql[5] = "SELECT `payment_date`, `employeeid`,`amount_pay`, `token` FROM `e_payment_salery`";
+
+       $sql[6] =  "SELECT `purchasedate`, `supplier`, `payment_taka`, `token` FROM `purchase` where `token` = 'p_Cash'";
+
+       $sql[7] = "SELECT `transerdate`, `to`, `amounts`, `bycashcheque` FROM `banktransfer`";
+
+         $dateext = [];
+         $dateext[0] =" AND `selldate`";
+         $dateext[1] =" AND `recievedate`";
+         $dateext[2] =" AND `pay_date`";
+         $dateext[3] =" AND `expiredate`";
+         $dateext[4] =" WHERE `expendituredate`";
+         $dateext[5] =" WHERE `payment_date`";
+         $dateext[6] =" AND `purchasedate`";
+         $dateext[7] =" WHERE `transerdate`";
+
+       if (!empty($start) && empty($end)) 
+       {
+         for ($i=0; $i <8 ; $i++) 
+         { 
+           $sql[$i] .= $dateext[$i]." ='{$start}'";
+         }
+       }
+
+       if (!empty($start) && !empty($end)) 
+       {
+         for ($i=0; $i <8 ; $i++) 
+         { 
+           $sql[$i] .= $dateext[$i]." BETWEEN '{$start}' AND '{$end}'";
+         }
+       }
+
+       $query = implode(" UNION ", $sql);
+       //echo $query;
+
+       return $query;
+    }
 	
    function cashReport($date)
-	{
-		$sql = "SELECT `selldate`, `customerid`, `payment_taka`, `token` FROM `sell` WHERE `token` = 's_Cash' AND `selldate`= '{$date}'
-          UNION 
-         SELECT `recievedate`, `cusotmer_id`, `amounts`, `bycashcheque` FROM `recevecollection` WHERE `bycashcheque` = 'rac_Cash' AND  `recievedate` = '{$date}'
-         UNION 
-         SELECT `pay_date`, `sup_id`, `amnts`, `status` FROM `supplierpayment` WHERE `status`='pts_Cash' AND  `pay_date` = '{$date}'  
-         UNION 
-         SELECT `expiredate`, `customerid`, `amount`, `fromtable` FROM `cheque` WHERE `approve`='1' AND  `expiredate` = '{$date}' 
-         UNION 
-         SELECT `expendituredate`, `accountsid`, `amount`, `token` FROM `expenditure` WHERE `expendituredate`= '{$date}' 
-         UNION 
-         SELECT `payment_date`, `employeeid`,`amount_pay`, `token` FROM `e_payment_salery` WHERE `payment_date` = '{$date}'
-         UNION 
-         SELECT `purchasedate`, `supplier`, `payment_taka`, `token` FROM `purchase` where `token` = 'p_Cash' AND `purchasedate` = '{$date}' 
-
-            UNION 
-            SELECT `transerdate`, `to`, `amounts`, `bycashcheque` FROM `banktransfer` WHERE `transerdate`= '{$date}'";
+	 {
+	        	$sql = cashRawQuery($date);
             $data = $GLOBALS['db']->joinQuery($sql)->fetchAll();
             return  $data;
 	}
 
-	function previousDayCash($previousday)
+	function previousDayCash()
 	{
-		$data =  cashReport($previousday);
-		$sum = 0;
-		foreach ($data as $val)
-		 {
-			$amounts = trim($val['payment_taka']);
-			$tkn = trim($val['token']);
-                    if ($tkn == "pts_Cash") 
+   
+           $i=1;
+           while (1) 
+           {
+             $prv = $GLOBALS['df']->sub(new DateInterval('P'.$i.'D'))->format('Y-m-d');
+             if (datewiseCashBalance($prv)>0) 
+             {
+               return datewiseCashBalance($prv);
+             }
+             $i++;
+
+           }
+	}
+
+
+  function datewiseCashBalance($previousday)
+  {
+    $data =  $GLOBALS['db']->joinQuery(cashRawQuery($previousday));
+    $sum = 0;
+    foreach ($data as $val)
+      {
+         $sum += getMoneyToken(trim($val['token']),trim($val['payment_taka']));
+      }
+    return $sum;
+  }
+
+
+
+    function getMoneyToken($tkn,$amounts)
+    {
+                   if ($tkn == "pts_Cash") 
                     {
-                       $sum -= $amounts;
+                       return  -$amounts;
                     }
-                    if ($tkn == "rac_Cash") 
+                    else if ($tkn == "rac_Cash") 
                     {
-                       $sum += $amounts;
+                       return +$amounts;
                     }
-                   else  if ($tkn == "s_Cash") 
+                    else  if ($tkn == "s_Cash") 
                     {
-                       $sum += $amounts;
+                       return +$amounts;
                     }
                     else if ($tkn== "p_Cash") 
                     {
-                      $sum -= $amounts;
+                      return -$amounts;
                     }
                     else if ($tkn == "add") 
                     {
-                       $sum += $amounts;
+                       return +$amounts;
                     } 
                     else if (substr($tkn, 0,7) == "expense") 
                     {
-                       $sum -= $amounts;
+                       return -$amounts;
                     }
                     else if (substr($tkn, 0,5) == "stuff") 
                     {
-                       $sum -= $amounts;
+                       return -$amounts;
                     }
                     
                     else if ($tkn == "minus") 
                     {
-                       $sum -= $amounts;
+                       return -$amounts;
                     }
                     else if ($tkn == "salerypayment") 
                     {
-                       $sum -= $amounts;
+                       return -$amounts;
                     }
                     else if (substr($tkn,0,7) == "ct_Cash") 
                     {
                       $tkens = explode("_", $tkn);
                       if ($tkens[2] == 1) 
                       {
-                            $sum -= $amounts;
+                            return -$amounts;
                       }
                       else 
                       {
-                             $sum += $amounts;  
+                             return +$amounts;  
                       }
                       
                     }
-		}
-		return $sum;
-	}
+    }
+
+
+
+
+
+ 
+
+
+  function detailsOfAction($tkn,$customerid)
+  {
+         $str = "No caption";
+                   if ($tkn == "pts_Cash") 
+                    {
+                      $str = '<p class="description">Payment Paid to supplier <a href="#">'.$GLOBALS['fn']->getUserName($customerid).'</a></p>';
+                    }
+                   else  if ($tkn == "rac_Cash") 
+                    {
+                      $str = '<p class="description">Payment collection from customer <a href="#">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
+                    }
+                   else  if ($tkn == "s_Cash") 
+                    {
+                      $str = '<p class="description">Product sold payment from customer <a href="#">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
+                    }
+                    else if ($tkn == "p_Cash") 
+                    {
+                      $str = '<p class="description">Purchase Payment to supplier <a href="#">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
+                    }
+                    else if ($tkn == "add") 
+                    {
+                      $str = '<p class="description">Cheque has been withdrawn from the customer <a href="#">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
+                    } 
+                    else if (substr($tkn, 0,7) == "expense") 
+                    {
+                      $tkens = explode("_", $tkn);
+                      $str = '<p class="description">Bill paid for <a href="#">'.$GLOBALS['fn']->expenseCategory($tkens[1]).'</a> </p>';
+                    }
+                    else if (substr($tkn, 0,5) == "stuff") 
+                    {
+                      $tkens = explode("_", $tkn);
+                      $str = '<p class="description">Bill paid for <a href="#">'.$GLOBALS['fn']->expenseCategory($tkens[1]).'</a> to employee <a href="#">'.$GLOBALS['fn']->getUserName($tkens[2]).'</a> </p>';
+                    }
+                    else if (substr($tkn,0,7) == "ct_Cash") 
+                    {
+                      $tkens = explode("_", $tkn);
+                      $str = '<p class="description">Money transfar from  <a href="#">'.$GLOBALS['fn']->Chartsaccounta($tkens[2]).'</a> to  <a href="#">'.$GLOBALS['fn']->Chartsaccounta($tkens[3]).'</a> </p>';
+                    }
+                    
+                    else if ($tkn == "minus") 
+                    {
+                      $str = '<p class="description">Cheque Payment to supplier <a href="#">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
+                    }
+                    else if ($tkn == "salerypayment") 
+                    {
+                      $str = '<p class="description">Salery Payment to Employee <a href="#">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
+                    }
+            return $str;
+  }
 
 
 ?>

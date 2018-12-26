@@ -1,5 +1,18 @@
 <?php include 'files/header.php'; ?>
-<?php include 'files/menu.php'; ?>
+<?php include 'files/menu.php'; 
+
+ $rbas->setPageName(8)->run();
+
+  // delete function 
+  if (isset($_GET['del-id'])) {
+             if ($db->delete("banktransfer","transferid='".$_GET['del-id']."'")) {?>
+            <script> alert('Data has been deleted');
+             window.location.href='cash-transfer.php'; </script>
+            <?php   }
+               }
+
+
+?>
 <div class="container">
    <div class="row">
                     <div class="col-sm-12">
@@ -12,7 +25,6 @@
                                 </ol>
                             </div>
                             <h4 class="page-title">Cash Transfar</h4>
-                            
                         </div>
                     </div>
                 </div>
@@ -20,20 +32,19 @@
    <div class="row">
       <div class="col">
          <div class="card mb-3">
-            
             <div class="card-body">
                <form class="form-horizontal form-label-left" method="post">
                   <div class="row">
                      <div class="col">
                         <div class="form-group">
-                           <label  for="name"> Date <span class="required">*</span>
+                          <label  for="name"> Date <span class="required">*</span>
                            </label>
                            <input id="treansferdate" class="form-control" name="treansferdate"  required="required" type="date">
                         </div>
                      </div>
                      <div class="col">
                         <div class="form-group">
-                           <label  for="name">From  <span class="required">*</span>
+                          <label  for="name">From  <span class="required">*</span>
                            </label>
                            <select class="form-control" name="from">
                               <option value="">Choose option</option>
@@ -69,7 +80,7 @@
                   <div class="row">
                      <div class="col">
                         <div class="form-group">
-                           <label for="name">Amount <span class="required">*</span>
+                          <label for="name">Amount <span class="required">*</span>
                            </label>
                            <input id="amount" class="form-control" name="amount"  required="required" type="number">
                         </div>
@@ -198,7 +209,7 @@
                   <th>Amount</th>
                   
                   <th>Carriar</th>
-                  <th>By</th>
+                  
                   <th>Action</th>
                </tr>
             </thead>
@@ -213,9 +224,8 @@
                   <td><?=$fn->Chartsaccounta($val['to'])?></td>
                   <td><?=$fn->Chartsaccounta($val['from'])?></td>
                   <td><?=$val['amounts']?></td>
-                 
                   <td><?=$val['carreier']?></td>
-                  <td><?=$val['bycashcheque']?></td>
+                 
                   <td> <div class="dropdown">
   <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
     <i class="fa fa-gear"></i>
@@ -229,7 +239,7 @@
               echo '<a class="dropdown-item" href="#">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) { ?>
-              <a class="dropdown-item" href="recieve-collection.php?del-id=<?=$val['recol_id']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
+              <a class="dropdown-item" href="cash-transfer.php?del-id=<?=$val['transferid']?>" onclick="return confirm('Are you sure?')">Delete <i class="fa fa-times"></i></a>
       <?php   }
          if ($rbas->getPrint()) {
               echo '<a class="dropdown-item" href="#">Print</a>';

@@ -124,27 +124,14 @@ section .section-title {
                                 <div class="row">
                                     <div class="col"></div>
                                     <div class="col">
-                                        
                                         <h4>Bismillahir Rahmanir Rahim</h4>
                                         <h5>Today : <?=date('l',strtotime(date('Y-m-d')))?> </h5>
-                                        <h5>Date : <?=date('d/m/Y',strtotime(date('Y-m-d')))?></h5>
+                                        <h5>Date : <?=$df->format('F j, Y, g:i a')?></h5>
                                     </div>
                                     <div class="col"></div>
                                 </div>
 
-                                <div class="table-responsive">
-                                     <?php 
-         
-         
-         
-            require 'php/reportquery.php';
-
-            $data =  cashReport(date('Y-m-d'));
-            /* get the previous day */
-            $time = time();
- $previus =  date("Y-m-d", mktime(0,0,0,date("n", $time),date("j",$time)- 1 ,date("Y", $time)));
-
-         ?>
+        <div class="table-responsive">                         
         <table class="table table-hover table-bordered" id="datatable-buttons">
          <thead>
             <tr>
@@ -155,221 +142,42 @@ section .section-title {
                <th>Balance</th>
             </tr>
          </thead>
-         <!-- <tr>
-                
-                <td colspan="4" class="text-right">Pre cash</td>
-                <td><?=$opening_balance['opening_balance']?></td>
-            </tr> -->
          <tbody>
             <tr>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td>Pre cash</td>
-                <td><?=previousDayCash($previus)?></td>
+                <td><?=previousDayCash()?></td>
             </tr>
             
             <?php 
+            $data = cashReport($df->format('Y-m-d'));
                $i=0;
-               $sum = previousDayCash($previus);
-                  foreach ($data as $val) {  $i++;
+               $sum = 0;
+                  foreach ($data as $val) 
+                  { 
+                     $i++;
+                   
+                     $tkn     =  trim($val['token']);
+                     $amounts =  trim($val['payment_taka']);
+                     $sign    =  getMoneyToken($tkn,$amounts);
+                    
+                     $td1     =  (substr($sign, 0,1)   !="-")?$amounts:" ";
+                     $td2     =  (substr($sign, 0,1)   =="-")?$amounts:" ";
+
+                     $detail  =  detailsOfAction($tkn,trim($val['customerid']));
+
+                     $sum    +=  getMoneyToken($tkn,$amounts);
+               
+                    
                    ?>
             <tr>
-               <td scope="row"><?=$i?></td>
-               
-              
-               <td><?php 
-               $tkn = trim($val['token']);
-               //echo $tkn."</br>";
-                  if ($tkn == "pts_Cash") 
-                    {
-                      echo '<p class="description">Payment Paid to supplier <a href="#">'.$fn->getUserName($val['customerid']).'</a></p>';
-                    }
-                    if ($tkn == "rac_Cash") 
-                    {
-                      echo '<p class="description">Payment collection from customer <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
-                    }
-                   else  if ($tkn == "s_Cash") 
-                    {
-                      echo '<p class="description">Product sold payment from customer <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
-                    }
-                    else if ($tkn == "p_Cash") 
-                    {
-                      echo '<p class="description">Purchase Payment to supplier <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
-                    }
-                    else if ($tkn == "add") 
-                    {
-                      echo '<p class="description">Cheque has been withdrawn from the customer <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
-                    } 
-                    else if (substr($tkn, 0,7) == "expense") 
-                    {
-                      $tkens = explode("_", $tkn);
-                      echo '<p class="description">Bill paid for <a href="#">'.$fn->expenseCategory($tkens[1]).'</a> </p>';
-                    }
-                    else if (substr($tkn, 0,5) == "stuff") 
-                    {
-                      $tkens = explode("_", $tkn);
-                      echo '<p class="description">Bill paid for <a href="#">'.$fn->expenseCategory($tkens[1]).'</a> to employee <a href="#">'.$fn->getUserName($tkens[2]).'</a> </p>';
-                    }
-                    else if (substr($tkn,0,7) == "ct_Cash") 
-                    {
-                      $tkens = explode("_", $tkn);
-                      echo '<p class="description">Money transfar from  <a href="#">'.$fn->Chartsaccounta($tkens[2]).'</a> to  <a href="#">'.$fn->Chartsaccounta($tkens[3]).'</a> </p>';
-                    }
-                    
-                    else if ($tkn == "minus") 
-                    {
-                      echo '<p class="description">Cheque Payment to supplier <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
-                    }
-                    else if ($tkn == "salerypayment") 
-                    {
-                      echo '<p class="description">Salery Payment to Employee <a href="#">'.$fn->getUserName($val['customerid']).'</a> </p>';
-                    }
-               ?></td>
-               <?php
-                   $amounts = $val['payment_taka'];
-                    if ($tkn == "pts_Cash") 
-                    {
-                        ?>
-                        <td></td>
-                        <td><?=$amounts?></td>
-                        <?php 
-                     
-                    }
-                   else if (substr($tkn,0,7) == "ct_Cash") 
-                    {
-                      $tkens = explode("_", $tkn);
-                      if ($tkens[2] == 1) 
-                      {
-                            ?>
-                            <td></td>
-                            <td><?=$amounts?></td>
-                            <?php 
-                      }
-                      else 
-                      {
-                            ?>
-                            <td><?=$amounts?></td>
-                            <td></td>
-                            <?php  
-                      }
-                      
-                    }
-                   else if ($tkn == "rac_Cash") 
-                    {
-                        ?>
-                        <td><?=$amounts?></td>
-                        <td></td>
-                        <?php 
-                    }
-                   else  if ($tkn == "s_Cash") 
-                    {
-                        ?>
-                        <td><?=$amounts?></td>
-                        <td></td>
-                        <?php 
-                    }
-                    else if ($tkn== "p_Cash") 
-                    {
-                        ?>
-                        <td></td>
-                        <td><?=$amounts?></td>
-                        <?php 
-                    }
-                    else if ($tkn == "add") 
-                    {
-                        ?>
-                        <td><?=$amounts?></td>
-                        <td></td>
-                        <?php 
-                    } 
-                    else if (substr($tkn, 0,7) == "expense") 
-                    {
-                        ?>
-                        <td></td>
-                        <td><?=$amounts?></td>
-                        <?php 
-                    }
-                    else if (substr($tkn, 0,5) == "stuff") 
-                    {
-                        ?>
-                        <td></td>
-                        <td><?=$amounts?></td>
-                        <?php 
-                    }
-                    
-                    else if ($tkn == "minus") 
-                    {
-                        ?>
-                        <td></td>
-                        <td><?=$amounts?></td>
-                        <?php 
-                    }
-                    else if ($tkn == "salerypayment") 
-                    {
-                       ?>
-                        <td></td>
-                        <td><?=$amounts?></td>
-                        <?php 
-                    }
-
-               ?>
-               
-               <td>
-                 <?php 
-                 $amounts = $val['payment_taka'];
-                    if ($tkn == "pts_Cash") 
-                    {
-                      echo $sum -= $amounts;
-                    }
-                    if ($tkn == "rac_Cash") 
-                    {
-                      echo $sum += $amounts;
-                    }
-                   else  if ($tkn == "s_Cash") 
-                    {
-                      echo $sum += $amounts;
-                    }
-                    else if ($tkn== "p_Cash") 
-                    {
-                     echo $sum -= $amounts;
-                    }
-                    else if ($tkn == "add") 
-                    {
-                      echo $sum += $amounts;
-                    } 
-                    else if (substr($tkn, 0,7) == "expense") 
-                    {
-                      echo $sum -= $amounts;
-                    }
-                    else if (substr($tkn, 0,5) == "stuff") 
-                    {
-                      echo $sum -= $amounts;
-                    }
-                    
-                    else if ($tkn == "minus") 
-                    {
-                      echo $sum -= $amounts;
-                    }
-                    else if ($tkn == "salerypayment") 
-                    {
-                      echo $sum -= $amounts;
-                    }
-                    else if (substr($tkn,0,7) == "ct_Cash") 
-                    {
-                      $tkens = explode("_", $tkn);
-                      if ($tkens[2] == 1) 
-                      {
-                           echo $sum -= $amounts;
-                      }
-                      else 
-                      {
-                            echo $sum += $amounts;  
-                      }
-                      
-                    }
-               ?>
-               </td>
+               <td><?=$i?></td>
+               <td><?=$detail?></td>
+               <td><?=$td1?></td>
+               <td><?=$td2?></td>
+               <td><?=$sum?></td>
                </tr>
             <?php   }
                ?>
@@ -378,7 +186,7 @@ section .section-title {
             <tr>
                
                <td colspan="4" class="text-right"> <h5>Total Cash Balance</h5> </td>
-               <td> <strong><?=number_format((float)$sum,2,'.',',')?></strong></td>
+              <td> <strong><?=number_format((float)$sum,2,'.',',')?></strong></td>
              </tr>
       </table>
                                 </div>

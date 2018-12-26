@@ -100,36 +100,25 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
                   </div>
                   <div id="chequeoption" style="display: none;">
                      <div class="row">
+                      <div class="col">
+                           <div class="form-group">
+                              <label for="">Bank Name <small>(type Bank Names)</small></label>
+                      <input type="text" class="form-control" name="accounts" id="accounts">
+                           </div>
+                        </div>
                         <div class="col">
                            <div class="form-group">
-                              <label  for="name"> Cheque  No
+                              <label  for="name"> Cheque /account No
+                                <p></p>
                               </label>
                               <input id="checkno" class="form-control" name="checkno"   type="text">
                            </div>
                         </div>
-                        <div class="col">
-                           <div class="form-group">
-                              <label for="">Account</label>
-                              <select class="form-control" name="accounts" id="accounts">
-                                 <option value="">Select a bank</option>
-                                 <option>AB Bank Limited</option>
-                                 <option>Agrani Bank Limited</option>
-                                 <option>Al-Arafah Islami Bank Limited</option>
-                                 <option>Bangladesh Commerce Bank Limited</option>
-                                 <option>Bangladesh Development Bank Limited</option>
-                                 <option>Bangladesh Krishi Bank</option>
-                                 <option>Bank Al-Falah Limited</option>
-                                 <option>Bank Asia Limited</option>
-                                 <option>BASIC Bank Limited</option>
-                                 <option>BRAC Bank Limited</option>
-                                 <option>Citibank N.A</option>
-                                 <option>Commercial Bank of Ceylon Limited</option>
-                              </select>
-                           </div>
-                        </div>
+                        
                         <div class="col">
                            <div class="form-group">
                               <label  for="name"> Issue Date
+                                <p></p>
                               </label>
                               <input id="issuedate" class="form-control" name="issuedate"  type="date">
                            </div>
@@ -249,7 +238,7 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
                      <th>Customer</th>
                      <th>Amount</th>
                      <th>Carriar</th>
-                     <th>By</th>
+                    
                      <th>Action</th>
                   </tr>
                </thead>
@@ -264,7 +253,7 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
                      <td><?=$fn->getUserName($val['cusotmer_id'])?></td>
                      <td><?=$val['amounts']?></td>
                      <td><?=$val['carreier']?></td>
-                     <td><?=$val['bycashcheque']?></td>
+                     
                      <td> <div class="dropdown">
   <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
     <i class="fa fa-gear"></i>
@@ -302,6 +291,8 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
 <link href="assets/plugins/alertify/css/alertify.css" rel="stylesheet" type="text/css">
 <script src="assets/plugins/alertify/js/alertify.js"></script>
 <script>
+
+  
 
             // check the radio button to show the cheque payment method
       function chequeoptioncheck(){

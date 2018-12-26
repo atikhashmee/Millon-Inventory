@@ -136,41 +136,22 @@ $rbas->setPageName(4)->run(); ?>
                      <div class="col">
                         
                         <div id="chequeoption"  style="display: none;">
+                           
                            <div class="form-group">
-                              <label for="">Cheque No</label>
+                              <label for="">Bank Name <small>(type bank name)</small> </label>
+                              <input type="text" class="form-control" name="accounts" id="accounts">
+                           </div>
+                           <div class="form-group">
+                              <label for="">Cheque/account No</label>
                               <input type="text" class="form-control" name="chequeno" id="chequeno">
-                           </div>
-                           <div class="form-group">
-                              <label for="">Account</label>
-                              <select class="form-control" name="accounts" id="accounts">
-                                 <!-- <?php    
-                                    $accounthead = $db->selectAll("charts_accounts")->fetchAll();
-                                    foreach ($accounthead as $ah) { ?>
-                                    <option value="<?=$ah['charts_id']?>"><?=$ah['chart_name']?></option>
-                                    <?php }
-                                       ?> -->
-                                 <option value="">Select a bank</option>
-                                 <option>AB Bank Limited</option>
-                                 <option>Agrani Bank Limited</option>
-                                 <option>Al-Arafah Islami Bank Limited</option>
-                                 <option>Bangladesh Commerce Bank Limited</option>
-                                 <option>Bangladesh Development Bank Limited</option>
-                                 <option>Bangladesh Krishi Bank</option>
-                                 <option>Bank Al-Falah Limited</option>
-                                 <option>Bank Asia Limited</option>
-                                 <option>BASIC Bank Limited</option>
-                                 <option>BRAC Bank Limited</option>
-                                 <option>Citibank N.A</option>
-                                 <option>Commercial Bank of Ceylon Limited</option>
-                              </select>
-                           </div>
-                           <div class="form-group">
-                              <label for="">Amount</label>
-                              <input type="text" class="form-control" id="chequeamount" name="chequeamount" value="0">
                            </div>
                            <div class="form-group">
                               <label for="">Expire date</label>
                               <input type="date" class="form-control" name="expredate" id="expredate">
+                           </div>
+                           <div class="form-group">
+                              <label for="">Amount</label>
+                              <input type="text" class="form-control" id="chequeamount" name="chequeamount" value="0">
                            </div>
                         </div>
                      </div>
@@ -187,7 +168,7 @@ $rbas->setPageName(4)->run(); ?>
                         </div>
                         <div id="cashoption">
                            <div class="form-group">
-                              <label for="">Paid</label>
+                              <label for="">Cash Paying Amount</label>
                               <input type="text" class="form-control" id="nowpayment" name="nowpayment">
                            </div>
                            <div class="form-group">

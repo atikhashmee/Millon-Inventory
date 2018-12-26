@@ -180,10 +180,10 @@
                   <ul class="submenu megamenu">
                      <li>
                         <ul>
-                           <li ><a  href="bankstatement.php">Bank Statement</a></li>
-                           <li><a  href="stock-report.php">Stock Report</a></li>
-                           <li><a  href="customer-wise-report.php">Customerwise product Report</a></li>
-                           <li><a  href="customer-wise-payment-report.php">Customer Payment Report</a></li>
+                           <li> <a  href="bankstatement.php">Cash History</a></li>
+                           <li> <a  href="stock-report.php">Stock Report</a></li>
+                           <li> <a  href="customer-wise-report.php">Customerwise product Report</a></li>
+                           <li> <a  href="customer-wise-payment-report.php">Customer Payment Report</a></li>
                         </ul>
                      </li>
                      <li>

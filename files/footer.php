@@ -110,6 +110,40 @@
                     ev.preventDefault();
                    });
             }
+
+              function jDate(id)
+              {
+               
+                    $(id).datepicker({
+                  dateFormat: "yy-mm-dd"
+                   }).datepicker("setDate", new Date());
+                 
+              }
+
+
+
+              var banksname = [
+                  "AB Bank Limited",
+                  "Agrani Bank Limited",
+                  "Agrani Bank Limited",
+                  "Al-Arafah Islami Bank Limited",
+                  "Bangladesh Commerce Bank Limited",
+                  "Bangladesh Development Bank Limited",
+                  "Bangladesh Krishi Bank",
+                  "Bank Al-Falah Limited",
+                  "Bank Asia Limited",
+                  "BASIC Bank Limited",
+                  "BRAC Bank Limited",
+                  "Citibank N.A",
+                  "Commercial Bank of Ceylon Limited"
+              ];
+              
+                 $("#accounts").autocomplete({
+                  source:banksname
+                 });
+              
+              
+             
         </script>
 
     </body>

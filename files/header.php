@@ -6,7 +6,7 @@
                               include("php/dbmodels.php");
                               include("php/privilige_funtionality.php");
                               include("php/basic_calculation.php");
-
+                              include("php/reportquery.php");
                               include("php/menu_privilige.php");
                               $db = new Db();
                               $fn = new Functions();
@@ -111,6 +111,12 @@
              {
                  $prod[$p['pro_id']] = $fn->getStockByProId($p['pro_id']);
              }
+
+
+
+             /*se the time zone for the website */
+             $df = new DateTime('now', new DateTimezone('Asia/Dhaka'));
+           // $df->format('Y-m-d');
         ?>
 
 
