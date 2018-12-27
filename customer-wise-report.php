@@ -1,6 +1,5 @@
 <?php include 'files/header.php'; ?>
-<?php include 'files/menu.php';
- ?>
+<?php include 'files/menu.php'; ?>
 <div class="container">
 
     <div class="row">
@@ -63,7 +62,8 @@
 <div class="row" style="margin-top: 22px;">
    <!-- users view section starts here -->
    <div class="col">
-   <?php 
+       <div class="card card-body">
+        <?php 
          $sql =  "SELECT `selldate`, `billchallan`, `productid`, `quantity`, `price`,`weight`,`transport`,`vat`,`discount`,`comission`,`token` FROM `sell` 
          UNION
           SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `discount`,`comission`, `token` FROM `sell_return` 
@@ -96,21 +96,17 @@
               }  
               
              
-              // fetching customer opening balnce to add up the total transaction
-              $customers_opening = $db->joinQuery("SELECT `opening_balance` FROM `users` WHERE `u_id`='".$_POST['cutomername']."'")->fetch(PDO::FETCH_ASSOC);
-              $opening = $customers_opening['opening_balance'];
+             
               ?>
-              <div class="bg-light card card-body" style=" background: #060202 !important;">
-                <h4 style="color: white">Customer Name : <?php  echo $fn->getUserName($_POST['cutomername']); ?></h4>
-                <!-- <h5 style="color: white">Opening Balance : <?php echo $customers_opening['opening_balance']; ?> </h5> -->
-              </div>
+              
+                <address style="margin-left: 44px;"><?php  echo $dm->getUserFullDetails($_POST['cutomername']); ?></address>
+                
               <?php 
          }
          
          $data = $db->joinQuery($sql)->fetchAll();
          
          ?>
-       <div class="card card-body">
       <table class="table table-hover  table-bordered" id="datatable-buttons" >
          <thead>
             <tr>
@@ -125,17 +121,10 @@
             </tr>
          </thead>
          <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>Opnening Balance</td>
-            <td><?=$opening?></td>
-          </tr>
+         
             <?php 
                $i=0;
-               $sum = $opening;
+               $sum = 0;
                   foreach ($data as $val) {  $i++;
                       
                       $bc = new Bc();

@@ -184,6 +184,7 @@
                            <li> <a  href="stock-report.php">Stock Report</a></li>
                            <li> <a  href="customer-wise-report.php">Customerwise product Report</a></li>
                            <li> <a  href="customer-wise-payment-report.php">Customer Payment Report</a></li>
+                           <li> <a  href="customer-history.php">Customer History</a></li>
                         </ul>
                      </li>
                      <li>

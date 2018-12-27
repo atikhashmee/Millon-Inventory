@@ -2,6 +2,9 @@
 <?php 
  include 'files/header.php';
  include 'files/menu.php';
+
+
+
 ?>
 
 
@@ -127,6 +130,12 @@ section .section-title {
                                         <h4>Bismillahir Rahmanir Rahim</h4>
                                         <h5>Today : <?=date('l',strtotime(date('Y-m-d')))?> </h5>
                                         <h5>Date : <?=$df->format('F j, Y, g:i a')?></h5>
+
+                                        <?php 
+
+                                           // echo $df->format("Y-m-d");
+                         $data = cashReport($df->format('Y-m-d'));
+                                        ?>
                                     </div>
                                     <div class="col"></div>
                                 </div>
@@ -152,7 +161,7 @@ section .section-title {
             </tr>
             
             <?php 
-            $data = cashReport($df->format('Y-m-d'));
+            
                $i=0;
                $sum = 0;
                   foreach ($data as $val) 

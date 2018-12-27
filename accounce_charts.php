@@ -277,7 +277,7 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
               echo '<a class="dropdown-item" href="accounce_charts.php?edit-id='.$val['charts_id'].'">Edit <i class="fa fa-pencil"></i></a>';
          }
          if ($rbas->getDelete()) {
-               if ($i != 1) 
+               if ($val['chart_name'] != "Cash") 
                 {
                    ?>
                     <a class="dropdown-item" href="accounce_charts.php?del-id=<?=$val['charts_id']?>" onclick="return confirm('Are you sure?')">Delete<i class="fa fa-times"></i></a>

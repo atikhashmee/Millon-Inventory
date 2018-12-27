@@ -7,7 +7,8 @@
 
 
 <?php 
-   if (isset($_GET['del-id'])) {
+   if (isset($_GET['del-id']))
+    {
            if ($db->delete("sell","billchallan = '".$_GET['del-id']."'")) {?>
 <script> alert('Data has been deleted'); window.location.href='sellproduct.php'; </script>
 <?php   }
@@ -91,6 +92,7 @@
                    </thead>
                        <tbody>
                           <?php 
+                          
                           $invoiceinfo = $db->selectAll('sell','`billchallan`="'.$_GET['invo'].'"')->fetchAll();
                           /*echo "<pre>";
                           print_r($invoiceinfo);

@@ -1,6 +1,5 @@
 		<?php 
 				require_once("dboperation.php");
-				 
 				class Functions extends Db
 				{
 
@@ -46,7 +45,13 @@
 				   {
 				   	 $user =  $this->selectAll("users","u_id='".$userid."'");
 				   	 $username = $user->fetch(PDO::FETCH_ASSOC);
-				       return ($user->rowCount()==0)?"Not Found":$username['name'];
+				      return ($user->rowCount()==0)?"Not Found":$username['name'];
+				   }
+				   public function userOpeningBalance($userid)
+				   {
+				   	 $user =  $this->selectAll("users","u_id='".$userid."'");
+				   	 $username = $user->fetch(PDO::FETCH_ASSOC);
+				      return ($user->rowCount()==0)?"Not Found":$username['opening_balance'];
 				   }
 
 				   public function Chartsaccounta($chartid)
@@ -113,6 +118,46 @@
 						                  echo "there is problem uploading your files";
 						                }
 			                   }
+
+			   public function getCustomerTotalBalance($obj,$userid)
+			        {
+                     $sql = $obj->queryEnquery($userid);
+                     /*echo "<pre>";
+                     print_r($sql);
+                     echo "</pre>";*/
+			        	 
+			        	 $sum = 0;
+			  $sqlquery = $this->joinQuery($sql)->fetchAll();
+			 	foreach ($sqlquery as $val) 
+			 	{
+			 		    $tkn = trim($val['bycashcheque']);
+						$amount = trim($val['amounts']);
+						$str = $obj->getCustomerToken($tkn,$amount,trim($val['others']));
+						$payment    = $str['payamount'];
+						$sellamount = $str['sellamount'];
+						$return     = $str['sellreturn'];
+						$desc       = $str['descrip'];
+
+						if ($sellamount != 0 && $payment !=0 ) 
+						{
+							$sum += (float)$sellamount-(float)$payment;
+						}
+						else if ($sellamount != 0 && $payment ==0) 
+						{
+							$sum += (float)$sellamount;
+						}
+						else if ($return  != 0) 
+						{
+							$sum -= (float) $return;
+						}
+						else 
+						{
+							$sum -= (float) $payment;
+						}
+			 	}
+
+			 		return $sum;
+			        }
 
 
 			    public function getCustomerPayments($customerid)

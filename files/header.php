@@ -8,9 +8,13 @@
                               include("php/basic_calculation.php");
                               include("php/reportquery.php");
                               include("php/menu_privilige.php");
+                              include("php/cussupreportquery.php");
+
+
                               $db = new Db();
                               $fn = new Functions();
                               $dm = new DbModels();
+                              $rp = new Report();
                               
                               session_start();
 
@@ -88,9 +92,14 @@
              $users =  $db->selectAll("users")->fetchAll();
              $customersb = [];
              $suppliersb = [];
-             foreach ($users as $ur) {
-                 if ($ur['user_role'] == '1') {
-                    $customersb[$ur['u_id']] = $fn->getCustomerPurchasedAmount($ur['u_id']) - $fn->getCustomerPayments($ur['u_id']);
+             foreach ($users as $ur) 
+             {
+                
+
+                 if ($ur['user_role'] == '1') 
+                 {
+                
+            $customersb[$ur['u_id']] = $fn->getCustomerTotalBalance(new Report() ,$ur['u_id']);
                  }
                   if ($ur['user_role'] == '2') {
                     $suppliersb[$ur['u_id']] = $fn->getSupllierdueby($ur['u_id']) - $fn->getSupplierPayment($ur['u_id']);

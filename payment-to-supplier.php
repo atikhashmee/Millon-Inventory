@@ -50,7 +50,7 @@ if (isset($_GET['del-id']))
                   <div class="row">
                      <div class="col">
                         <div class="form-group">
-                           <label  for="name"> Date <span class="required">*</span>
+                          <label  for="name"> Date <span class="required">*</span>
                            </label>
                            <input id="paymentdat" class="form-control" name="paymentdat"  required="required" type="date">
                         </div>
@@ -122,15 +122,22 @@ if (isset($_GET['del-id']))
                      <div class="row">
                       <div class="col">
                            <div class="form-group">
-                              <label for="">Bank Name 
-                                <small>(type out bank names)</small> </label>
-                              <input type="text" class="form-control" name="accounts" id="accounts">
-                           </div>
+                              <label for="">Bank Name</label>
+                              <select class="form-control" name="accounts" id="accounts">
+                      <option value=""> Select option</option>
+                        <?php    
+                           $accounthead = $db->selectAll("charts_accounts","chart_name != 'Cash'")->fetchAll();
+                           foreach ($accounthead as $ah) { ?>
+                        <option value="<?=$ah['charts_id']?>"><?=$ah['chart_name']?></option>
+                        <?php }
+                           ?>
+                     </select>
                         </div>
+                      </div>
                         <div class="col">
                            <div class="form-group">
                               <label  for="name"> Cheque/Account Number
-                              <p></p> 
+                             
                               </label>
                               <input id="chequeno" class="form-control" name="chequeno"   type="text">
                            </div>
@@ -138,7 +145,7 @@ if (isset($_GET['del-id']))
                         
                         <div class="col">
                            <div class="form-group">
-                              <label  for="name"> Issue Date <p></p>
+                              <label  for="name"> Issue Date 
                               </label>
                               <input id="issuedate" class="form-control" name="issuedate" type="date">
                            </div>

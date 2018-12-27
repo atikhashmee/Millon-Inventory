@@ -117,7 +117,7 @@
                      <select class="form-control" name="accounts" id="accounts">
                       <option value=""> Select option</option>
                         <?php    
-                           $accounthead = $db->selectAll("charts_accounts","charts_id != 1")->fetchAll();
+                           $accounthead = $db->selectAll("charts_accounts","chart_name != 'Cash'")->fetchAll();
                            foreach ($accounthead as $ah) { ?>
                         <option value="<?=$ah['charts_id']?>"><?=$ah['chart_name']?></option>
                         <?php }

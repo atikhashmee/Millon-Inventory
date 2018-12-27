@@ -56,10 +56,10 @@
 	
    function cashReport($date)
 	 {
-	        	$sql = cashRawQuery($date);
+	        	$sql =  cashRawQuery($date);
             $data = $GLOBALS['db']->joinQuery($sql)->fetchAll();
             return  $data;
-	}
+	 }
 
 	function previousDayCash()
 	{

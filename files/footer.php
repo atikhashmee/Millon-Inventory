@@ -111,6 +111,7 @@
                    });
             }
 
+              /*jquery datepicker for any field*/
               function jDate(id)
               {
                
@@ -119,6 +120,8 @@
                    }).datepicker("setDate", new Date());
                  
               }
+              jDate("#start");
+              jDate("#to");
 
 
 
@@ -141,7 +144,39 @@
                  $("#accounts").autocomplete({
                   source:banksname
                  });
-              
+
+
+                 /* search any user using autocomplete */
+                 function userName(selector,val,type) 
+                 { 
+                  var src;
+                   if (type === "customer") 
+                   {
+                     src = <?=json_encode($dm->getUsersByR(1));?>;
+                   }
+                   else if (type === "suppler") 
+                   {
+                     src = <?=json_encode($dm->getUsersByR(2));?>;
+                   }
+                   else if (type === "cussup") 
+                   {
+                     src = <?=json_encode($dm->getUsersByR(3));?>;
+                   }
+                   else if (type === "employee") 
+                   {
+                     src = <?=json_encode($dm->getUsersByR(4));?>;
+                   }
+                   $(selector).autocomplete({
+                     source : src,
+                     change : function(event,ui)
+      {
+         document.getElementById(event.target.id).value = ui.item.label;
+         document.getElementById(val).value = ui.item.value;
+      }
+                    });
+                 }
+
+              userName("#customer","customerid","customer");
               
              
         </script>
