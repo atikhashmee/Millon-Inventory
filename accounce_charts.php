@@ -244,8 +244,8 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
          $data = $db->joinQuery($sql)->fetchAll();
          
          ?>
-         <div class="card card-body">
-      <table class="table  table-hover table-striped table-bordered" id="datatable" >
+      <div class="card card-body">
+  <table class="table  table-hover table-striped table-bordered" id="datatable" >
          <thead>
             <tr>
                <th>#</th>

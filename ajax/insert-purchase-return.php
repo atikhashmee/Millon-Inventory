@@ -4,6 +4,8 @@
 
 			include '../php/dboperation.php';
 			$db = new Db();
+
+			require_once("session_header.php");
 			  
 			  $datass = json_decode($_GET['dclas']);
 
@@ -30,6 +32,7 @@
 			    	 	'weight' => $_GET['weight'],
 			    	 	'transport' => $_GET['transport'],
 			    	 	'return_date' => $datass[$i]->date,
+			    	 	'entryby' => $_SESSION['u_id']
 			    	 	 );
 
 			    	 /*echo "<pre>";

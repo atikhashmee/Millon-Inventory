@@ -28,8 +28,8 @@
             <div class="row">
              
                <div class="col">
-                <select class="form-control" name="suppliername" id="suppliername">
-                     <option value="">Select a Customer</option>
+              <select class="form-control" name="suppliername" id="suppliername">
+                     <option value="">Select a supplier</option>
                      <?=$dm->getUsersByRole(2)?>
                   </select>
                 </div>
@@ -47,7 +47,7 @@
               <div class="col"><input type="date" class="form-control" name="start"></div>
             <div class="col"><input type="date" class="form-control" name="to"></div>
               <div class="col">
-                <button type="submit" name="filter" class="btn btn-outline-primary"> Search <i class="fa fa-search"></i>  </button>
+              <button type="submit" name="filter" class="btn btn-outline-primary"> Search <i class="fa fa-search"></i>  </button>
               </div>
             </div>
           </form>
@@ -58,154 +58,218 @@
 
 
 
-<div class="row mt-2">
-   <!-- users view section starts here -->
-   <div class="col">
-   <?php 
-         $sql =  "SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase`
-            UNION
-           SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `comission`,`discount`, `token` FROM `purchase_return` ORDER by purchasedate";
+     <div class="row">
+       <div class="col">
+         <div class="card card-body">
+         <!--  <table  style="width: 100%; height: 200px; font-size: 0.8em;" border="1px">
+               <tr>
+                   <td rowspan="4">2019-12-23</td> 
+                   <td rowspan="3">201812123420</td>
+                   <td>P209</td>
+                   <td>34</td>
+                   <td>567</td>
+                   <td rowspan="3">230</td>
+                   
+               </tr>
+         
+               <tr>
+                      
+                      <td>P202</td> 
+                      <td>12</td> 
+                      <td>124</td> 
+               </tr> 
+                <tr>
+                      
+                      <td>P202</td> 
+                      <td>12</td> 
+                      <td>124</td> 
+               </tr> 
+               <tr>
+                      
+                      <td>201812123420</td>
+                      <td>P202</td> 
+                      <td>12</td> 
+                      <td>124</td> 
+                      <td>130</td> 
+               </tr>
+             
+         
+              
+         </table> -->
+           <table border="1" id="datatable-buttons">
+            <thead>
+            <tr>
+              <th rowspan="2">Dates</th>
+              <th rowspan="2">Invoices</th>
+              <th rowspan="2">Products</th>
+              <th rowspan="2">Quantity</th>
+              <th rowspan="2">Price</th>
+              <th rowspan="2">Total</th>
+              <th rowspan="2">Subtotal</th>
+              <th colspan="5">Extra</th>
+              <th rowspan="2">Grandtotal</th>
+              <th rowspan="2">Balance</th>
 
-                  $opening = 0;
+            </tr>
+            <tr>
+              <th>wg</th>
+              <th>tr</th>
+              <th>vat</th>
+              <th>com</th>
+              <th>Dis</th>
+            </tr>
+            </thead>
+            <tbody>
+              <?php
 
-         if (isset($_POST['filter'])) {
-
-
-
-              //search by only name
-
-
-              if (!empty($_POST['suppliername'])) {
-
-                $sql ="SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase` WHERE `supplier`='".$_POST['suppliername']."'
-             UNION
-              SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `comission`, `discount`, `token` FROM `purchase_return` WHERE `supplierId`='".$_POST['suppliername']."' ORDER by purchasedate";
-
+              function productCountByDate($date)
+              {
+                   $productcount = $GLOBALS['db']->joinQuery("SELECT COUNT( `productid`) as totalproduct FROM `purchase` WHERE `purchasedate`='{$date}'")->fetch(PDO::FETCH_ASSOC);
+                   return  $productcount['totalproduct'];
+              } 
+              function productCountByInvoice($invoice)
+              {
+                   $productcount = $GLOBALS['db']->joinQuery("SELECT COUNT( `productid`) as totalproduct FROM `purchase` WHERE `billchallan`='{$invoice}'")->fetch(PDO::FETCH_ASSOC);
+                   return  $productcount['totalproduct'];
               }
-
-                //search by name and product name
-              if (!empty($_POST['suppliername']) && !empty($_POST['product'])) {
+              $myquery = "SELECT DISTINCT`purchasedate` FROM `purchase`";
+                if (isset($_POST['filter'])) 
+                {
+                    if (!empty($_POST['suppliername'])) 
+                    {
+                       $myquery = "SELECT DISTINCT`purchasedate` FROM `purchase` WHERE `supplier`='".$_POST['suppliername']."'";
+                    }
+                      //search by name and product name
+            /*  if (!empty($_POST['suppliername']) && !empty($_POST['product'])) {
                 $sql ="SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase` WHERE supplier='".$_POST['suppliername']."' AND productid='".$_POST['product']."'
                  UNION 
                  SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase_return` WHERE supplierId ='".$_POST['suppliername']."' AND productid='".$_POST['product']."' ORDER by purchasedate";
-              }
+              }*/
 
               //search by customer name ,  and date
 
-               if (!empty($_POST['suppliername']) &&  !empty($_POST['start']) && !empty($_POST['to']) ) {
-                $sql ="SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase` WHERE supplier='".$_POST['suppliername']."'  AND purchasedate BETWEEN '".$_POST['start']."' AND '".$_POST['to']."'
-                 UNION 
-                 SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase_return` WHERE supplierId='".$_POST['suppliername']."' AND return_date BETWEEN '".$_POST['start']."' AND '".$_POST['to']."' ORDER by purchasedate";
+               if (!empty($_POST['suppliername']) &&  !empty($_POST['start']) && !empty($_POST['to']) ) 
+               {
+                  
+                  $myquery = "SELECT DISTINCT`purchasedate` FROM `purchase` WHERE `supplier`='".$_POST['suppliername']."' AND purchasedate='".$_POST['start']."'";
               }
 
                 //search by customer name , product name , and date
 
-                if (!empty($_POST['cutomername']) && !empty($_POST['product']) && !empty($_POST['start']) && !empty($_POST['to']) ) {
-                $sql ="SELECT `purchasedate`,`billchallan`, `productid`, `quantity`, `price`, `weight`, `transport`, `vat`,`comission`, `discount`, `token` FROM `purchase` WHERE sell.customerid='".$_POST['cutomername']."' AND sell.productid='".$_POST['product']."' AND sell.selldate BETWEEN '".$_POST['start']."' AND '".$_POST['to']."'
-                 UNION 
-                 SELECT `return_date`, `memono`, `productid`, `quntity`, `price`, `weight`, `transport`, `vat`, `comission`,`discount`, `token` FROM `purchase_return` WHERE sell_return.customerid='".$_POST['cutomername']."' AND sell_return.productid='".$_POST['product']."' AND sell_return.return_date BETWEEN '".$_POST['start']."' AND '".$_POST['to']."' ORDER by selldate";
-              }  
+                if (!empty($_POST['cutomername']) &&  !empty($_POST['start']) && !empty($_POST['to']) ) 
+                {
+                  $myquery = "SELECT DISTINCT`purchasedate` FROM `purchase` WHERE `supplier`='".$_POST['suppliername']."' AND purchasedate BETWEEN '".$_POST['start']."' AND '".$_POST['to']."'";
+                }  
 
               
 
 
              
-              // fetching customer opening balnce to add up the total transaction
-              $customers_opening = $db->joinQuery("SELECT `opening_balance` FROM `users` WHERE `u_id`='".$_POST['suppliername']."'")->fetch(PDO::FETCH_ASSOC);
-              $opening = $customers_opening['opening_balance'];
               ?>
-              <div class="bg-light card card-body" style=" background: #060202 !important;">
-                <h4 style="color: white">Supplier Name : <?php  echo $fn->getUserName($_POST['suppliername']); ?></h4>
-                <!-- <h5 style="color: white">Opening Balance : <?php echo $customers_opening['opening_balance']; ?> </h5> -->
-              </div>
+              
+                <address><?php  echo $dm->getUserFullDetails($_POST['suppliername']); ?></address>
+                
+             
               <?php 
-         }
-                  
-         $data = $db->joinQuery($sql)->fetchAll();
-         
-         ?>
-     <div class="card card-body">
-      <table class="table table-hover  table-bordered" id="datatable-buttons" >
-         <thead>
-            <tr>
-               <th>#</th>
-               <th>Date</th>
-               <th>Bill/Challan</th>
-               
-               <th>Description</th>
-               
-               <th>Total</th>
-               <th>Balance</th>
-            </tr>
-         </thead>
-         <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>Opnening Balance</td>
-            <td><?=$opening?></td>
-          </tr>
-            <?php 
-               $i=0;
-               $sum = $opening;
-                  foreach ($data as $val) {  $i++;
-                    $bc = new Bc();
-                    $bc->setAmount(((int)$val['price'] * (int)$val['quantity']));
-                    $bc->setWeight($val['weight']);
-                    $bc->setTransport($val['transport']);
-                    $bc->setVat($val['vat']);
-                    $bc->setDiscount($val['discount']);
-                    $bc->setComission($val['comission']);
-                   ?>
-            <tr>
-               <th scope="row"><?=$i?></th>
-               <td><?=$val['purchasedate']?></td>
-               <td><?=$val['billchallan']?></td>
-               <td>
-                <p style="margin: 0px; padding: 0px" ><?=$fn->getProductName($val['productid'])?></p> 
-                <?=$val['quantity']?>@
-                <?=$val['price']?>--
-                <?=$val['weight']?>--
-                <?=$val['transport']?>--
-                <?=$val['vat']?>--<?=$val['discount']?>--<?=$val['comission']?>
-                 <p style="margin: 0px; padding: 0px">Status = <?php 
-                    if (trim($val['token']) =="pr") {
-                        echo "Product returned";
-                    }else if(trim($val['token'])=="p_Cash" || trim($val['token'])=="p_Cheque"){
-                       echo "Product Purchesed";
-                    }
-               ?></p> </td>
-               
-               <td><?php 
 
-                      if ( trim($val['token']) =="pr") {
-                        echo "-".$bc->getResult();
-                    }else if(trim($val['token'])=="p_Cash" || trim($val['token'])=="p_Cheque"){
-                       echo "+".$bc->getResult();
-                    }
 
-               ?></td>
-               <td><?php 
+                }
+          
+                $dates = $db->joinQuery($myquery)->fetchAll();
+                $daycount = count($dates);
+                $sum = 0;
+                foreach ($dates as $date) 
+                {
+                     $invoices = $db->joinQuery("SELECT DISTINCT `billchallan`,`weight`,`transport`,`vat`,`comission`,`discount` FROM `purchase` WHERE `purchasedate`='".$date['purchasedate']."'")->fetchAll();
+                     $daterowspan = productCountByDate($date['purchasedate']);
+                    
+                    
+                     $j=0;
+                     foreach ($invoices as $invoice) 
+                     {
+                         $products = $db->joinQuery("SELECT * FROM `purchase` WHERE `billchallan`='".$invoice['billchallan']."'")->fetchAll();
+                         $totalsum = $db->joinQuery("SELECT SUM(`quantity`*`price`) as sumas FROM `purchase` WHERE `billchallan`='".$invoice['billchallan']."'")->fetch(PDO::FETCH_ASSOC);
+                         $invoicerowspan =productCountByInvoice($invoice['billchallan']);
+                         $grandsum = $rp->invoiceAmount($invoice['billchallan'],"p");
 
-                      if ($val['token']=="pr") {
-                        echo $sum -= $bc->getResult();
-                    }else if(trim($val['token'])=="p_Cash" || trim($val['token'])=="p_Cheque"){
-                       echo $sum += $bc->getResult();
-                    }
+                        $sum += $grandsum;
+                         $i=0;
+                         foreach ($products as $product) 
+                         {
+                          
+                           if ($i==0 && $j==0) 
+                           {
+                             ?>
+                              <tr>
+                                <td rowspan="<?=$daterowspan?>"><?=$date['purchasedate']?></td>
+                                <td rowspan="<?=$invoicerowspan?>"><?=$invoice['billchallan']?></td>
+                                <td><?=$fn->getProductName($product['productid'])?></td>
+                                <td><?=$product['quantity']?></td>
+                                <td><?=$product['price']?></td>
+                                <td><?=($product['quantity']*$product['price'])?></td>
+                                <td rowspan="<?=$invoicerowspan?>"><?=$totalsum['sumas']?></td>
+                                <td><?=$invoice['weight']?></td>
+                                <td><?=$invoice['transport']?></td>
+                                <td><?=$invoice['vat']?></td>
+                                <td><?=$invoice['comission']?></td>
+                                <td><?=$invoice['discount']?></td>
+                          <td rowspan="<?=$invoicerowspan?>"><?=$grandsum?></td>
+                      <td rowspan="<?=$invoicerowspan?>"><?=$sum?></td>
+                              </tr>
+                             <?php
+                           }
+                           else if ($i==0 && $j!=0) 
+                           {
+                              ?>
+                              <tr>
+                                <td rowspan="<?=$invoicerowspan?>"><?=$invoice['billchallan']?></td>
+                                <td><?=$fn->getProductName($product['productid'])?></td>
+                                <td><?=$product['quantity']?></td>
+                                <td><?=$product['price']?></td>
+                                <td><?=($product['quantity']*$product['price'])?></td>
+                               <td rowspan="<?=$invoicerowspan?>"><?=$totalsum['sumas']?></td>
+                                <td><?=$invoice['weight']?></td>
+                                <td><?=$invoice['transport']?></td>
+                                <td><?=$invoice['vat']?></td>
+                                <td><?=$invoice['comission']?></td>
+                                <td><?=$invoice['discount']?></td>
 
-               ?></td>
-               
-               </tr>
-            <?php   }
-               ?>
-               
-         </tbody>
-      </table>
-      </div>
-   </div>
-</div>
+                            <td rowspan="<?=$invoicerowspan?>"><?=$grandsum?></td>
+                        <td rowspan="<?=$invoicerowspan?>"><?=$sum?></td>
+                              </tr>
+                             <?php
+                           }
+                           else 
+                           {
+                              ?>
+                              <tr>
+                                <td><?=$fn->getProductName($product['productid'])?></td>
+                                <td><?=$product['quantity']?></td>
+                                <td><?=$product['price']?></td>
+                                <td><?=($product['quantity']*$product['price'])?></td>
+
+                              </tr>
+                             <?php
+                           }
+
+
+                           $i++;
+                            
+                         }
+                         $j++;
+                     }
+                }
+          
+              ?>
+              </tbody>
+          </table>
+         </div>
+       </div>
+     </div>
+
+
+
+
 </div>
 <?php include 'files/footer.php'; ?>
 <script src="assets/js/productbasic.js"></script>

@@ -34,8 +34,12 @@
                    
                 </select>
               </div>
-              <div class="col"><input type="date" class="form-control" name="start"></div>
-            <div class="col"><input type="date" class="form-control" name="to"></div>
+              <div class="col">
+                <input type="text" class="form-control" name="start" id="start">
+              </div>
+            <div class="col">
+              <input type="text" class="form-control" name="to" id="to">
+            </div>
               <div class="col"><button type="submit" name="btnsearch" class="btn btn-outline-primary"> Search <i class="fa fa-search"></i> </button></div>
             </div>
           </form>
@@ -55,6 +59,17 @@ UNION
 SELECT `memono`, `return_date`, `token`,`productid`,`quntity` FROM `sell_return` 
 UNION
 SELECT `memono`, `return_date`,`token`,`productid`,`quntity`  FROM `purchase_return`";
+                 if (isset($_GET['pro_id'])) 
+                 {
+                      $sql  = "
+SELECT `billchallan`,`selldate`, `token`, `productid`, `quantity` FROM `sell` WHERE `productid`='".$_GET['pro_id']."' 
+UNION
+SELECT `billchallan`, `purchasedate`,`token`,`productid`, `quantity` FROM `purchase` WHERE `productid`='".$_GET['pro_id']."'
+UNION
+SELECT `memono`, `return_date`, `token`,`productid`,`quntity` FROM `sell_return` WHERE `productid`='".$_GET['pro_id']."'
+UNION
+SELECT `memono`, `return_date`,`token`,`productid`,`quntity`  FROM `purchase_return` WHERE `productid`='".$_GET['pro_id']."'";
+                 }
                 if (isset($_POST['btnsearch'])) {
                   
                   if (!empty($_POST['start']) && !empty($_POST['to']) ) {

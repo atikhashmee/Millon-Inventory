@@ -122,17 +122,13 @@
 			   public function getCustomerTotalBalance($obj,$userid)
 			        {
                      $sql = $obj->queryEnquery($userid);
-                     /*echo "<pre>";
-                     print_r($sql);
-                     echo "</pre>";*/
-			        	 
 			        	 $sum = 0;
 			  $sqlquery = $this->joinQuery($sql)->fetchAll();
 			 	foreach ($sqlquery as $val) 
 			 	{
-			 		    $tkn = trim($val['bycashcheque']);
-						$amount = trim($val['amounts']);
-						$str = $obj->getCustomerToken($tkn,$amount,trim($val['others']));
+			 		    $tkn = trim($val['token']);
+						$amount = trim($val['total']);
+						$str = $obj->getCustomerToken($tkn,$amount,trim($val['paytk']));
 						$payment    = $str['payamount'];
 						$sellamount = $str['sellamount'];
 						$return     = $str['sellreturn'];
@@ -145,6 +141,42 @@
 						else if ($sellamount != 0 && $payment ==0) 
 						{
 							$sum += (float)$sellamount;
+						}
+						else if ($return  != 0) 
+						{
+							$sum -= (float) $return;
+						}
+						else 
+						{
+							$sum -= (float) $payment;
+						}
+			 	}
+
+			 		return $sum;
+			        }
+
+			        public function getSupplierTotalBalance($obj,$userid)
+			        {
+			        	$sql = $obj->purQueryEnquery($userid);
+			        	 $sum = 0;
+			  $sqlquery = $this->joinQuery($sql)->fetchAll();
+			 	foreach ($sqlquery as $val) 
+			 	{
+			 		    $tkn = trim($val['token']);
+						$amount = trim($val['total']);
+						$str = $obj->getSupplierToken($tkn,$amount,trim($val['paytaka']));
+						$payment    = $str['payamount'];
+						$puramount  = $str['puramount'];
+						$return     = $str['purreturn'];
+						$desc       = $str['descrip'];
+
+						if ($puramount != 0 && $payment !=0 ) 
+						{
+							$sum += (float)$puramount-(float)$payment;
+						}
+						else if ($puramount != 0 && $payment ==0) 
+						{
+							$sum += (float)$puramount;
 						}
 						else if ($return  != 0) 
 						{

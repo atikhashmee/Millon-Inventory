@@ -141,7 +141,7 @@ section .section-title {
                                 </div>
 
         <div class="table-responsive">                         
-        <table class="table table-hover table-bordered" id="datatable-buttons">
+        <table style="width: 100%" border="1" id="datatable">
          <thead>
             <tr>
                <th>#</th>

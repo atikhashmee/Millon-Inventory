@@ -1,6 +1,7 @@
  <?php 
 
 			include '../php/dboperation.php';
+			require_once("session_header.php");
 			$db = new Db();
 			$sql =  "SELECT * FROM `sell` WHERE `billchallan`='".$_GET['memo']."'";
 			/*fetch data from sell return to see already some product or return or not */

@@ -7,6 +7,7 @@
       /**  get the quantity of the product selled by the employee  */
       function gettropsale($proid,$employeid,$sdate,$enddate)
       {
+
            $sql = "SELECT  SUM(`quantity`) as totalquantity FROM `sell` WHERE `productid`='{$proid}' AND `sellby`='{$employeid}' AND `selldate` BETWEEN '{$sdate}' AND '{$enddate}'";
            $targetquantity = $GLOBALS['db']->joinQuery($sql)->fetch(PDO::FETCH_ASSOC);
            $sql1 = "SELECT  SUM(`quntity`) as returntotal FROM `sell_return` WHERE `productid`='{$proid}' AND `takenby` = '{$employeid}' AND `return_date` BETWEEN '{$sdate}' AND '{$enddate}'";
@@ -30,6 +31,7 @@
       color: #000;
       font-size: 16px;
       width: auto;
+
    }
 
  </style>
@@ -88,53 +90,81 @@
 
                 <div class="row" style="margin-top:30px">
                  <div class="col-xl-12">
-                  <ul class="list-group">
+                  <div class="card card-body">
+                    <?php
 
-                    <?php 
-                        if (isset($_POST['search'])) {
-                            $i=0;
-                            $dataid = $db->joinQuery('SELECT * FROM `target` WHERE `employee_id`="'.$_POST['employeeid'].'"')->fetchAll();
-                            foreach ($dataid as $did) { $i++; 
+                        $sql = "SELECT * FROM `target`";
+                        $i = 0;
+                        $sum = 0;
+                        if (isset($_POST['search'])) 
+                        {
+
+                          if (!empty($_POST['employeeid'])) 
+                          {
+                            $sql = "SELECT * FROM `target` WHERE `employee_id`='".$_POST['employeeid']."' ORDER BY autoid DESC";
+                          }
+                        }
+                        $dataid = $db->joinQuery($sql)->fetchAll();
+
+                    ?>
+                    <table border="1" style="width: 100%" id="datatable">
+                       <thead>
+                         <tr>
+                           <th rowspan="2">#</th>
+                           <th rowspan="2">Product Name</th>
+                           <th colspan="2">Quantity</th>
+                           <th colspan="2">Amount</th>
+                           <th rowspan="2">(%)</th>
+                         </tr>
+                         <tr>
+                           <td>Given</td>
+                           <td>Fullfill</td>
+                           <td>Given</td>
+                           <td>Worth</td>
+                         </tr>
+                         
+                       </thead>
+                       <tbody>
+                         <?php
+
+                          foreach ($dataid as $did) 
+                          {
+                              $i++; 
             $totalday = gettheday($did['startdate'],$did['enddate']);
             $qunt =  gettropsale($did['brandid'],$did['employee_id'],$did['startdate'],$did['enddate']);
             $parcantage  = ($qunt/$did['quantity'])*100;
-                              ?>
-                              
-  <li class="list-group-item list-group-item-default" style="margin-bottom: 5px;">
-    
-        <div class="row" >
-          <div class="col-md-2"><h4><?=$i?></h4></div>
-          <div class="col">
-             <div class="progress">
-            <div class="progress-bar bg-success" style="width:<?=$parcantage?>%">
-             <?=$parcantage?>%
-            </div>
-            </div>
-               <div class="row" style="margin-top: 5px;">
-          <div  class="col divdesign"><p>Product Name: <?=$did['brandid']?></p></div>
-          <div  class="col divdesign"><p>Target Quantity:<?=$did['quantity']?> </p></div>
-          <div  class="col divdesign"><p>Fullfilled (%): <?=$parcantage?>%
-             </p>
-            <p>Quantity : <?=$qunt?></p>
-           </div>
-          <div  class="col divdesign"><p>Amount: <?=$did['commsion']?></p>
-      <p>Employee gets : <?=($did['commsion']/$did['quantity'])*$qunt?></p>
-          </div>
-                </div>
-          </div>
-          
-        </div>
-  </li>
-  
+            $sum += ($did['commsion']/$did['quantity'])*$qunt;
+                            ?>
+                            <tr>
+                              <td><?=$i?></td>
+                              <td><a href="stock-report.php?pro_id=<?=$did['brandid']?>"><?=$fn->getProductName($did['brandid'])?></a></td>
+                              <td><?=$did['quantity']?></td>
+                              <td><?=$qunt?></td>
+                              <td><?=$did['commsion']?></td>
+                              <td><?=($did['commsion']/$did['quantity'])*$qunt?></td>
+                              <td>
+                                   <div class="c100 dark p<?=$parcantage?>">
+                                      <span><?=$parcantage?>%</span>
+                                      <div class="slice">
+                                        <div class="bar"></div>
+                                        <div class="fill"></div>
+                                      </div>
+                                    </div>
+                              </td>
+                             
+                            </tr>
+                            <?php 
+                          }
 
-
-                           
-  
-                           <?php  }
-                        }
-
-                    ?>
-                    </ul>
+                         ?>
+                       </tbody>
+                       <tr>
+                         <td colspan="5" class="text-right">Total gets</td>
+                         <td><?=$sum?></td>
+                       </tr>
+                    </table>
+                  </div>
+                  
                  </div>
                 </div>
                 

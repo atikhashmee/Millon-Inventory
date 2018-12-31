@@ -75,77 +75,123 @@
         <div class="card m-b-30">
                             <div class="card-body">
 
-                               
-         <table class="table table-bordered table-striped  table-condensed" id="datatable">
-           <thead>
-             <tr>
-               <th>SL</th>
-               <th>Bill/challan No</th>
-               <th>Supplier</th>
-               <th>Product</th>
-               <th>Quantity</th>
-               <th>Price</th>
-               
+                   <form action="" method="POST">
+            <div class="row">
+               <div class="col">
+                <input type="hidden" name="supplierid" id="supplierid">
+                <input type="text" class="form-control" id="supplier" placeholder="type out supplier name">
+                </div>
               
-               <th>Grand Total </th>
+                 
+              <div class="col"><input type="text" class="form-control" name="start" id="start"></div>
+              <div class="col"><input type="text" class="form-control" name="to" id="to"></div>
+             
+              <div class="col">
+                <button type="submit" name="filter" class="btn btn-outline-primary">Search <i class="fa fa-search"></i> </button>
+              </div>
+            </div>
+          </form>
+                   
+                 <?php 
+                    /*echo "<pre>";
+                    print_r($rp->getE());
+                    echo "</pre>";*/
+                 
+                        $exequery = $pr->purchaseHistory();
+                        $sum =0;
+                        if (isset($_POST['filter'])) 
+                         {
+                              if (!empty($_POST['supplierid']) && (empty($_POST['start']) && empty($_POST['to']))) 
+                                 {
+                  $exequery = $pr->purchaseHistory($_POST['supplierid']);
+                                 }
+                               
+                              if (!empty($_POST['supplierid'])&& (!empty($_POST['start']) && empty($_POST['to'])))
+                                 {
+                               $exequery = $pr->purchaseHistory($_POST['supplierid'],$_POST['start']);
+                                 }
+
+                            if (!empty($_POST['supplierid'])&& (!empty($_POST['start']) && !empty($_POST['to'])))
+                                 {
+                               $exequery = $pr->purchaseHistory($_POST['supplierid'],$_POST['start'],$_POST['to']);
+                                 }
+
+              
+                                
+                         }
+                         echo "<pre>";
+                    print_r($exequery);
+                    echo "</pre>";
+                                  $data = $db->joinQuery($exequery)->fetchAll();
+                                   ?> 
+                               </div>
+                           </div>
+        <div class="card m-b-30">
+                            <div class="card-body">
+
+                               
+     <table class="table table-bordered table-striped  table-condensed" id="datatable">
+      <thead>
+        <tr>
+          <th>SL</th>
+          <th>Date</th>
+          <th>Invoice No</th>
+          <th>Supplier</th>
+          <th>Amount</th>
+          <th>Entry By</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+       <?php 
+           
+       $i=0;
+     
+       foreach ($data as $pur) 
+        {  $i++; ?>
+             
+             <tr>
+               <td><?=$i?></td>
+               <td><?=$pur['purchasedate']?></td>
+               <td> <a href="pur_invoice_info.php?invo=<?=$pur['billchallan']?>"> <?=$pur['billchallan']?></a></td>
+               <td><a href="supplier-history-1.php?supid=<?=$pur['supplier']?>"><?=$fn->getUserName($pur['supplier'])?></a></td>
+               <td><?=$pur['total']?></td> 
                
-               <th>Purchase Date</th>
-               <th>Action</th>
+               <td><?=$pur['purchasedate']?></td>
+               <td><div class="dropdown">
+      <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-gear"></i>
+      </button>
+      <div class="dropdown-menu">
+        <?php 
+    if ($rbas->getView()) {
+         echo '<a class="dropdown-item" href="product-purchase-view-details.php?invo='.$pur['billchallan'].'">View <i class="fa fa-eye"></i></a>';
+    }
+    if ($rbas->getUpdate()) {
+         echo '<a class="dropdown-item" href="product-purchase-edit.php?invo='.$pur['billchallan'].'">Edit <i class="fa fa-pencil"></i></a>';
+    }
+    if ($rbas->getDelete()) {
+         ?>
+         <a class="dropdown-item" href="#" onclick="deleteItem('purchase-history','<?=$pur['billchallan']?>')">Delete <i class="fa fa-times"></i></a>
+          <?php
+    }
+    if ($rbas->getPrint()) {
+         echo '<a class="dropdown-item" href="#">Print</a>';
+    }
+        ?>
+        
+        
+      </div>
+    </div></td>
+             
              </tr>
-           </thead>
-           <tbody>
-            <?php 
-        error_reporting(0);
-            $i=0;
-            $purchase = $db->selectAll("purchase")->fetchAll();
-            foreach ($purchase as $pur) {  $i++; ?>
-                  
-                  <tr>
-                    <td><?=$i?></td>
-                    <td><?=$pur['billchallan']?></td>
-                    <td><?=$fn->getUserName($pur['supplier'])?></td>
-                    <td><?=$pur['productid']?>-<?=$fn->getProductName($pur['productid'])?></td>
-                    <td><?=$pur['quantity']?></td>
-                    <td><?=$pur['price']?></td>
-                  
-                    
-                    <td><?=($pur['quantity'] * $pur['price']) - ($pur['comdiscount']/100 * ($pur['quantity'] * $pur['price']))?></td> 
-                    
-                    <td><?=$pur['purchasedate']?></td>
-                    <td><div class="dropdown">
-  <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
-    <i class="fa fa-gear"></i>
-  </button>
-  <div class="dropdown-menu">
-    <?php 
-         if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="product-purchase-view-details.php?invo='.$pur['billchallan'].'">View <i class="fa fa-eye"></i></a>';
-         }
-         if ($rbas->getUpdate()) {
-              echo '<a class="dropdown-item" href="product-purchase-edit.php?invo='.$pur['billchallan'].'">Edit <i class="fa fa-pencil"></i></a>';
-         }
-         if ($rbas->getDelete()) {
-              ?>
-              <a class="dropdown-item" href="#" onclick="deleteItem('purchase-history','<?=$pur['billchallan']?>')">Delete <i class="fa fa-times"></i></a>
-      <?php
-         }
-         if ($rbas->getPrint()) {
-              echo '<a class="dropdown-item" href="#">Print</a>';
-         }
-    ?>
     
     
-  </div>
-</div></td>
-                  
-                  </tr>
-
-
-           <?php  }
-
-          ?>
-           </tbody>
-         </table>
+      <?php  }
+    
+     ?>
+      </tbody>
+    </table>
        </div>
      </div>
        </div>

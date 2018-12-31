@@ -43,7 +43,8 @@
 
                         </div>
                            <div class="form-group">
-                             <select class="form-control" name="sellby" id="sellby">
+
+                          <select class="form-control" name="sellby" id="sellby">
                                  <option value="">Marketing</option>
                                      <?php
                      $query1 = $db->joinQuery("SELECT * FROM `users` WHERE `user_role`='4' AND employeetype='4'");
@@ -195,7 +196,7 @@
                               </div>
                               
                                  
-                                 <input type="hidden" name="sellby" value="<?=$salehistory['sellby']?>">
+                                 <input type="hidden" name="dbsellby" value="<?=$salehistory['sellby']?>">
                                  
                                  <input type="hidden" name="nowpayment" value="<?=$salehistory['payment_taka']?>">
                                  <div class="col">
@@ -406,8 +407,10 @@
         alertify.confirm("Are you sure?", function (ev) 
         {
             ev.preventDefault();
+              // console.log(JSON.stringify(purchaseitem));
+              // console.log($("#allotherinfo").serialize());
               $.ajax({
-            url: 'ajax/addnewsellinfo.php?item='+JSON.stringify(purchaseitem)+"&allinfo="+$("#allotherinfo").serialize(),
+            url: 'ajax/addnewsellinfo.php?item='+JSON.stringify(purchaseitem)+'&allinfo='+$("#allotherinfo").serialize()+'&editdata=true',
             type: 'GET',
             dataType:'json'
           })

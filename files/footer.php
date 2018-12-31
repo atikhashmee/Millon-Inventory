@@ -177,6 +177,7 @@
                  }
 
               userName("#customer","customerid","customer");
+              userName("#supplier","supplierid","suppler");
               
              
         </script>

@@ -103,7 +103,7 @@
                     }
                     else  if ($tkn == "s_Cash") 
                     {
-                       return +$amounts;
+                       return +(int)$amounts;
                     }
                     else if ($tkn== "p_Cash") 
                     {

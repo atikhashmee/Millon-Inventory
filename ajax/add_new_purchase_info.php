@@ -4,7 +4,7 @@
 
 			include '../php/dboperation.php';
 			$db = new Db();
-			session_start();
+			require_once("session_header.php");
 			  $datass = json_decode($_GET['item']);
 			  $msg = array();
 			  if (!isset($_GET['editdata'])) 

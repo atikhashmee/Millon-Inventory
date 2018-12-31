@@ -6,19 +6,21 @@
 				class Report
 				{
 
-					private $salerawquery = ["SELECT `recievedate`, `cusotmer_id`, `amounts`,`bycashcheque`,'others' FROM `recevecollection` WHERE bycashcheque ='rac_Cash'",
-					"SELECT `expiredate`,`customerid`, `amount`, `fromtable`,'null' FROM `cheque` WHERE fromtable='add' AND approve='1'",
-					"SELECT `selldate`,`customerid`, (SUM(`quantity`*`price`)+(`weight`+`transport`+(`vat`/100)*SUM(`quantity`*`price`))-((`comission`/100)*SUM(`quantity`*`price`)+`discount`)) as total,`token`, CONCAT( billchallan,'_',payment_taka)as total FROM `sell`",
-					 "SELECT `return_date`,`customerid`, SUM(`quntity`*`price`)+ sum(`weight`+`transport`) as amount ,`token`, `memono` FROM `sell_return`"];
-				   private $whereas = [" AND"," AND"," WHERE"," WHERE"];
+					
 
-				   private $idcus = ["cusotmer_id","customerid","customerid","customerid"];
+					private $salerawquery = ["SELECT `selldate`,`customerid`, (SUM(`quantity`*`price`)+(`weight`+`transport`+(`vat`/100)*SUM(`quantity`*`price`))-((`comission`/100)*SUM(`quantity`*`price`)+`discount`)) as total,`token`, CONCAT( billchallan,'_',payment_taka)as paytk FROM `sell`",
+					"SELECT `return_date`,`customerid`, SUM(`quntity`*`price`)+ sum(`weight`+`transport`) as amount ,`token`, `memono` FROM `sell_return`",
+					"SELECT `recievedate`, `cusotmer_id`, `amounts`,`bycashcheque`,'others' FROM `recevecollection` WHERE bycashcheque ='rac_Cash'",
+					 "SELECT `expiredate`,`customerid`, `amount`, `fromtable`,'null' FROM `cheque` WHERE fromtable='add' AND approve='1'"];
+				   private $whereas = [" WHERE","WHERE","AND","AND"];
 
-				   private $iddate =["recievedate","expiredate","selldate","return_date"];
+				   private $idcus = ["customerid","customerid","cusotmer_id","customerid"];
+
+				   private $iddate =["selldate","return_date","recievedate","expiredate"];
 
 				    private  $s_goupby  = "GROUP BY `billchallan`";
 					private	$sr_goupby = "GROUP BY `memono`";
-					private	$orderby   = "ORDER BY recievedate ASC";
+					private	$orderby   = "ORDER BY selldate ASC";
 					
 				 public function queryEnquery($customerid="",$start="",$end="")
 				 {
@@ -29,11 +31,11 @@
 					for ($i=0; $i <count($this->idcus); $i++) 
 					{ 
 						
-						if ($i==2) 
+						if ($i==0) 
 						{
 						$this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}'".$this->s_goupby;
 						}
-						else if ($i==3) 
+						else if ($i==1) 
 						{
 						$this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}'".$this->sr_goupby;
 						}
@@ -48,11 +50,11 @@
 					{
 						for ($i=0; $i <count($this->idcus) ; $i++) 
 						{ 
-							if ($i==2) 
+							if ($i==0) 
 							{
 								$this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}' AND ".$this->iddate[$i]."='{$start}'".$this->s_goupby;
 							}
-							else if ($i==3) 
+							else if ($i==1) 
 							{
 								$this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}' AND ".$this->iddate[$i]."='{$start}'".$this->sr_goupby;
 							}
@@ -69,11 +71,11 @@
 					{
 						for ($i=0; $i <count($this->idcus); $i++) 
 						{ 
-							if ($i==2) 
+							if ($i==0) 
 							{
 								$this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}' AND ".$this->iddate[$i]." BETWEEN '{$start}' AND '{$end}'".$this->s_goupby;
 							}
-							else if ($i==3) 
+							else if ($i==1) 
 							{
 								$this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}' AND ".$this->iddate[$i]." BETWEEN '{$start}' AND '{$end}'".$this->sr_goupby;
 							}
@@ -94,17 +96,18 @@
 		public function getCustomerPaymentList($customerid="",$start="",$end="")
 				{
 					$sqll = array();
-					for ($i=0; $i <3 ; $i++) 
+					for ($i=0; $i <4 ; $i++) 
 					{ 
+						if ($i==1) continue;
 					    $sqll[$i] = $this->salerawquery[$i];
 					}
 				
-					if (!empty($customerid) && (empty($start) && empty($end))) 
+				if (!empty($customerid) && (empty($start) && empty($end))) 
 				{
-					for ($i=0; $i <3; $i++) 
+					for ($i=0; $i <4; $i++) 
 					{ 
-						
-						if ($i==2) 
+						if ($i==1) continue;
+						if ($i==0) 
 						{
 						$sqll[$i] = $this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}'".$this->s_goupby;
 						}
@@ -117,9 +120,10 @@
 
 				if (! empty($customerid) && (!empty($start) && empty($end))) 
 					{
-						for ($i=0; $i <3; $i++) 
+						for ($i=0; $i <4; $i++) 
 						{ 
-							if ($i==2) 
+							if ($i==1) continue;
+							if ($i==0) 
 							{
 								$sqll[$i] = $this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}' AND ".$this->iddate[$i]."='{$start}'".$this->s_goupby;
 							}
@@ -135,9 +139,10 @@
 
 					if (!empty($customerid) && (!empty($start) && !empty($end))) 
 					{
-						for ($i=0; $i <3; $i++) 
+						for ($i=0; $i <4; $i++) 
 						{ 
-							if ($i==2) 
+							if ($i==1) continue;
+							if ($i==0) 
 							{
 								$sqll[$i] = $this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}' AND ".$this->iddate[$i]." BETWEEN '{$start}' AND '{$end}'".$this->s_goupby;
 							}
@@ -153,6 +158,98 @@
 					$query   = implode(" UNION ",$sqll);
 					$query  .= $this->orderby;
 					return $query;
+				}
+        public function getCustomerProductList($customerid="",$start="",$end="")
+				{
+					$sqll = array();
+					for ($i=0; $i <2 ; $i++) 
+					{ 
+					    $sqll[$i] = $this->salerawquery[$i];
+					}
+				
+				if (!empty($customerid) && (empty($start) && empty($end))) 
+				{
+					for ($i=0; $i <2; $i++) 
+					{ 
+						
+						if ($i==0) 
+						{
+						$sqll[$i] = $this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}'".$this->s_goupby;
+						}
+						else
+						{
+							$sqll[$i] = $this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}'".$this->sr_goupby;;
+						}
+					}
+			    }
+
+				if (! empty($customerid) && (!empty($start) && empty($end))) 
+					{
+						for ($i=0; $i <2; $i++) 
+						{ 
+							
+							if ($i==0) 
+							{
+								$sqll[$i] = $this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}' AND ".$this->iddate[$i]."='{$start}'".$this->s_goupby;
+							}
+							
+							else
+							{
+								$sqll[$i] = $this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}' AND ".$this->iddate[$i]."='{$start}'".$this->sr_goupby;;
+							}
+							
+						}
+					}
+
+
+					if (!empty($customerid) && (!empty($start) && !empty($end))) 
+					{
+						for ($i=0; $i <2; $i++) 
+						{ 
+							
+							if ($i==0) 
+							{
+								$sqll[$i] = $this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}' AND ".$this->iddate[$i]." BETWEEN '{$start}' AND '{$end}'".$this->s_goupby;
+							}
+							
+							else
+							{
+								$sqll[$i] = $this->salerawquery[$i] .= $this->whereas[$i]." ".$this->idcus[$i]."='{$customerid}' AND ".$this->iddate[$i]." BETWEEN '{$start}' AND '{$end}'".$this->sr_goupby;
+							}
+							
+						}
+					}
+
+					$query   = implode(" UNION ",$sqll);
+					$query  .= $this->orderby;
+					return $query;
+				}
+
+
+
+				public function saleHistory($customerid="",$start="",$end="")
+				{
+					$salequery = "SELECT `billchallan`,`sellby`,`entryby`,`selldate`,`customerid`, (SUM(`quantity`*`price`)+(`weight`+`transport`+(`vat`/100)*SUM(`quantity`*`price`))-((`comission`/100)*SUM(`quantity`*`price`)+`discount`)) as total_taka,`token`, CONCAT( billchallan,'_',payment_taka)as total FROM `sell`";
+					if (!empty($customerid) && (empty($start) && empty($end))) 
+				      {
+						$salequery .= $this->whereas[2]." ".$this->idcus[2]."='{$customerid}'";
+			          }
+
+				if (! empty($customerid) && (!empty($start) && empty($end))) 
+					{
+						
+							
+								$salequery .= $this->whereas[2]." ".$this->idcus[2]."='{$customerid}' AND ".$this->iddate[2]."='{$start}'";
+						
+					}
+
+					if (!empty($customerid) && (!empty($start) && !empty($end))) 
+					{
+						 
+							
+						$salequery .= $this->whereas[2]." ".$this->idcus[2]."='{$customerid}' AND ".$this->iddate[2]." BETWEEN '{$start}' AND '{$end}'";
+					}
+					return $salequery."GROUP BY `billchallan` ORDER BY selldate DESC";
 				}
 
 
@@ -220,8 +317,9 @@
 
 			public 	function invoiceAmount($invoice,$token="") // may need later
 				{
+					$table = ($token=="s")?"sell":"purchase";
 					
-					$sell = $GLOBALS['db']->selectAll('sell',"billchallan='{$invoice}'")->fetchAll();
+					$sell = $GLOBALS['db']->selectAll($table,"billchallan='{$invoice}'")->fetchAll();
 					$productamount =0;
 					foreach ($sell as $s) 
 					{

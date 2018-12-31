@@ -5,26 +5,32 @@
 
 			include '../php/dboperation.php';
 			$db = new Db();
-			session_start();
+		  require_once("session_header.php");
 			$msg = array();
 
-			if (isset($_GET['allinfo'])) {
+			if (isset($_GET['allinfo'])) 
+			{
 
 			
 
                
                 /* to perform an update operation we are deleting the previous product and inserting newly updated product*/
-
-                $dd =  $db->joinQuery("SELECT COUNT(*) as rowexist FROM `sell` WHERE `billchallan`='".$_GET['billchallan']."'")->fetch(PDO::FETCH_ASSOC);
-                if ($dd['rowexist']>0) 
+                 if (isset($_GET['editdata']) && $_GET['editdata'] == true) 
                 {
-                    $db->delete('sell',"`billchallan`='".$_GET['billchallan']."'");
-                }
+	                $dd =  $db->joinQuery("SELECT COUNT(*) as rowexist FROM `sell` WHERE `billchallan`='".$_GET['billchallan']."'")->fetch(PDO::FETCH_ASSOC);
+	                if ($dd['rowexist']>0) 
+	                {
+	                    $db->delete('sell',"`billchallan`='".$_GET['billchallan']."'");
+	                }
+               }
                 /*end of product update*/
-                
+               
 
                  $datass = json_decode($_GET['item']);
-			   if ($_GET['cashcheque']=="yes") {
+                 if (!isset($_GET['editdata'])) 
+			  {
+			   if ($_GET['cashcheque']=="yes") 
+			   {
                   $chquedata = array(
                   	'parent_table_id'  => "s_".$_GET['billchallan'],
                     'accountno' => $_GET['chequeno'],
@@ -44,12 +50,24 @@
                  
                   
                 }
-   $chequecash = ($_GET['cashcheque']=="yes")?"Cheque":"Cash";
+            }
+
+
+                if (isset($_GET['editdata'])) 
+                {
+                	$chequecash = "Cheque";
+                }
+                else
+                {
+
+      $chequecash = ($_GET['cashcheque']=="yes")?"Cheque":"Cash";
+                }
+
 			   for ($i=0; $i <count($datass); $i++) 
 			   { 
 			    	 $data = array(
 			    	 	'selldate' => $_GET['datesell'],
-			    	 	'sellby' => $_GET['sellby'],
+			    	 	'sellby' =>(!empty($_GET['sellby'])?$_GET['sellby']:$_GET['dbsellby']),
 			    	 	'billchallan' => $_GET['billchallan'],
 			    	 	'weight' => $_GET['weght'],
 			    	 	'transport' => $_GET['transport'],
@@ -68,7 +86,7 @@
 
 			    	 /*echo "<pre>";
 			    	 print_r($data);
-			    	 echo "</pre>";*/
+			    	echo "</pre>";*/
 			    	$db->insert("sell",$data);
 			    	  
 			    }

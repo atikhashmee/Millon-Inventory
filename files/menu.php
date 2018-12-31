@@ -182,20 +182,21 @@
                         <ul>
                            <li> <a  href="bankstatement.php">Cash History</a></li>
                            <li> <a  href="stock-report.php">Stock Report</a></li>
-                           <li> <a  href="customer-wise-report.php">Customerwise product Report</a></li>
-                           <li> <a  href="customer-wise-payment-report.php">Customer Payment Report</a></li>
+                           
                            <li> <a  href="customer-history.php">Customer History</a></li>
                         </ul>
                      </li>
                      <li>
                         <ul>
                            <li><a  href="supplier-product-report.php">Supplierwise Product Report </a></li>
-                           <li><a  href="supplier-payment-report.php">Supplierwise Payment Report </a></li>
+                           <li>
+                          <a  href="supplier-history-1.php">Supplier History </a>
+                          </li>
                         </ul>
                      </li>
                      <li>
                         <ul>
-                           <li><a  href="employee_target_report.php"> Employee Target Report</a></li>
+                           <li><a  href="employee_target_report.php">Target Report</a></li>
                            <li><a  href="labour_payment_statement.php"> See the labour payment</a></li>
                            <li><a  href="employee_salery_report.php"> Salery Report</a></li>
                            <li><a  href="gross-profit.php">Gross Profit</a></li>

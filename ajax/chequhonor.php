@@ -4,6 +4,7 @@
 <?php
 
      	include '../php/dboperation.php';
+     	require_once("session_header.php");
 			$db = new Db();
 
 			if (isset($_GET['str'])) {

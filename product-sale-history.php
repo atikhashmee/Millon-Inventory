@@ -63,43 +63,92 @@ window.location.href='product-sale-history.php'; </script>
       <div class="card m-b-30">
                             <div class="card-body">
 
+                   <form action="" method="POST">
+            <div class="row">
+               <div class="col">
+                <input type="hidden" name="customerid" id="customerid">
+                <input type="text" class="form-control" id="customer" placeholder="type out customer name">
+                </div>
+              
+                 
+              <div class="col"><input type="text" class="form-control" name="start" id="start"></div>
+              <div class="col"><input type="text" class="form-control" name="to" id="to"></div>
+             
+              <div class="col">
+                <button type="submit" name="filter" class="btn btn-outline-primary">Search <i class="fa fa-search"></i> </button>
+              </div>
+            </div>
+          </form>
+                   
+                 <?php 
+                    /*echo "<pre>";
+                    print_r($rp->getE());
+                    echo "</pre>";*/
+                 
+                        $exequery = $rp->saleHistory();
+                        $sum =0;
+                        if (isset($_POST['filter'])) 
+                         {
+                              if (!empty($_POST['customerid']) && (empty($_POST['start']) && empty($_POST['to']))) 
+                                 {
+                  $exequery = $rp->saleHistory($_POST['customerid']);
+                                 }
                                
+                              if (!empty($_POST['customerid'])&& (!empty($_POST['start']) && empty($_POST['to'])))
+                                 {
+                               $exequery = $rp->saleHistory($_POST['customerid'],$_POST['start']);
+                                 }
+
+                            if (!empty($_POST['customerid'])&& (!empty($_POST['start']) && !empty($_POST['to'])))
+                                 {
+                               $exequery = $rp->saleHistory($_POST['customerid'],$_POST['start'],$_POST['to']);
+                                 }
+
+              
+                                
+                         }
+                        /* echo "<pre>";
+                    print_r($exequery);
+                    echo "</pre>";*/
+                                    $data = $db->joinQuery($exequery)->fetchAll();
+                                   ?> 
+                               </div>
+                           </div>
+      <div class="card m-b-30">
+        <div class="card-body"> 
+          
+        
+
       <table class="table table-bordered table-condensed  table-striped" id="datatable">
         <thead>
           <tr>
             <th>Sl</th>
-            <th>Bill/challan</th>
-            
-            <th>Customer</th>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Total</th>
-           
-            <th>Grand Total</th>
             <th>sell Date</th>
-            <th>sell By</th>
-            <th>Action </th>
+            <th>Bill/challan</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Marketing</th>
+            <th>Entryby</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           <?php 
-        error_reporting(0);
+            
             $i=0;
-            $sellinfo = $db->selectAll("sell")->fetchAll();
-            foreach ($sellinfo as $sel) {  $i++; ?>
+           
+            foreach ($data as $sel) 
+              {  
+                $i++; 
+                ?>
                   <tr>
                     <td><?=$i?></td>
-                    <td><?=$sel['billchallan']?></td>
-                    <td><?=$fn->getUserName($sel['customerid'])?></td>
-                    <td><?=$fn->getProductName($sel['productid'])?></td>
-                    <td><?=$sel['quantity']?></td>
-                    <td><?=$sel['price']?></td>
-                    <td><?=$sel['quantity'] * $sel['price'] ?></td>
-                    
-                    <td><?=($sel['quantity'] * $sel['price']) - ($sel['comission']/100 * ($sel['quantity'] * $sel['price']))?></td>
                     <td><?=$sel['selldate']?></td>
+                    <td><a href='sale_invoice_info.php?invo=<?=$sel['billchallan']?>'><?=$sel['billchallan']?></a></td>
+                    <td><a href='customer-history.php?cusid=<?=$sel['customerid']?>'><?=$fn->getUserName($sel['customerid'])?></a></td>
+                    <td><?=$sel['total_taka']?></td>
                     <td><?=$fn->getUserName($sel['sellby'])?></td>
+                    <td><?=$fn->getUserName($sel['entryby'])?></td>
                     <td><div class="dropdown">
   <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
    <i class="fa fa-gear"></i>

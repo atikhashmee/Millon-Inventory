@@ -37,7 +37,7 @@
             <div class="col-md-3"></div>
             <div class="col-md-7">
                <div class="form-group">
-              
+               <input type="hidden" name="e_name" value="<?=$targetdata['employee_id']?>">
                <input type="text" name="employeename" class="form-control" readonly value="<?=$fn->getUserName($targetdata['employee_id'])?>">
             </div>
             </div>
@@ -124,7 +124,7 @@
                                   
                                  
                  $data = array(
-                'employee_id' => $_POST['employeename'], 
+                'employee_id' => $_POST['e_name'], 
                 'brandid' => empty($_POST['brandname'])? $_POST['dbbrandname']: $_POST['brandname'], 
                 'quantity' => $_POST['quantity'], 
                 'unit' => empty($_POST['unit'])?$_POST['dbunit']:$_POST['unit'], 

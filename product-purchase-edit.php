@@ -379,12 +379,13 @@
           $.ajax({
              url:'ajax/add_new_purchase_info.php?item='+JSON.stringify(purchaseitem)+"&allotherinfo="+$("#allotherinfo").serialize()+'&editdata=true',
              type: 'GET',
+             dataType:'json'
            
            })
            .done(function(res) 
            {
              console.log(res);
-            var res = JSON.parse(res);
+           // var res = JSON.parse(res);
              res.forEach(function(item)
             { 
               

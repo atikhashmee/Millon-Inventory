@@ -9,12 +9,14 @@
                               include("php/reportquery.php");
                               include("php/menu_privilige.php");
                               include("php/cussupreportquery.php");
+                              include("php/purchase_report.php");
 
 
                               $db = new Db();
                               $fn = new Functions();
                               $dm = new DbModels();
                               $rp = new Report();
+                              $pr = new PuReport();
                               
                               session_start();
 
@@ -102,7 +104,7 @@
             $customersb[$ur['u_id']] = $fn->getCustomerTotalBalance(new Report() ,$ur['u_id']);
                  }
                   if ($ur['user_role'] == '2') {
-                    $suppliersb[$ur['u_id']] = $fn->getSupllierdueby($ur['u_id']) - $fn->getSupplierPayment($ur['u_id']);
+                    $suppliersb[$ur['u_id']] = $fn->getSupplierTotalBalance(new PuReport(),$ur['u_id']);
                  }
              }
 
@@ -159,6 +161,7 @@
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/icons.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/circle.css" rel="stylesheet" type="text/css" />
         <!-- alertify plugin -->
         <link href="assets/plugins/alertify/css/alertify.css" rel="stylesheet" type="text/css">
 

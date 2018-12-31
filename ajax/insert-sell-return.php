@@ -3,8 +3,9 @@
 		<?php 
 
 			include '../php/dboperation.php';
+			require_once("session_header.php");
 			$db = new Db();
-			  session_start();
+			
 			  $datass = json_decode($_GET['dclas']);
 
 			  //delete before update 
