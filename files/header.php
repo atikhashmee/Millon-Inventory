@@ -20,6 +20,9 @@
                               
                               session_start();
 
+
+                             
+
                               /* little work with session*/
 
                             if (!isset($_SESSION['u_id'])) 

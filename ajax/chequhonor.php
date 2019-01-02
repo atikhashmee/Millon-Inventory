@@ -7,7 +7,8 @@
      	require_once("session_header.php");
 			$db = new Db();
 
-			if (isset($_GET['str'])) {
+			if (isset($_GET['str'])) 
+			{
 
 				 if ($_GET['str'] == "honer") {
 				 		$decoded = json_decode(stripslashes($_GET['ids']));

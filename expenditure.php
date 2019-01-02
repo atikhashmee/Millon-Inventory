@@ -60,7 +60,7 @@ $rbas->setPageName(9)->run();
             <div class=" form-group">
                <label  for="name"> Date <span class="required">*</span>
                </label>
-               <input id="expensedate" class="form-control" name="expensedate"  required="required" type="date">
+               <input id="expensedate" class="form-control mydate" name="expensedate"  required="required" type="text">
             </div>
          </div>
          <div class="col">
@@ -224,8 +224,8 @@ $rbas->setPageName(9)->run();
                      ?>
                 </select>
               </div>
-              <div class="col"><input type="date" class="form-control" name="start"></div>
-              <div class="col"><input type="date" class="form-control" name="to"></div>
+              <div class="col"><input type="text" class="form-control mydate" name="start"></div>
+              <div class="col"><input type="text" class="form-control mydate" name="to"></div>
               <div class="col">
           <button type="submit"  name="search" class="btn btn-outline-primary btn-lg">
             Search <i class="fa fa-search"></i>
@@ -287,7 +287,12 @@ $rbas->setPageName(9)->run();
             </thead>
             <tbody>
                <?php 
-                  foreach ($data as $val) {  $i++; ?>
+               $sum= 0;
+                  foreach ($data as $val) 
+                    {  
+                      $sum += (int)$val['amount'];
+                      $i++; 
+                      ?>
                <tr>
                   <th scope="row"><?=$i?></th>
                   <td><?=$val['expendituredate']?></td>
@@ -329,6 +334,10 @@ $rbas->setPageName(9)->run();
                <?php   }
                   ?>
             </tbody>
+            <tr>
+              <td colspan="4" class="text-right"> <strong>Total</strong> </td>
+              <td  colspan="1"><strong><?=$sum?></strong></td>
+            </tr>
          </table>
          </div>
       </div>

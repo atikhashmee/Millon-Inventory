@@ -256,6 +256,29 @@ if (isset($_GET['del-id']))
    <div class="row" style="margin-top: 22px">
       <div class="col">
         <div class="card card-body">
+          <form action="" method="POST" style="margin-left: 40px">
+                  <div class="row">
+                     <div class="col">
+                        <label for="">Supplier Name</label>
+                        <input type="hidden" name="supplierid" id="supplierid">
+                        <input type="text" class="form-control" id="supplier" placeholder="type out supplier name">
+                     </div>
+                     <div class="col">
+                        <label for="">Date-From</label>
+                        <input type="text" class="form-control" name="start" id="start">
+                     </div>
+                     <div class="col">
+                        <label for="">Date-To</label>
+                        <input type="text" class="form-control" name="to" id="to">
+                     </div>
+                   
+                     <div class="col">
+                        <button type="submit" name="filter" style="position: absolute;top: 29px;" class="btn btn-outline-primary">Search <i class="fa fa-search"></i> </button>
+                     </div>
+                  </div>
+               </form>
+             </div>
+             <div class="card card-body">
          <table class="table table-bordered table-striped" id="datatable">
             <thead>
                <tr>
@@ -269,14 +292,38 @@ if (isset($_GET['del-id']))
             </thead>
             <tbody>
                <?php 
-                  $recdata =  $db->selectAll("supplierpayment")->fetchAll();
+               $sql = "SELECT * FROM `supplierpayment`";
+               if (isset($_POST['filter'])) 
+               {
+                   if (!empty($_POST['supplierid']) && (empty($_POST['start']) && empty($_POST['to']))) 
+                   {
+                     $sql = "SELECT * FROM `supplierpayment` WHERE `sup_id`='".$_POST['supplierid']."'";
+                   }
+
+
+                   if (!empty($_POST['start']) && empty($_POST['to'])) 
+                   {
+                     $sql = "SELECT * FROM `supplierpayment` WHERE `pay_date`='".$_POST['start']."'";
+                   }
+
+                   if (!empty($_POST['start']) && !empty($_POST['to'])) 
+                   {
+                     $sql = "SELECT * FROM `supplierpayment` WHERE `pay_date`Between '".$_POST['start']."' AND '".$_POST['to']."'";
+                   }
+               }
+
+                  $recdata =  $db->joinQuery($sql)->fetchAll();
                     $i=0;
-                    foreach ($recdata as $val) {  $i++; ?>
+                    $sum =0;
+                    foreach ($recdata as $val) { 
+                     $i++; 
+                     $sum += (int) $val['amnts'];
+                     ?>
                <tr>
                   <th><?=$i?></th>
                   <td><?=$val['pay_date']?></td>
                   <td><?=$fn->getUserName($val['sup_id'])?></td>
-                  <td><?=$val['amnts']?></td>
+                  <td><?=number_format($val['amnts'])?></td>
                   <td><?=$val['carier']?></td>
                   <td>
                       <div class="dropdown">
@@ -309,6 +356,10 @@ if (isset($_GET['del-id']))
                <?php   }
                   ?>
             </tbody>
+            <tr>
+              <td colspan="3" class="text-right"> <strong>Total</strong> </td>
+              <td> <strong><?=number_format($sum)?></strong> </td>
+            </tr>
          </table>
          </div>
       </div>

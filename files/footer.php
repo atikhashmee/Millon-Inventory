@@ -120,6 +120,15 @@
                    }).datepicker("setDate", new Date());
                  
               }
+              function jclassDate(classname)
+              {
+               
+                    $(classname).datepicker({
+                  dateFormat: "yy-mm-dd"
+                   }).datepicker("setDate", new Date());
+                 
+              }
+              jclassDate(".mydate");
               jDate("#start");
               jDate("#to");
 

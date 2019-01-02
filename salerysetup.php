@@ -77,6 +77,7 @@
               ?>
             <div class="card card-body">
             <form class="form-horizontal form-label-left" method="post" >
+              <a class="btn btn-outline-primary pull-12" href="pay_salery.php?eid=<?=$_GET['eid']?>">Go to payment <i class="fa fa-arrow-right"></i></a>
               <div class="form-group">
                 <label for=""><h3>Employee Name</h3></label>
               <input type="text" class="form-control" value="<?=$fn->getUserName($_GET['eid'])?>" readonly>
@@ -161,6 +162,7 @@
             { ?>
               <div class="card card-body">
                 <form class="form-horizontal form-label-left" method="post" >
+                  <a class="btn btn-outline-primary pull-12" href="pay_salery.php?eid=<?=$_GET['eid']?>">Go to payment <i class="fa fa-arrow-right"></i></a>
                   <div class="form-group">
                 <label for=""><h3>Employee Name</h3></label>
               <input type="text" class="form-control" value="<?=$fn->getUserName($_GET['eid'])?>" readonly>

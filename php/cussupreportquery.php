@@ -249,7 +249,10 @@
 							
 						$salequery .= $this->whereas[2]." ".$this->idcus[2]."='{$customerid}' AND ".$this->iddate[2]." BETWEEN '{$start}' AND '{$end}'";
 					}
-					return $salequery."GROUP BY `billchallan` ORDER BY selldate DESC";
+					
+						return $salequery."GROUP BY `billchallan` ORDER BY selldate DESC";
+					
+					
 				}
 
 

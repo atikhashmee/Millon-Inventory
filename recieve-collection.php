@@ -230,6 +230,20 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
       </div>
       <div class="col-md-12"   style="margin-top: 22px;" >
          <div class="card card-body">
+          <form action="" method="POST" class="mb-5 ml-5">
+                  <div class="row">
+                     <div class="col">
+                        <input type="hidden" name="customerid" id="customerid">
+                        <input type="text" class="form-control" id="customer" placeholder="type out customer name">
+                     </div>
+                     <div class="col"><input type="text" class="form-control" name="start" id="start"></div>
+                     <div class="col"><input type="text" class="form-control" name="to" id="to"></div>
+                     <div class="col">
+                        <button type="submit" name="filter" class="btn btn-outline-primary">Search <i class="fa fa-search"></i> </button>
+                     </div>
+                  </div>
+               </form>
+
             <table class="table table-striped table-bordered table-striped" id="datatable">
                <thead>
                   <tr>
@@ -244,14 +258,40 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
                </thead>
                <tbody>
                   <?php 
-                     $recdata =  $db->selectAll("recevecollection")->fetchAll();
+                  $sql = "SELECT * FROM `recevecollection`";
+               if (isset($_POST['filter'])) 
+               {
+                if (!empty($_POST['customerid']) && (empty($_POST['start']) && empty($_POST['to']))) 
+                   {
+                     $sql = "SELECT * FROM `recevecollection` WHERE `cusotmer_id`='".$_POST['customerid']."'";
+                   }
+
+
+                   if (!empty($_POST['start']) && empty($_POST['to'])) 
+                   {
+                     $sql = "SELECT * FROM `recevecollection` WHERE `recievedate`='".$_POST['start']."'";
+                   }
+
+                   if (!empty($_POST['start']) && !empty($_POST['to'])) 
+                   {
+                     $sql = "SELECT * FROM `recevecollection` WHERE `recievedate`Between '".$_POST['start']."' AND '".$_POST['to']."'";
+                   }
+               }
+              /*echo "<pre>";
+              print_r($sql);
+              echo "</pre>";*/
+                     $recdata =  $db->joinQuery($sql)->fetchAll();
                        $i=0;
-                       foreach ($recdata as $val) {  $i++; ?>
+                       $sum = 0;
+                       foreach ($recdata as $val) 
+                       {  
+                        $sum += (int) $val['amounts'];
+                        $i++; ?>
                   <tr>
                      <th><?=$i?></th>
                      <td><?=$val['recievedate']?></td>
                      <td><?=$fn->getUserName($val['cusotmer_id'])?></td>
-                     <td><?=$val['amounts']?></td>
+                     <td><?=number_format($val['amounts'])?></td>
                      <td><?=$val['carreier']?></td>
                      
                      <td> <div class="dropdown">
@@ -282,6 +322,10 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
                   <?php   }
                      ?>
                </tbody>
+               <tr>
+                 <td colspan="3" class="text-right"><strong>Total</strong></td>
+                 <td><?=number_format($sum)?></td>
+               </tr>
             </table>
          </div>
       </div>

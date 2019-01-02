@@ -29,17 +29,19 @@
                 <div class="col-4"></div>
                 <div class="col-4">
                   <div class="form-group">
-                    <input type="date" class="form-control" name="datename">
+                  <input type="text" class="form-control mydate" name="datename">
                     <small><strong>(Search cheque list by date)</strong> </small>
                   </div>
                 </div>
                 <div class="col-4">
                   <button  class="btn btn-outline-primary" name="searchcheque">Search <i class="fa fa-search"></i></button>
+                  <a href="check-history.php" class="btn btn-outline-primary">GO to Table <i class="fa fa-arrow-right"></i></a>
 
                 </div>
 
               </div>
             </form>
+
          </div>
        </div>
      </div>

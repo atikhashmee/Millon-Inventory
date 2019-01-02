@@ -119,9 +119,9 @@
               
                                 
                          }
-                         echo "<pre>";
+                         /*echo "<pre>";
                     print_r($exequery);
-                    echo "</pre>";
+                    echo "</pre>";*/
                                   $data = $db->joinQuery($exequery)->fetchAll();
                                    ?> 
                                </div>

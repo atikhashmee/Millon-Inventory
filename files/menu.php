@@ -32,28 +32,26 @@
                   <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#" role="button"
                      aria-haspopup="false" aria-expanded="false">
                   <i class="mdi mdi-bell-outline noti-icon"></i>
-                  <span class="badge badge-danger noti-icon-badge">3</span>
+                  <span class="badge badge-danger noti-icon-badge" id="cnt">0</span>
                   </a>
-                  <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg">
+                  <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg" id="notify">
                      <!-- item-->
-                     <div class="dropdown-item noti-title">
-                        <h5>Notification (3)</h5>
-                     </div>
+                     
                      <!-- item-->
-                     <a href="javascript:void(0);" class="dropdown-item notify-item active">
+                     <!-- <a href="javascript:void(0);" class="dropdown-item notify-item active">
                         <div class="notify-icon bg-success"><i class="mdi mdi-cart-outline"></i></div>
                         <p class="notify-details"><b>Your order is placed</b><small class="text-muted">Dummy text of the printing and typesetting industry.</small></p>
                      </a>
-                     <!-- item-->
+                     item
                      <a href="javascript:void(0);" class="dropdown-item notify-item">
                         <div class="notify-icon bg-warning"><i class="mdi mdi-message"></i></div>
                         <p class="notify-details"><b>New Message received</b><small class="text-muted">You have 87 unread messages</small></p>
                      </a>
-                     <!-- item-->
+                     item
                      <a href="javascript:void(0);" class="dropdown-item notify-item">
                         <div class="notify-icon bg-info"><i class="mdi mdi-martini"></i></div>
                         <p class="notify-details"><b>Your item is shipped</b><small class="text-muted">It is a long established fact that a reader will</small></p>
-                     </a>
+                     </a> -->
                      <!-- All-->
                      <a href="javascript:void(0);" class="dropdown-item notify-item">
                      View All
@@ -196,9 +194,12 @@
                      </li>
                      <li>
                         <ul>
-                           <li><a  href="employee_target_report.php">Target Report</a></li>
+                           <li>
+                            <a  href="check-history.php">Cheque History</a>
+                          </li>
+                            <li><a  href="employee_target_report.php">Target Report</a></li>
                            <li><a  href="labour_payment_statement.php"> See the labour payment</a></li>
-                           <li><a  href="employee_salery_report.php"> Salery Report</a></li>
+                           <li><a  href="employee_report.php">Employee Report</a></li>
                            <li><a  href="gross-profit.php">Gross Profit</a></li>
                         </ul>
                      </li>
@@ -250,3 +251,28 @@
 <!-- End Navigation Bar-->
 <div class="wrapper">
 <!-- it holds the inner contents -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+  $.ajax({
+    url: 'ajax/notifications.php'
+  })
+  .done(function(res) {
+    //console.log(res);
+    var data =  JSON.parse(res);
+    var text = '';
+    for (var i = 0; i < data.length; i++) {
+      text += '<a href="purchase.php" class="dropdown-item notify-item"><i class="fa fa-less"></i><p class="notify-details"><b>Product Stock is out</b><small class="text-muted"> Product = '+data[i].productsid+' Quantity = '+data[i].proquantity+'</small></p></a>';
+     
+    } 
+    $("#notify").html(text);
+    $("#cnt").text(data.length);
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    console.log("complete");
+  });
+  
+</script>

@@ -199,6 +199,16 @@
    <div class="row" style="margin-top: 22px;">
       <div class="col">
         <div class="card card-body">
+          <form action="" method="POST" class="mb-5 ml-5">
+                  <div class="row">
+                     
+                     <div class="col"><input type="text" class="form-control" name="start" id="start"></div>
+                     <div class="col"><input type="text" class="form-control" name="to" id="to"></div>
+                     <div class="col">
+                        <button type="submit" name="filter" class="btn btn-outline-primary">Search <i class="fa fa-search"></i> </button>
+                     </div>
+                  </div>
+               </form>
          <table class="table table-bordered table-striped" id="datatable">
             <thead>
                <tr>
@@ -215,15 +225,36 @@
             </thead>
             <tbody>
                <?php 
-                  $recdata =  $db->selectAll("banktransfer")->fetchAll();
+                  $sql = "SELECT * FROM `banktransfer`";
+               if (isset($_POST['filter'])) 
+               {
+                
+                   if (!empty($_POST['start']) && empty($_POST['to'])) 
+                   {
+                     $sql = "SELECT * FROM `banktransfer` WHERE `transerdate`='".$_POST['start']."'";
+                   }
+
+                   if (!empty($_POST['start']) && !empty($_POST['to'])) 
+                   {
+                     $sql = "SELECT * FROM `banktransfer` WHERE `transerdate`Between '".$_POST['start']."' AND '".$_POST['to']."'";
+                   }
+               }
+               /*echo "<pre>";
+               print_r($sql);
+               echo "</pre>";*/
+                  $recdata =  $db->joinQuery($sql)->fetchAll();
                     $i=0;
-                    foreach ($recdata as $val) {  $i++; ?>
+                    $sum =0;
+                    foreach ($recdata as $val) 
+                      { 
+                        $sum += (int) $val['amounts'];
+                       $i++; ?>
                <tr>
                   <th><?=$i?></th>
                   <td><?=$val['transerdate']?></td>
                   <td><?=$fn->Chartsaccounta($val['to'])?></td>
                   <td><?=$fn->Chartsaccounta($val['from'])?></td>
-                  <td><?=$val['amounts']?></td>
+                  <td><?=number_format($val['amounts'])?></td>
                   <td><?=$val['carreier']?></td>
                  
                   <td> <div class="dropdown">
@@ -253,6 +284,10 @@
                <?php   }
                   ?>
             </tbody>
+            <tr>
+              <td colspan="3" class="text-right"><strong>Total</strong></td>
+              <td><strong><?=number_format($sum)?></strong></td>
+            </tr>
          </table>
          </div>
       </div>

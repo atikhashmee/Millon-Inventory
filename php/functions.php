@@ -475,6 +475,45 @@ $data =  $this->joinQuery($sql)->fetchAll();
 
 				}
 
+				 function myQuantity($proid){
+              $openini = $GLOBALS['db']->joinQuery("SELECT `opening_stock` FROM `product_info` WHERE `pro_id`='{$proid}'")->fetch(PDO::FETCH_ASSOC);
+              $total = $openini['opening_stock'];
+
+              $sql = "SELECT `billchallan`,`selldate`, `token`, `productid`, `quantity` 
+                    FROM `sell` WHERE `productid`='{$proid}'
+                    UNION
+                    SELECT `billchallan`, `purchasedate`,`token`,`productid`, `quantity` 
+                    FROM `purchase` WHERE `productid`='{$proid}'
+                    UNION
+                    SELECT `memono`, `return_date`, `token`,`productid`,`quntity` 
+                    FROM `sell_return` WHERE `productid`='{$proid}'
+                    UNION
+                    SELECT `memono`, `return_date`,`token`,`productid`,`quntity`  
+                    FROM `purchase_return` WHERE `productid`='{$proid}'";
+                    $query =  $GLOBALS['db']->joinQuery($sql)->fetchAll();
+                          foreach ($query as $qu) 
+                          {  
+                   if (trim($qu['token']) =="p_Cash" || trim($qu['token'])=="p_Cheque") 
+                             {
+                               $total+= $qu['quantity'];
+                             }
+                          else if (trim($qu['token'])=="s_Cash" || trim($qu['token'])=="s_Cheque") 
+                               {
+                              $total-= $qu['quantity'];
+                               }
+                           else if (trim($qu['token'])=="sr") 
+                               {
+                              $total+= $qu['quantity'];
+                             }
+                          else if (trim($qu['token'])=="pr") 
+                             {
+                              $total-= $qu['quantity'];
+                             }
+                        }
+           return $total;
+
+         }
+
 
 
 			}

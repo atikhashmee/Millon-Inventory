@@ -103,7 +103,8 @@
                           $vat = 0;
 
 
-                            foreach ($invoiceinfo as $inv) {
+                            foreach ($invoiceinfo as $inv) 
+                            {
                               $sum += ($inv['price']*$inv['quantity']);
                               $weight = $inv['weight'];
                               $transport = $inv['transport'];

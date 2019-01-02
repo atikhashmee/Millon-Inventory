@@ -23,18 +23,39 @@
           return $days+1;
       }
 
+        if (isset($_GET['runningupdate'])) 
+        {
+          $update = array(
+            'approve' => "1" 
+          );
+          if ($db->update("target",$update,"autoid='".$_GET['runningupdate']."'")) {
+                ?>
+                <script>
+                  window.location.href='employee_target_report.php';
+                </script>
+                <?php
+             }
+        }
+
+      function expiration($enddate)
+      {
+           $date1 =  new DateTime($enddate);
+           $today = new DateTime(date("Y-m-d"));
+           if ($date1<$today) 
+           {
+             echo "<a class='btn btn-outline-danger' href='#'>Ended</a>";
+           }
+           else
+           {
+            echo "
+            
+            <a  href='#'><img src='assets/images/giphy.gif' height='50px' width='50px'> </a>";
+           }
+      }
+
 ?>
 
- <style>
-   .divdesign{
-      border-right: 2px solid #000;
-      color: #000;
-      font-size: 16px;
-      width: auto;
 
-   }
-
- </style>
      <div class="container">
       <div class="row">
                     <div class="col-sm-12">
@@ -58,7 +79,48 @@
                 <div class="row">
        <div class="col">
          <div class="card card-body">
-         <form action="" method="post">
+           <?php
+            if (isset($_GET['paycommission'])) 
+            {
+                ?>
+                  <form action="" method="post">
+           <div class="form-group">
+            <label for="">Date</label>
+            <input type="text" class="form-control mydate"  name="paymentdate">
+          </div>
+          <div class="form-group">
+            <label for="">Amount</label>
+            <input type="number" class="form-control" id="amount" name="amount" value="<?=$_GET['amount']?>" min="<?=$_GET['amount']?>">
+          </div>
+          <div class="form-group">
+            <button type="submit" name="paybtn" class="btn btn-outline-primary">Pay now <i class="fa fa-floppy-o"></i> </button>
+          </div>
+         </form>
+         <?php
+
+            if (isset($_POST['paybtn'])) 
+            {
+               $data = array(
+                'paydate' =>  $_POST['paymentdate'], 
+                'pament'  =>  $_POST['amount'], 
+                'token'   => "comisn_paid" 
+              );
+              if ($db->update("target",$data,"autoid='".$_GET['paycommission']."'")) 
+              {
+                   ?>
+                   <script>
+                  window.location.href='employee_target_report.php';
+                  </script>
+                   <?php
+              }
+            }
+         ?>
+                <?php 
+            }
+            else
+            {
+               ?>
+                 <form action="" method="post">
             <div class="row">
               <div class="col">
                 <select class="form-control" name="employeeid">
@@ -84,6 +146,11 @@
                 <button type="submit"  name="search" class="btn btn-outline-primary">Search <i class="fa fa-search"></i> </button></div>
             </div>
           </form>
+               <?php 
+            }
+
+           ?>
+       
          </div>
        </div>
      </div>
@@ -115,6 +182,7 @@
                            <th colspan="2">Quantity</th>
                            <th colspan="2">Amount</th>
                            <th rowspan="2">(%)</th>
+                           <th rowspan="2">Status</th>
                          </tr>
                          <tr>
                            <td>Given</td>
@@ -134,6 +202,7 @@
             $qunt =  gettropsale($did['brandid'],$did['employee_id'],$did['startdate'],$did['enddate']);
             $parcantage  = ($qunt/$did['quantity'])*100;
             $sum += ($did['commsion']/$did['quantity'])*$qunt;
+            $emgets =   ($did['commsion']/$did['quantity'])*$qunt;
                             ?>
                             <tr>
                               <td><?=$i?></td>
@@ -150,6 +219,26 @@
                                         <div class="fill"></div>
                                       </div>
                                     </div>
+                              </td>
+                              <td>
+                                <?php 
+
+                                expiration($did['enddate']); 
+
+                                  if ($did['token'] == "comisn_paid") 
+                                  {
+                                    echo '||<button href="#" class="btn btn-secondary">Paid</button>';
+                                  }
+                                  else
+                                  {
+                                   echo '<a class="btn btn-outline-info"  href="employee_target_report.php?paycommission='.$did['autoid'].'&amount='.$emgets.'">Pay</a>';
+                                  }
+                                  
+
+                                ?> <br>
+                              
+                              <!-- The Modal -->
+
                               </td>
                              
                             </tr>
@@ -173,3 +262,5 @@
               </div>
            
 <?php include 'files/footer.php'; ?>
+
+

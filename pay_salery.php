@@ -49,7 +49,14 @@
     <div class="row">
       <div class="col">
          <h5>Employee Salery Comprise</h5>
-          <small> <p>Check the checkbox to update salery rate</p> </small>
+          <small> <p>Check the checkbox to update salery rate. Want to change the salery? <a href='salerysetup.php?eid=<?=$_GET['eid']?>'>click here</a> </p> </small>
+          <small>  </small>
+          <?php 
+            if (count($usersalerykeys) == 0)
+             {
+                echo "<p style='color:red'>No salery has been set yet. <a href='salerysetup.php?eid=".$_GET['eid']."'>Set up now</a> </p>";
+             }
+          ?>
          <table class="table table-bordered">
            
          
@@ -101,7 +108,7 @@
         <div class="form-group">
           <label for="name"> Date <span class="required">*</span>
           </label>
-          <input id="paydate" class="form-control" name="paydate" type="date" required>
+          <input id="paydate" class="form-control mydate"  name="paydate" type="date" required>
         </div>
         <div class="form-group">
           <label for="">Total</label>

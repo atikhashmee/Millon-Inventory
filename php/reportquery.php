@@ -20,7 +20,9 @@
 
        $sql[6] =  "SELECT `purchasedate`, `supplier`, `payment_taka`, `token` FROM `purchase` where `token` = 'p_Cash'";
 
-       $sql[7] = "SELECT `transerdate`, `to`, `amounts`, `bycashcheque` FROM `banktransfer`";
+       $sql[7] = "SELECT `transerdate`, `to`, `amounts`, `bycashcheque` FROM `banktransfer`"; 
+
+       $sql[7] = "SELECT `paydate`, `employee_id`, `pament`, `token` FROM `target` WHERE token='comisn_paid'";
 
          $dateext = [];
          $dateext[0] =" AND `selldate`";
@@ -31,6 +33,7 @@
          $dateext[5] =" WHERE `payment_date`";
          $dateext[6] =" AND `purchasedate`";
          $dateext[7] =" WHERE `transerdate`";
+         $dateext[7] =" AND `paydate`";
 
        if (!empty($start) && empty($end)) 
        {
@@ -130,6 +133,10 @@
                     {
                        return -$amounts;
                     }
+                    else if ($tkn == "comisn_paid") 
+                    {
+                       return -$amounts;
+                    }
                     else if (substr($tkn,0,7) == "ct_Cash") 
                     {
                       $tkens = explode("_", $tkn);
@@ -198,6 +205,9 @@
                     else if ($tkn == "salerypayment") 
                     {
                       $str = '<p class="description">Salery Payment to Employee <a href="#">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
+                    }else if ($tkn == "comisn_paid") 
+                    {
+                      $str = '<p class="description">Commsion Paid to Marketing <a href="#">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
                     }
             return $str;
   }
