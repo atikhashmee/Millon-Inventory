@@ -113,7 +113,7 @@
             <div class="col">
                <div id="chequeoption"  style="display: none;">
                   <div class="form-group">
-                     <label for="">Chose Account</label>
+                     <label for="">Chose Account<span style="color: red">*</span></label>
                      <select class="form-control" name="accounts" id="accounts">
                       <option value=""> Select option</option>
                         <?php    
@@ -125,15 +125,15 @@
                      </select>
                   </div>
                   <div class="form-group">
-                     <label for="">Cheque No</label>
+                     <label for="">Cheque No<span style="color: red">*</span></label>
                      <input type="text" class="form-control" name="chequeno" id="chequeno">
                   </div>
                   <div class="form-group">
-                     <label for="">Expire date</label>
+                     <label for="">Expire date<span style="color: red">*</span></label>
                      <input type="date" class="form-control" name="expredate" id="expredate">
                   </div>
                   <div class="form-group">
-                     <label for="">Amount</label>
+                     <label for="">Amount<span style="color: red">*</span></label>
                      <input type="text" class="form-control" name="cheqamount" id="cheqamount">
                   </div>
                </div>
@@ -321,6 +321,10 @@
        else if(getValue("suppliername").length===0)
        {
            msg('Select a suppliername','al');
+       }
+       else if (($("#customRadio2:checked").val() === "yes") &&((getValue("accounts").length=== 0) ||  (getValue("expredate").length=== 0)||  (getValue("cheqamount").length=== 0) ) )
+       {
+             msg("If you are chosing cheque payment option then you have to fill up (*) remarked fields",'al');
        }
        else 
        {

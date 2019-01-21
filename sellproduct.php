@@ -136,19 +136,19 @@ $rbas->setPageName(4)->run(); ?>
                         <div id="chequeoption"  style="display: none;">
                            
                            <div class="form-group">
-                              <label for="">Bank Name <small>(type bank name)</small> </label>
+                              <label for="">Bank Name <small>(type bank name)</small> <span style="color: red">*</span> </label>
                               <input type="text" class="form-control" name="accounts" id="accounts">
                            </div>
                            <div class="form-group">
-                              <label for="">Cheque/account No</label>
+                              <label for="">Cheque/account No <span style="color: red">*</span></label>
                               <input type="text" class="form-control" name="chequeno" id="chequeno">
                            </div>
                            <div class="form-group">
-                              <label for="">Expire date</label>
+                              <label for="">Expire date <span style="color: red">*</span></label>
                               <input type="date" class="form-control" name="expredate" id="expredate">
                            </div>
                            <div class="form-group">
-                              <label for="">Amount</label>
+                              <label for="">Amount <span style="color: red">*</span></label>
                               <input type="text" class="form-control" id="chequeamount" name="chequeamount" value="0">
                            </div>
                         </div>
@@ -449,6 +449,10 @@ $rbas->setPageName(4)->run(); ?>
        }else if (getValue("sellby").length === 0) 
        {
            msg("Select a Marketing",'al');
+       }
+       else if (($("#customRadio2:checked").val() === "yes") &&((getValue("accounts").length=== 0) ||  (getValue("expredate").length=== 0)||  (getValue("chequeamount").length=== 0) ) )
+       {
+             msg("If you are chosing cheque payment option then you have to fill up (*) remarked fields",'al');
        }
        else 
        {

@@ -7,8 +7,9 @@
 			require_once("session_header.php");
 			  $datass = json_decode($_GET['item']);
 			  $msg = array();
-			  if (!isset($_GET['editdata'])) 
-			  {
+
+
+			  
 			  	if ($_GET['cashcheque']=="yes") {
                   $chquedata = array(
                     'parent_table_id'  => "p_".$_GET['billchallan'],
@@ -25,8 +26,16 @@
                    array_push($msg, ["check"=>"Cheque has been saved"]);
                  }
                 }
+                else if ($_GET['cashcheque']=="no")
+                 {
+                 	$chequequntity = $db->selectAll('cheque','parent_table_id="p_'.$_GET['billchallan'].'"')->rowCount();
+                		if ($chequequntity>0 && $_GET['editdata'] == true) 
+                		{
+                			$db->delete('cheque','parent_table_id="p_'.$_GET['billchallan'].'"');
+                		}
+                 }
                 
-			  }
+			  
 			   
 
                 	
@@ -41,16 +50,10 @@
                 }
 
 
-                /*end of product update*/
-                if (isset($_GET['editdata'])) 
-                {
-                	$chequecash = "Cheque";
-                }
-                else
-                {
+              
+              
 
-      $chequecash = ($_GET['cashcheque']=="yes")?"Cheque":"Cash";
-                }
+            $chequecash = ($_GET['cashcheque']=="yes")?"Cheque":"Cash";
    
 			   for ($i=0; $i <count($datass); $i++) { 
 			    	 $data = array(

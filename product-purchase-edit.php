@@ -1,7 +1,7 @@
 <?php include 'files/header.php'; ?>
 <?php include 'files/menu.php';
 
-   $salehistory = $db->joinQuery('SELECT DISTINCT `billchallan`, `purchasedate`, `payment_taka`,  `purchaseentryby`,`supplier` FROM `purchase` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
+   $salehistory = $db->joinQuery('SELECT DISTINCT `billchallan`, `purchasedate`, `payment_taka`,  `purchaseentryby`,`supplier`,`token` FROM `purchase` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
    ?>
 <div class="container">
    <div class="row">
@@ -169,15 +169,92 @@
                            </div>
                            <div class="row">
                               <!-- Use accounts sections  -->
-                              <div class="col">
-                              </div>
+                <div class="col">
+                    <?php 
+                                $divstyle = "display: none;";
+                                $bankname = "";
+                                $accountnum = "";
+                                $expiredate = "";
+                                $amount  ="";
+                                $cascheque = "false";
+                                $quantity = 0;
+                         if (trim($salehistory['token']) == "p_Cheque" ) 
+                         {
+                                  $cascheque ="true";
+                                   $divstyle = "display: inline-block;"; 
+                                   $cheque = $db->selectAll('cheque','parent_table_id="p_'.$_GET['invo'].'"');
+                                   $chequeval  = $cheque->fetch(PDO::FETCH_ASSOC);
+
+                                    $quantity = $cheque->rowCount();
+                                   $bankname = $chequeval['bankname'];
+                                   $accountnum = $chequeval['accountno'];
+                                   $expiredate = $chequeval['expiredate'];
+                                   $amount = $chequeval['amount'];
+
+
+                          }
+                                ?>
+               <div id="chequeoption"  style="<?=$divstyle?>">
+                  <?php 
+                            if ($quantity<=0) {
+                              echo "<small style='color:red'>(No bank Information found)</small>";
+                            }
+                          ?>
+                  <div class="form-group">
+                     <label for="">Chose Account</label>
+                     <select class="form-control" name="accounts" id="accounts"  >
+                      <option value="<?=$bankname?>"><?=$fn->Chartsaccounta($bankname)?></option>
+                        <?php    
+                           $accounthead = $db->selectAll("charts_accounts","chart_name != 'Cash'")->fetchAll();
+                           foreach ($accounthead as $ah) { ?>
+                        <option value="<?=$ah['charts_id']?>"><?=$ah['chart_name']?></option>
+                        <?php }
+                           ?>
+                     </select>
+                  </div>
+                  <div class="form-group">
+                     <label for="">Cheque No</label>
+                     <input type="text" class="form-control" name="chequeno" id="chequeno" value="<?=$accountnum?>">
+                  </div>
+                  <div class="form-group">
+                     <label for="">Expire date</label>
+                     <input type="date" class="form-control" name="expredate" id="expredate" value="<?=$expiredate?>">
+                  </div>
+                  <div class="form-group">
+                     <label for="">Amount</label>
+                     <input type="text" class="form-control" name="cheqamount" id="cheqamount" value="<?=$amount?>">
+                  </div>
+               </div>
+            </div>
+            <div class="col">
+               <div class="form-group" style="position: relative; top:20px; text-align: center;">
+                  <div class="custom-control custom-radio">
+                     <input type="radio" id="customRadio1" name="cashcheque" value="no" class="custom-control-input" onchange="chequeoptioncheck()" <?=($cascheque=="true")?"":"checked"?>  >
+                     <label class="custom-control-label" for="customRadio1">Cash</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                     <input type="radio" id="customRadio2" name="cashcheque" value="yes" class="custom-control-input" onchange="chequeoptioncheck()" <?=($cascheque=="true")?"checked":""?>>
+                     <label class="custom-control-label" for="customRadio2">Cheque</label>
+                  </div>
+               </div>
+               <div id="cashoption">
+                  <div class="form-group">
+                     <label for="">Paid</label>
+                     <input type="text" class="form-control" id="nowpayment" name="nowpayment" value="<?=$salehistory['payment_taka']?>">
+                  </div>
+                  <div class="form-group">
+                     <label for="">Bill Balance</label>
+                     <input type="text" class="form-control" name="billbalance" id="billbalance">
+                  </div>
+               </div>
+            </div>
+                              
                               
                                  
-                                 <input type="hidden" name="sellby" value="<?=$salehistory['purchaseentryby']?>">
-
-                                 
-                                 <input type="hidden" name="nowpayment" value="<?=$salehistory['payment_taka']?>">
+                                
                                  <div class="col">
+                                   <input type="hidden" name="sellby" value="<?=$salehistory['purchaseentryby']?>">
+                                 
                                     <div class="form-group">
                                        <label for="">Total</label>
                                        <input type="text" class="form-control" id="subtotalbeforecommsion" name="subtotalbeforecommsion" value="0">
@@ -376,6 +453,11 @@
       {
         alertify.confirm("Are you sure?",function(ev){
           ev.preventDefault();
+
+           /* console.log(JSON.stringify(purchaseitem));
+            console.log($("#allotherinfo").serialize());*/
+
+
           $.ajax({
              url:'ajax/add_new_purchase_info.php?item='+JSON.stringify(purchaseitem)+"&allotherinfo="+$("#allotherinfo").serialize()+'&editdata=true',
              type: 'GET',
@@ -536,6 +618,23 @@
       });
    
    
+
+   // check the radio button to show the cheque payment method
+      function chequeoptioncheck(){
+        var divid  = document.getElementById('chequeoption');
+       var radio  =  document.getElementById('customRadio2');
+       var cashoption = document.getElementById('cashoption');
+        if (radio.checked === true){
+          divid.style.display = 'inline-block';
+   
+          cashoption.style.display  = 'none';
+          
+        }else {
+          divid.style.display = 'none';
+           cashoption.style.display  = 'inline-block';
+        }
+   
+      }
    
      
     

@@ -139,6 +139,7 @@
           <th>Supplier</th>
           <th>Amount</th>
           <th>Entry By</th>
+          <th>Payment As</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -158,6 +159,7 @@
                <td><?=$pur['total']?></td> 
                
                <td><?=$pur['purchasedate']?></td>
+               <td><?=explode("_", trim($pur['token']))[1]?></td>
                <td><div class="dropdown">
       <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-gear"></i>

@@ -95,7 +95,9 @@
 
 
     function getMoneyToken($tkn,$amounts)
-    {
+    { 
+         
+
                    if ($tkn == "pts_Cash") 
                     {
                        return  -$amounts;

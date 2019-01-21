@@ -135,7 +135,9 @@ section .section-title {
 
                                   // echo $df->format("Y-m-d");
                          $data = cashReport($df->format('Y-m-d'));
-                                        ?>
+
+                         // previous date cash
+                         $previus = datewiseCashBalance($df->sub(new DateInterval('P1D'))->format('Y-m-d'));  ?>
                                     </div>
                                     <div class="col"></div>
                                 </div>
@@ -157,20 +159,20 @@ section .section-title {
                 <td></td>
                 <td></td>
                 <td>Pre cash</td>
-                <td><?=datewiseCashBalance($df->sub(new DateInterval('P1D'))->format('Y-m-d'))?></td>
+                <td><?=$previus?></td>
             </tr>
             
             <?php 
             
                $i=0;
-               $sum = 0;
+               $sum = (int)$previus;
                   foreach ($data as $val) 
                   { 
                      $i++;
                    
                      $tkn     =  trim($val['token']);
                      $amounts =  trim($val['payment_taka']);
-                     $sign    =  getMoneyToken($tkn,$amounts);
+                     $sign    =  getMoneyToken($tkn,intval($amounts));
                     
                      $td1     =  (substr($sign, 0,1)   !="-")?$amounts:" ";
                      $td2     =  (substr($sign, 0,1)   =="-")?$amounts:" ";
@@ -205,101 +207,6 @@ section .section-title {
                     </div>
                 </div>
              <!-- end of cash report -->
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card m-b-30">
-                            <div class="card-body">
-                                <h4 class="mt-0 header-title">Today's sale</h4>
-                                  <table border="1" style="width: 100%" id="datatable">
-                                    <tr>
-                                      <th>#</th>
-                                      <th>Name</th>
-                                      <th>Quantity</th>
-                                    </tr>
-                                    <?php
-                                    function getProperty($proid)
-                                    {
-                                      $item =   $GLOBALS['db']->selectAll('product_info')->fetch(PDO::FETCH_ASSOC);
-                                       return [
-                                         "cat"  =>$item['product_cat'],
-                                         "brand"=>$item['brand_id'],
-                                         "size" =>$item['size_id']
-                                       ];
-                                    }
-                                    $sql = "SELECT `productid`, SUM(`quantity`) as totalitem FROM `sell` WHERE `selldate`=CURDATE() GROUP BY `productid`";
-                                    $todaydata = $db->joinQuery($sql)->fetchAll();
-                                    $count    = 0;
-                                    $procat   = array();
-                                    $probrand = array();
-                                    $prosize  = array();
-                                    foreach ($todaydata as $td) 
-                                    {
-
-                        array_push($procat, getProperty($td['productid'])['cat']);
-                      array_push($prosize, getProperty($td['productid'])['size']);
-                    array_push($probrand, getProperty($td['productid'])['brand']);
-                                        $count++;
-                                        ?>
-                                        <tr>
-                                          <td><?=$count?></td>
-                                          <td><?=$td['productid']?></td>
-                                          <td><?=$td['totalitem']?></td>
-                                        </tr>
-                                        <?php
-                                    }
-                                     $procat = array_unique($procat);
-
-
-
-
-                                    ?>
-                                  </table>
-                                  <div class="row">
-                                    <?php
-
-                                       foreach ($procat as $pcat =>$pval )
-                                      {
-                                           ?>
-                                              <div class="col-xs-6">
-                                            <a href="#" class="active" id="login-form-link"><?=$pval?></a>
-                                          </div>
-                                 
-                                           <?php
-                                       }
-                                    ?>
-                                  </div>
-                    </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="card m-b-30">
-                            <div class="card-body">
-                                <h4 class="mt-0 header-title">Revenue</h4>
-
-                                <ul class="list-inline widget-chart m-t-20 text-center">
-                                    <li>
-                                        <h4 class=""><b>5248</b></h4>
-                                    <p class="text-muted m-b-0">Marketplace</p>
-                                    </li>
-                                    <li>
-                                        <h4 class=""><b>321</b></h4>
-                                        <p class="text-muted m-b-0">Last week</p>
-                                    </li>
-                                    <li>
-                                        <h4 class=""><b>964</b></h4>
-                                        <p class="text-muted m-b-0">Last Month</p>
-                                    </li>
-                                </ul>
-
-                                <div id="morris-bar-example" style="height: 300px"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-           
 
             </div> <!-- end container -->
        
