@@ -52,7 +52,7 @@
        }
 
        $query = implode(" UNION ", $sql);
-       //echo $query;
+      // echo $query;
 
        return $query;
     }

@@ -54,11 +54,9 @@ $rbas->setPageName(4)->run(); ?>
                        <input type="text" class="form-control col-md-10" name="billchallan" id="billchallan" placeholder="click on the button" required>
                            <button type="button" onclick="gBCN()" class="btn btn-outline-info col-md-2"><i class="fa fa-hashtag"></i></button>
                         </div>
-                         
-                              
                               <div class="form-group row">
-                              <label for="name">Date of Sell <span class="required">*</span></label>
-                                 <input type="text" id="datesell" name="datesell" class="form-control col-md-10">
+                           <label for="name">Date of Sell <span class="required">*</span></label>
+                            <input type="text" id="datesell" name="datesell" class="form-control col-md-10">
                               </div>
                      </div>
                   </div>

@@ -26,7 +26,7 @@
                      <div class="col">
                         <label for="">Supplier Name</label>
                         <input type="hidden" name="supplierid" id="supplierid">
-                        <input type="text" class="form-control" id="supplier" placeholder="type out supplier name">
+                        <input type="text" class="form-control" id="supplier" placeholder="Typeout supplier name">
                      </div>
                      <div class="col">
                         <label for="">Date-From</label>
@@ -46,6 +46,17 @@
                         </select>
                      </div>
                      </div>
+                      <div class="col">
+                        <div class="form-group">
+                   <div class="custom-control custom-checkbox" style="top: 29px;">
+                              <input type="checkbox" class="custom-control-input"  id="customCheck"
+                                 value="Yes" name="customCheck">
+                            <label class="custom-control-label" for="customCheck">
+                                 <p style="font-size: 12px;"> Include  Opening Balance</p>
+                              </label>
+                           </div>
+                        </div>
+                     </div>
                      
                      <div class="col">
                         <button type="submit" name="filter" style="position: absolute;top: 29px;" class="btn btn-outline-primary">Search <i class="fa fa-search"></i> </button>
@@ -58,8 +69,8 @@
                   echo "</pre>";*/
                   
                       $exequery = $pr->purQueryEnquery();
-                      $sum =0;
-                  
+                   
+                        $sum =0;
                       $searchtype = "";
                       if (isset($_GET['supid'])) 
                       {
@@ -130,6 +141,15 @@
                         }
                         
                            }
+
+                  if (isset($_POST['customCheck']) && $_POST['customCheck'] == "Yes")
+                  {
+                  $sum = $fn->getOpeningBalance($_POST['supplierid']);
+                  }
+                  else
+                  {
+                  $sum = 0;
+                  }
                          
                   
                               

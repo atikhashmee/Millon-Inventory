@@ -24,7 +24,7 @@
                   <div class="row">
                      <div class="col">
                         <input type="hidden" name="customerid" id="customerid">
-                        <input type="text" class="form-control" id="customer" placeholder="type out customer name">
+                        <input type="text" class="form-control" id="customer" placeholder="Typeout customer name">
                      </div>
                      <div class="col"><input type="text" class="form-control" name="start" id="start"></div>
                      <div class="col"><input type="text" class="form-control" name="to" id="to"></div>
@@ -128,7 +128,7 @@
                   
                   if (isset($_POST['customCheck']) && $_POST['customCheck'] == "Yes")
                   {
-                  $sum = $fn->userOpeningBalance($_POST['customerid']);
+                  $sum = $fn->getOpeningBalance($_POST['customerid']);
                   }
                   else
                   {
@@ -164,7 +164,7 @@
                   }
                   ?> 
                <div class="table-responsive">
-                  <table border="1" id="datatable-buttons">
+                  <table border="1" id="datatable-buttons" style="width: 100%">
                      <thead>
                         <tr>
                            <th>#</th>

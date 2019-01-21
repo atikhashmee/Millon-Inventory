@@ -129,6 +129,7 @@ window.location.href='product-sale-history.php'; </script>
             <th>Amount</th>
             <th>Marketing</th>
             <th>Entryby</th>
+            <th>Payment As</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -149,6 +150,18 @@ window.location.href='product-sale-history.php'; </script>
                     <td><?=$sel['total_taka']?></td>
                     <td><?=$fn->getUserName($sel['sellby'])?></td>
                     <td><?=$fn->getUserName($sel['entryby'])?></td>
+                    <td><?php 
+                    if (trim($sel['token']) == "s_Cash") 
+                    {
+                     
+                      echo "Cash";
+                    }
+                    else if (trim($sel['token']) == "s_Cheque") 
+                    {
+                        echo "Cheque";
+                    }
+
+                    ?></td>
                     <td><div class="dropdown">
   <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
    <i class="fa fa-gear"></i>

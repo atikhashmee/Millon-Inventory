@@ -135,40 +135,40 @@
                             <td></td>
                             <td></td>
                             <td class="text-right"> <strong>Total</strong> </td>
-                            <td class="text-right"><?=number_format($sum)?></td>
+                            <td class="text-right"><?=number_format((float)$sum)?></td>
                           </tr>
                           <tr>
                             <td></td>
                             <td></td>
                             <td class="text-right"> <strong>Weight</strong> </td>
-                            <td class="text-right"><?=number_format($weight)?></td>
+                          <td class="text-right"><?=number_format((float)$weight)?></td>
                           </tr> 
                           <tr>
                             <td></td>
                             <td></td>
                             <td class="text-right"> <strong>Transport</strong> </td>
-                            <td class="text-right"><?=number_format($transport)?></td>
+                            <td class="text-right"><?=number_format((float)$transport)?></td>
                           </tr> 
                           <tr>
                             <td></td>
                             <td></td>
                             <td class="text-right"> <strong>Subtotal</strong> </td>
                             <td class="text-right"><?=number_format(
-                              ($transport+$weight+$sum))?></td>
+                             ((float)$transport+(float)$weight+(float)$sum))?></td>
                           </tr>
                           <hr>
                           <tr>
                             <td></td>
                             <td></td>
                             <td class="text-right"> <strong>Vat</strong> </td>
-                            <td class="text-right"><?=number_format($vat)?></td>
+                            <td class="text-right"><?=number_format((float)$vat)?></td>
                           </tr>
                           <tr>
                             <td></td>
                             <td></td>
                             <td class="text-right"><strong>Grand Total</strong> </td>
                             <td class="text-right"><?=number_format(
-                              ($transport+$weight+$sum) + ( ($vat/100) * ($transport+$weight+$sum)))?></td>
+                              ((float)$transport+(float)$weight+(float)$sum) + ( ((float)$vat/100) * ((float)$transport+(float)$weight+(float)$sum)))?></td>
                           </tr>                      
                        </tbody>
                                                     </table>

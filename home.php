@@ -133,7 +133,7 @@ section .section-title {
 
                                         <?php 
 
-                                           // echo $df->format("Y-m-d");
+                                  // echo $df->format("Y-m-d");
                          $data = cashReport($df->format('Y-m-d'));
                                         ?>
                                     </div>
@@ -157,7 +157,7 @@ section .section-title {
                 <td></td>
                 <td></td>
                 <td>Pre cash</td>
-                <td><?=previousDayCash()?></td>
+                <td><?=datewiseCashBalance($df->sub(new DateInterval('P1D'))->format('Y-m-d'))?></td>
             </tr>
             
             <?php 
@@ -211,87 +211,65 @@ section .section-title {
                         <div class="card m-b-30">
                             <div class="card-body">
                                 <h4 class="mt-0 header-title">Today's sale</h4>
+                                  <table border="1" style="width: 100%" id="datatable">
+                                    <tr>
+                                      <th>#</th>
+                                      <th>Name</th>
+                                      <th>Quantity</th>
+                                    </tr>
+                                    <?php
+                                    function getProperty($proid)
+                                    {
+                                      $item =   $GLOBALS['db']->selectAll('product_info')->fetch(PDO::FETCH_ASSOC);
+                                       return [
+                                         "cat"  =>$item['product_cat'],
+                                         "brand"=>$item['brand_id'],
+                                         "size" =>$item['size_id']
+                                       ];
+                                    }
+                                    $sql = "SELECT `productid`, SUM(`quantity`) as totalitem FROM `sell` WHERE `selldate`=CURDATE() GROUP BY `productid`";
+                                    $todaydata = $db->joinQuery($sql)->fetchAll();
+                                    $count    = 0;
+                                    $procat   = array();
+                                    $probrand = array();
+                                    $prosize  = array();
+                                    foreach ($todaydata as $td) 
+                                    {
 
-                                <nav>
-                 <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                        
+                        array_push($procat, getProperty($td['productid'])['cat']);
+                      array_push($prosize, getProperty($td['productid'])['size']);
+                    array_push($probrand, getProperty($td['productid'])['brand']);
+                                        $count++;
+                                        ?>
+                                        <tr>
+                                          <td><?=$count?></td>
+                                          <td><?=$td['productid']?></td>
+                                          <td><?=$td['totalitem']?></td>
+                                        </tr>
+                                        <?php
+                                    }
+                                     $procat = array_unique($procat);
 
-                        <?php
-                            $i=0;
-                            $categories = $db->selectAll("cateogory")->fetchAll();
-                            foreach ($categories as $cat) 
-                            {  
 
-                                $class = ($i==0)?"active":" ";
-                                ?>
-                                <a class="nav-item nav-link <?=$class?>" id="nav-<?=$cat['cat_id']?>-tab" data-toggle="tab" href="#nav-<?=$cat['cat_name']?>" role="tab" aria-controls="nav-<?=$cat['cat_name']?>" aria-selected="true"><?=$cat['cat_name']?></a>
-                                <?php
-                                $i++;
-                            }
 
-                        ?>
-                        
+
+                                    ?>
+                                  </table>
+                                  <div class="row">
+                                    <?php
+
+                                       foreach ($procat as $pcat =>$pval )
+                                      {
+                                           ?>
+                                              <div class="col-xs-6">
+                                            <a href="#" class="active" id="login-form-link"><?=$pval?></a>
+                                          </div>
+                                 
+                                           <?php
+                                       }
+                                    ?>
+                                  </div>
                     </div>
-                </nav>
-                <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
-                    <?php
-                        $j =0;
-                        foreach ($categories as $ca) 
-                        {
-                            $class = ($j==0)?"active":" ";
-                            ?>
-                            <div class="tab-pane fade show <?=$class?>" id="nav-<?=$cat['cat_name']?>" role="tabpanel" aria-labelledby="nav-<?=$cat['cat_name']?>-tab">
-                                <?php
-                                    if ($ca['cat_id'] == 1) 
-                                    {
-                                        ?>
-                                          <table class="table table-borderd" id="datatable">
-                                              <thead>
-                                                  <tr>
-                                                      <th>#</th>
-                                                      <th>Name</th>
-                                                      <th>Quantity</th>
-                                                  </tr>
-                                              </thead>
-                                              <tbody>
-                                                  <?php
-                                                    $sizes =  $db->joinQuery("SELECT DISTINCT `pro_size_name` FROM `p_size`")->fetchAll();
-                                                    foreach ($sizes as $sz) 
-                                                    {
-                                                        ?>
-                                                          <tr>
-                                                              <td>#</td>
-                                                              <td><?=$sz['pro_size_name']?></td>
-                                                              <td></td>
-                                                          </tr>
-                                                        <?php
-                                                    }
-                                                  ?>
-                                              </tbody>
-                                          </table>
-                                        <?php
-                                    }
-                                    else if ($ca['cat_id'] == 2)
-                                    {
-                                        ?>
-                                         <h3>hello world</h3>
-                                        <?php
-                                    }
-
-                                ?>
-                                    
-                            </div>
-                            <?php
-                            $j++;
-                        }
-
-                    ?>
-                    
-                    
-                    
-                    
-                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -321,104 +299,7 @@ section .section-title {
                     </div>
                 </div>
 
-                <div class="row">
-
-                    <div class="col-xl-8">
-                        <div class="card m-b-30">
-                            <div class="card-body">
-                                <h4 class="mt-0 m-b-15 header-title">
-                                Product reviews
-                            </h4>
-
-                                <div class="table-responsive">
-                                    <table class="table table-hover mb-0">
-                                        <thead>
-                                        <tr>
-                                            <th>Invoice</th>
-                                            <th>Product</th>
-                                            <th>Status</th>
-                                            <th>Qunatity</th>
-                                            <th>Date</th>
-                                            <th>Price</th>
-                                        </tr>
-
-                                        </thead>
-                                        <tbody>
-                                            <?php 
-
- $sql = "SELECT `billchallan`,`selldate`, `token`, `productid`, `quantity`,`price` FROM `sell`  
-UNION 
-SELECT `billchallan`, `purchasedate`,`token`,`productid`,`quantity`,`price` FROM `purchase`
-UNION
-SELECT `memono`, `return_date`, `token`,`productid`,`quntity`,`price` FROM `sell_return` 
-UNION
-SELECT `memono`, `return_date`,`token`,`productid`,`quntity`,`price`  FROM `purchase_return`";
-
-$query =  $db->joinQuery($sql)->fetchAll();
-foreach ($query as $qu) {
-    ?>
-        
-                                               <tr>
-                                            <td><?=$qu['billchallan']?></td>
-                                            <td><?=$qu['productid']?></td>
-                                            <td><span class="badge badge-info"><?php 
-                                            if ($qu['token'] == 'p') {
-                                                echo "Purchase";
-                                            }else if ($qu['token'] == 's') {
-                                                echo "Sale";
-                                            }else if ($qu['token'] == 'sr') {
-                                                echo "Sale Return";
-                                            }else if ($qu['token'] == 'pr') {
-                                                echo "Purchase Return";
-                                            }
-                                            
-                                            ?></span></td>
-                                            <td><?=$qu['quantity']?></td>
-                                            <td><?=date_format(date_create($qu['selldate']),"d/m/Y"); ?></td>
-                                            <td><?=$qu['price']?></td>
-                                        </tr>
-    <?php 
-   
-}
-
-                                            ?>
-                                        
-
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="card m-b-30">
-                            <div class="card-body">
-                                <h4 class="mt-0 header-title">Monthly Earnings</h4>
-
-                                <ul class="list-inline widget-chart m-t-20 text-center">
-                                    <li>
-                                        <h4 class=""><b>3654</b></h4>
-                                        <p class="text-muted m-b-0">Marketplace</p>
-                                    </li>
-                                    <li>
-                                        <h4 class=""><b>954</b></h4>
-                                        <p class="text-muted m-b-0">Last week</p>
-                                    </li>
-                                    <li>
-                                        <h4 class=""><b>8462</b></h4>
-                                        <p class="text-muted m-b-0">Last Month</p>
-                                    </li>
-                                </ul>
-
-                                <div id="morris-donut-example" style="height: 265px"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <!-- end row -->
+           
 
             </div> <!-- end container -->
        

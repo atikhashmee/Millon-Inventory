@@ -23,6 +23,14 @@
 				       return ($prod->rowCount()==0)?"Not found":$productname['brand_name'];
 
 				   }
+				   public function getOpeningBalance($userid)
+				   {
+				   	 $user =  $this->selectAll("users","u_id='".$userid."'");
+				   	 $username = $user->fetch(PDO::FETCH_ASSOC);
+				      return floatval($username['opening_balance']);
+				   }
+
+				   
 
 				   public function getCatName($catid)
 				   {
@@ -47,12 +55,7 @@
 				   	 $username = $user->fetch(PDO::FETCH_ASSOC);
 				      return ($user->rowCount()==0)?"Not Found":$username['name'];
 				   }
-				   public function userOpeningBalance($userid)
-				   {
-				   	 $user =  $this->selectAll("users","u_id='".$userid."'");
-				   	 $username = $user->fetch(PDO::FETCH_ASSOC);
-				      return ($user->rowCount()==0)?"Not Found":$username['opening_balance'];
-				   }
+				   
 
 				   public function Chartsaccounta($chartid)
 				   {
@@ -122,7 +125,7 @@
 			   public function getCustomerTotalBalance($obj,$userid)
 			        {
                      $sql = $obj->queryEnquery($userid);
-			        	 $sum = 0;
+			        	 $sum = $this->getOpeningBalance($userid);
 			  $sqlquery = $this->joinQuery($sql)->fetchAll();
 			 	foreach ($sqlquery as $val) 
 			 	{
@@ -158,7 +161,7 @@
 			        public function getSupplierTotalBalance($obj,$userid)
 			        {
 			        	$sql = $obj->purQueryEnquery($userid);
-			        	 $sum = 0;
+			        	 $sum = $this->getOpeningBalance($userid);
 			  $sqlquery = $this->joinQuery($sql)->fetchAll();
 			 	foreach ($sqlquery as $val) 
 			 	{

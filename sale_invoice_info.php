@@ -190,6 +190,7 @@
                            <div class="d-print-none mo-mt-2">
                               <div class="pull-right">
                                  <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light">Print <i class="fa fa-print"></i></a>
+                                 <a href="product-sale-edit.php?invo=<?=$_GET['invo']?>" class="btn btn-warning waves-effect waves-light">Edit <i class="fa fa-pencil"></i></a></a>
                                  <a href="#" class="btn btn-primary waves-effect waves-light">Mail</a>
                               </div>
                            </div>

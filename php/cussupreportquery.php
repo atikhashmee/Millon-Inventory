@@ -232,14 +232,14 @@
 					$salequery = "SELECT `billchallan`,`sellby`,`entryby`,`selldate`,`customerid`, (SUM(`quantity`*`price`)+(`weight`+`transport`+(`vat`/100)*SUM(`quantity`*`price`))-((`comission`/100)*SUM(`quantity`*`price`)+`discount`)) as total_taka,`token`, CONCAT( billchallan,'_',payment_taka)as total FROM `sell`";
 					if (!empty($customerid) && (empty($start) && empty($end))) 
 				      {
-						$salequery .= $this->whereas[2]." ".$this->idcus[2]."='{$customerid}'";
+						$salequery .= "WHERE customerid ='{$customerid}'";
 			          }
 
 				if (! empty($customerid) && (!empty($start) && empty($end))) 
 					{
 						
 							
-								$salequery .= $this->whereas[2]." ".$this->idcus[2]."='{$customerid}' AND ".$this->iddate[2]."='{$start}'";
+								$salequery .= " WHERE customerid = '{$customerid}' AND selldate='{$start}'";
 						
 					}
 
@@ -247,7 +247,7 @@
 					{
 						 
 							
-						$salequery .= $this->whereas[2]." ".$this->idcus[2]."='{$customerid}' AND ".$this->iddate[2]." BETWEEN '{$start}' AND '{$end}'";
+						$salequery .= "WHERE customerid = '{$customerid}' AND selldate between '{$start}' AND '{$end}'";
 					}
 					
 						return $salequery."GROUP BY `billchallan` ORDER BY selldate DESC";

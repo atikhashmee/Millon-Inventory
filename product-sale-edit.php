@@ -2,7 +2,7 @@
 <?php include 'files/menu.php';?>
 <?php 
 
-   $salehistory = $db->joinQuery('SELECT DISTINCT`customerid`,`selldate`,`billchallan`,`payment_taka`,`sellby` FROM `sell` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
+   $salehistory = $db->joinQuery('SELECT DISTINCT`customerid`,`selldate`,`billchallan`,`payment_taka`,`sellby`,`token` FROM `sell` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
    
    /* echo "<pre>";
    print_r($salehistory);
@@ -193,12 +193,87 @@
                            <div class="row">
                               <!-- Use accounts sections  -->
                               <div class="col">
+                                <?php 
+                                $divstyle = "display: none;";
+                                $bankname = "";
+                                $accountnum = "";
+                                $expiredate = "";
+                                $amount  ="";
+                                $cascheque = "false";
+                                $quantity = 0;
+                         if (trim($salehistory['token']) == "s_Cheque" ) 
+                         {
+                                  $cascheque ="true";
+                                   $divstyle = "display: inline-block;"; 
+                                   $cheque = $db->selectAll('cheque','parent_table_id="s_'.$_GET['invo'].'"');
+                                   $chequeval  = $cheque->fetch(PDO::FETCH_ASSOC);
+
+                                    $quantity = $cheque->rowCount();
+                                   $bankname = $chequeval['bankname'];
+                                   $accountnum = $chequeval['accountno'];
+                                   $expiredate = $chequeval['expiredate'];
+                                   $amount = $chequeval['amount'];
+
+
+                          }
+                                ?>
+                        
+                        <div id="chequeoption"  style="<?=$divstyle?>">
+                          <?php 
+                            if ($quantity<=0) {
+                              echo "<small style='color:red'>(No bank Information found)</small>";
+                            }
+                          ?>
+                         
+                           <div class="form-group">
+                              <label for="">Bank Name <small>(type bank name)</small> </label>
+                              <input type="text" class="form-control" name="accounts" id="accounts" value="<?=$bankname?>">
+                           </div>
+                           <div class="form-group">
+                              <label for="">Cheque/account No</label>
+                              <input type="text" class="form-control" name="chequeno" id="chequeno" value="<?=$accountnum?>">
+                           </div>
+                           <div class="form-group">
+                              <label for="">Expire date</label>
+                              <input type="date" class="form-control" name="expredate" id="expredate" value="<?=$expiredate?>">
+                           </div>
+                           <div class="form-group">
+                              <label for="">Amount</label>
+                              <input type="text" class="form-control" id="chequeamount" name="chequeamount" value="<?=$amount?>">
+                           </div>
+                        </div>
+                     </div>
+                              <div class="col">
+                      <div class="form-group"  style="position: relative; top:20px; text-align: center;">
+                     
+                          
+                        
+                           <div class="custom-control custom-radio">
+                              <input type="radio" id="customRadio1" name="cashcheque" value="no" onchange="chequeoptioncheck()" class="custom-control-input" <?=($cascheque=="true")?"":"checked"?> >
+                              <label class="custom-control-label" for="customRadio1">Cash</label>
+                           </div>
+                           <div class="custom-control custom-radio">
+                              <input type="radio" id="customRadio2" name="cashcheque" value="yes" onchange="chequeoptioncheck()" class="custom-control-input" <?=($cascheque=="true")?"checked":""?> >
+                              <label class="custom-control-label" for="customRadio2">Cheque</label>
+                           </div>
+                          
+                        </div>
+                         <div id="cashoption">
+                           <div class="form-group">
+                              <label for="">Cash Paying Amount</label>
+                              <input type="text" class="form-control" id="nowpayment" name="nowpayment" value="<?=$salehistory['payment_taka']?>">
+                           </div>
+                           <div class="form-group">
+                              <label for="">Due Balance</label>
+                              <input type="text" class="form-control" name="billbalance" id="billbalance">
+                           </div>
+                        </div>
                               </div>
                               
                                  
                                  <input type="hidden" name="dbsellby" value="<?=$salehistory['sellby']?>">
                                  
-                                 <input type="hidden" name="nowpayment" value="<?=$salehistory['payment_taka']?>">
+                                 
                                  <div class="col">
                                     <div class="form-group">
                                        <label for="">Total</label>
@@ -234,7 +309,11 @@
                                        <label for="">Grand Total</label>
                                        <input type="text" class="form-control" id="grandtotalaftercommision">
                                     </div>
-                                    <button type="button" onclick="savePurchaseinfo()"   class="btn btn-outline-primary">Update and Save <i class="fa fa-floppy-o"></i> </button>
+
+                                    
+                    
+                           
+                                    <button type="button" id="updatebtn" onclick="savePurchaseinfo()"   class="btn btn-outline-primary">Update and Save <i class="fa fa-floppy-o"></i> </button>
                                  </div>
                               </form>
                            </div>
@@ -398,6 +477,25 @@
     }
             
     }
+
+    // check the radio button to show the cheque payment method
+      function chequeoptioncheck(){
+        var divid  = document.getElementById('chequeoption');
+       var radio  =  document.getElementById('customRadio2');
+       var cashoption = document.getElementById('cashoption');
+        if (radio.checked === true){
+          divid.style.display = 'inline-block';
+   
+          cashoption.style.display  = 'none';
+          
+        }else {
+          divid.style.display = 'none';
+           cashoption.style.display  = 'inline-block';
+        }
+   
+      }
+
+      
    
  
    
@@ -407,8 +505,8 @@
         alertify.confirm("Are you sure?", function (ev) 
         {
             ev.preventDefault();
-              // console.log(JSON.stringify(purchaseitem));
-              // console.log($("#allotherinfo").serialize());
+              /*console.log(JSON.stringify(purchaseitem));
+              console.log($("#allotherinfo").serialize());*/
               $.ajax({
             url: 'ajax/addnewsellinfo.php?item='+JSON.stringify(purchaseitem)+'&allinfo='+$("#allotherinfo").serialize()+'&editdata=true',
             type: 'GET',
@@ -563,6 +661,9 @@
         
          document.getElementById("quntity").value = prodd[e.target.value];
       });
+
+
+      
 
     
 </script>

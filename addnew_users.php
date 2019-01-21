@@ -155,7 +155,7 @@
                
                ?>
             <div class="card card-body">
-               <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <table id="datatable-buttons" border="1" cellspacing="0" width="100%">
                   <thead>
                      <tr>
                         <th>#</th>
