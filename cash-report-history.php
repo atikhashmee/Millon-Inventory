@@ -30,42 +30,30 @@
          <div class="card card-body">
           <form action="" method="post">
             <div class="row">
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="">Accounts Name</label>
-                    <select name="" id="" class="form-control">
-                      <option value="">Select an Option</option>
-                        <?php    
-                           $accounthead = $db->selectAll("charts_accounts","chart_name != 'Cash'")->fetchAll();
-                           foreach ($accounthead as $ah) { ?>
-                        <option value="<?=$ah['charts_id']?>"><?=$ah['chart_name']?></option>
-                        <?php }
-                           ?>
-                    </select>
-                </div>
+              <div class="col">
                 <div class="form-group">
                   <label for="">Select a start Date</label>
                   <input type="text" class="form-control" name="startdate" id="startdate">
                 </div>
               </div>
-              <div class="col-md-3">
+              <div class="col">
                 <div class="form-group">
                   <label for="">Select an end Date</label>
                 <input type="text" class="form-control" name="endate" id="endate">
                 </div>
               </div>
-              <div class="col-md-3">
+              <div class="col">
                 <div class="form-group">
           <div class="custom-control custom-checkbox" style="top: 30px;">
             <input type="checkbox" class="custom-control-input"  id="customCheck"
               value="Yes" name="customCheck">
               <label class="custom-control-label" for="customCheck">
-               <small>Include Cash Opening Balance</small> 
+                Include Cash Opening Balance
                </label>
                </div>
             </div>
               </div>
-              <div class="col-md-3">
+              <div class="col">
                
                   <button type="submit" name="datesearch" style="position: absolute; top: 29px;"  class="btn btn-outline-primary">  Search <i class="fa fa-search"></i> </button> 
                

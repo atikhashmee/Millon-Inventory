@@ -67,7 +67,7 @@ $rbas->setPageName(9)->run();
             <div class="form-group">
                <label for="name">Select a Category<span class="required">*</span>
                </label>
-               <select class="form-control" name="expensecate">
+               <select class="form-control" name="expensecate" required="true">
                   <option value="">Choose option</option>
                   <?php 
                      $cat  =  $db->selectAll("expensecategory")->fetchAll();
@@ -84,16 +84,14 @@ $rbas->setPageName(9)->run();
             <div class="form-group">
                <label  for="name">Accounts  <span class="required">*</span>
                </label>
-               <select class="form-control" name="accountsid">
-                  <option value="">Choose option</option>
-                  <?php 
-                     $cat  =  $db->joinQuery("SELECT * FROM `charts_accounts`")->fetchAll();
-                     foreach ($cat as $cater) { ?>
-                  <option value="<?=$cater['charts_id']?>"><?=$cater['chart_name']?></option>
-                  <?php
-                     }
-                     
-                     ?>
+               <select class="form-control" name="accountsid" required="true" readonly>
+                <?php 
+                     $cat  =  $db->joinQuery("SELECT chart_name FROM `charts_accounts` WHERE chart_name='Cash'")->fetch(PDO::FETCH_ASSOC);  ?>
+                    
+               <option value="<?=$cat['charts_id']?>"><?=$cat['chart_name']?></option>
+                 
+                  
+                  
                </select>
             </div>
          </div>
@@ -119,7 +117,7 @@ $rbas->setPageName(9)->run();
                   <option value="">Employee Type</option>
                   <?=$dm->getEmployeeType()?>
                </select>
-                <select class="form-control col" name="employeeid" id="employeeid">
+              <select class="form-control col" name="employeeid" id="employeeid">
                   
                   
                </select>
@@ -274,13 +272,13 @@ $rbas->setPageName(9)->run();
       <div class="col">
 
             <div class="card card-body">
-         <table class="table table-condensed table-bordered table-hover table-striped" id="datatable" >
+         <table style="width: 100%" border="1" id="datatable" >
             <thead>
                <tr>
                   <th>#</th>
                   <th>Date</th>
-                  <th>Expense Category</th>
-                  <th>Accounts Name</th>
+                  <th>Expense Details</th>
+                  
                   <th>Amount</th>
                   <th>Action</th>
                </tr>
@@ -288,16 +286,27 @@ $rbas->setPageName(9)->run();
             <tbody>
                <?php 
                $sum= 0;
+                $details = "";
                   foreach ($data as $val) 
                     {  
                       $sum += (int)$val['amount'];
                       $i++; 
+                      $detailss =  explode("_", $val['token']);
+                      if (trim($detailss[0]) != "stuff") 
+                      {
+                         $details = "Expense for <a href='#'>".$fn->expenseCategory($val['expensecatid'])."</a>";
+                      }
+                      else
+                      {
+                        $details = "Expense for <a  href='#'>".$fn->expenseCategory($val['expensecatid'])."</a> to stuff <a href='#'>".$fn->getUserName(trim($val['employeeid']))."</a>";
+                      }
+
                       ?>
                <tr>
                   <th scope="row"><?=$i?></th>
                   <td><?=$val['expendituredate']?></td>
-                  <td><?=$fn->expenseCategory($val['expensecatid'])?></td>
-                  <td><?=$fn->Chartsaccounta($val['accountsid'])?></td>
+                  <td><?=$details?></td>
+                  
                   <td><?=$val['amount']?></td>
                   <td>
     <div class="dropdown">

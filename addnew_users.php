@@ -10,6 +10,7 @@
    }
    
    ?>
+    
 <div class="container">
    <div class="row">
       <div class="col-sm-12">
@@ -63,13 +64,14 @@
    <div class="row">
       <div class="col" id="formcolum" style="display: none;">
          <div class="card border-primary">
-            <div class="card-header">Add new User</div>
+           
             <div class="card-body">
+              <h4>Add new User <small>(<span class="required">*</span>) fields are required fields</small> </h4>
                <form action="#" method="post">
                   <div class="form-group">
-                     <label for="sel1">Select list:</label>
-                     <select class="form-control" id="usertype" name="usertype" onchange="mynextdata()">
-                        <option> Choose option</option>
+                     <label for="sel1">Person Type : <span class="required">*</span></label>
+                     <select class="form-control" id="usertype" name="usertype" onchange="mynextdata()" required="true">
+                        <option value=""> Choose option</option>
                         <option value="1">Customer</option>
                         <option value="2">Supplier</option>
                         <option value="3">Customer & supplier</option>
@@ -77,32 +79,47 @@
                      </select>
                   </div>
                   <div id="formshow" style="display: none;">
-                    <select class="form-control" name="emtype" id="emtype">
+                    
+                    <div class="d-inline-block">
+                      
+                    <label>Employee Type <span class="required">*</span></label>
+                    <select class="form-control" name="emtype" id="emtype" required="true">
+
                         <option value="">Employee type</option>
                         <?=$dm->getEmployeeType()?>
                      </select>
+                     </div>
+                     <div class="d-inline-block">
 
                   
                   <a href="employee-type.php" class="btn btn-outline-info"><i class="fa fa-plus"></i></a>
+                  </div>
                     
                    
                   </div>
                   
                   <div class="form-group">
-                     <label for="email">Name:</label>
+                     <label for="email">Name: <span class="required">*</span> </label>
                      <input class="form-control" id="name" name="name" placeholder="both name(s) e.g Jon Doe" required="required" type="text">
                   </div>
                   <div class="form-group">
                      <label for="email">Email:</label>
-                     <input class="form-control" id="email" name="email" required="required" type="email">
+                     <input class="form-control" id="email" name="email"  type="email">
                   </div>
                   <div class="form-group">
                      <label for="email">Contact Number:</label>
-                     <input class="form-control" data-role="tagsinput" id="number" name="number" required="required" type="text">
+                     <div id="contactNumberContainer" class="d-inline-block">
+                     <input class="form-control"  id="number" name="number[]"  type="text">  
+                     </div>
+                     <div class="d-inline-block">
+                        <button type="button" id="mybutton" class="btn btn-outline-primary"><i class="fa fa-plus"></i></button>
+                     </div>
+                     
                   </div>
+                  
                   <div class="form-group">
                      <label for="email">Address:</label>
-                     <textarea class="form-control" id="address" name="address" required="required"></textarea>
+                     <textarea class="form-control" id="address" name="address" ></textarea>
                   </div>
                   <div class="form-group" id="opendingforemployee">
                      <label for="email">Opening Balance:</label>
@@ -121,7 +138,7 @@
             'name' => $_POST['name'], 
             'password' => md5("123456"), 
             'email' => $_POST['email'], 
-            'contact_number' => $_POST['number'], 
+            'contact_number' => implode(",", $_POST['number']), 
             'address' => $_POST['address'], 
             'employeetype' => empty($_POST['emtype'])?0:$_POST['emtype'], 
             'opening_balance' => $_POST['openingbalance'], 
@@ -175,7 +192,16 @@
                         <th scope="row"><?=$i?></th>
                         <td><?=$val['name']?></td>
                         <td><?=$val['email']?></td>
-                        <td><?=$val['contact_number']?></td>
+                        <td><?php 
+                            $numbers =  explode(",", $val['contact_number']);
+                           foreach ($numbers as $number)
+                           {
+                             ?>
+                             <div class="badge badge-primary"><?=$number?></div>
+                             <?php 
+                           }
+
+                        ?></td>
                         <td><?=$val['address']?></td>
                         <td><?=$val['opening_balance']?></td>
                         <td><?=$val['created_at']?></td>
@@ -256,4 +282,30 @@
    
      
    }
+
+  
+       
+
+        document.getElementById("mybutton").addEventListener("click", (function(){
+                 let incr =0;
+                 
+               return ()=>{
+                incr ++;
+                $("#contactNumberContainer").append('<div class="d-inline-block" id="remdiv_'+incr+'"><input class="form-control"  id="number_'+incr+'" name="number[]" type="text"></div><div class="d-inline-block"><button type="button" id="rem_'+incr+'" onclick="removeitem('+incr+')" ><i class="fa fa-times text-danger"></i></span></div>');
+               } 
+
+        })() ,false);
+
+
+         function removeitem(item){
+            $("#rem_"+item).remove();
+            $("#remdiv_"+item).remove();
+         }
+
+
+
+ 
+   
+
+      
 </script>

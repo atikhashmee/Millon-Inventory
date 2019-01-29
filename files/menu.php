@@ -178,7 +178,8 @@
                   <ul class="submenu megamenu">
                      <li>
                         <ul>
-                           <li> <a  href="bankstatement.php">Cash History</a></li>
+                     <li> <a  href="cash-report-history.php">Cash History</a></li>
+                           <li> <a  href="bankstatement.php">Banks Accoutns History</a></li>
                            <li> <a  href="stock-report.php">Stock Report</a></li>
                            
                            <li> <a  href="customer-history.php">Customer History</a></li>
@@ -260,11 +261,12 @@
   .done(function(res) {
     //console.log(res);
     var data =  JSON.parse(res);
-    var text = '';
-    for (var i = 0; i < data.length; i++) {
-      text += '<a href="purchase.php" class="dropdown-item notify-item"><i class="fa fa-less"></i><p class="notify-details"><b>Product Stock is out</b><small class="text-muted"> Product = '+data[i].productsid+' Quantity = '+data[i].proquantity+'</small></p></a>';
+    var text = '<div class="card"><div class="card-header">Notification</div><div class="card-body" style="height:300px; overflow: auto;">';
+    for (var i = 0; i <data.length; i++) {
+      text += '<a href="purchase.php"  class="list-group-item border-bottom"><b>Product Stock is out</b><small> Product = '+data[i].productsid+' Quantity = '+data[i].proquantity+'</small></a>';
      
     } 
+    text += "</div><div class='card-footer'>See ALL</div></div>";
     $("#notify").html(text);
     $("#cnt").text(data.length);
   })

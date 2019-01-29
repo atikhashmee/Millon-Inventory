@@ -18,6 +18,7 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
                }
 
  ?>
+ 
 <div class="container">
 
   <div class="row">
@@ -44,9 +45,9 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
 
             if (isset($_GET['edit-id'])) { 
               //fetch the values for the update
-$datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->fetch(PDO::FETCH_ASSOC);
-              ?>
+$datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->fetch(PDO::FETCH_ASSOC); ?>
   <div class="card card-body">
+    <h4>Add new Account <small>(<span class="required">*</span>) fields are required fields</small> </h4>
     <form class="form-horizontal form-label-left" method="post">
          <div class="form-group">
             <label  for="name">Select a  type <span class="required">*</span>
@@ -82,7 +83,7 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
          <div class="form-group">
             <label  for="name"> Contact Number 
             </label>
-            <input id="name" class="form-control" name="contactnumber"   type="text" value="<?=$datas['contactnumber']?>">
+            <input id="name"  class="form-control" name="contactnumber"   type="text" value="<?=$datas['contactnumber']?>">
          </div>
          <div class="form-group">
             <label  for="name"> E-Mail 
@@ -109,11 +110,12 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
   </div>
 <?php    } else { ?>
   <div class="card card-body">
+    <h4>Add new User <small>(<span class="required">*</span>) fields are required fields</small> </h4>
     <form class="form-horizontal form-label-left" method="post">
          <div class="form-group">
             <label  for="name">Select a  type <span class="required">*</span>
             </label>
-            <select class="form-control" name="catid">
+            <select class="form-control" name="catid" required="true">
                <option value="">Choose option</option>
                <?php 
                   $cat  =  $db->joinQuery("SELECT * FROM `acccount_category`")->fetchAll();
@@ -138,12 +140,12 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
          <div class="form-group">
             <label  for="name"> Contact person 
             </label>
-            <input id="name" class="form-control" name="contactperson"  type="text">
+            <input id="name"c class="form-control" name="contactperson"  type="text">
          </div>
          <div class="form-group">
             <label  for="name"> Contact Number 
             </label>
-            <input id="name" class="form-control" name="contactnumber"   type="text">
+            <input id="name" data-role="tagsinput" class="form-control" name="contactnumber"   type="text">
          </div>
          <div class="form-group">
             <label  for="name"> E-Mail 
@@ -162,7 +164,7 @@ $datas = $db->selectAll("charts_accounts","charts_id='".$_GET['edit-id']."'")->f
          </div>
          <div class="form-group">
             
-               <button type="submit" class="btn btn-outline-danger">Cancel</button>
+              <button type="submit" class="btn btn-outline-danger">Cancel</button>
                <button id="savecategory" name="savecategory" type="submit" class="btn btn-outline-primary">Save <i class="fa fa-floppy-o"></i></button>
           
          </div>

@@ -45,7 +45,16 @@
            </tr>
            <tr>
              <td> <b>Contact Number</b> </td>
-             <td><?=$userdetails['contact_number']?></td>
+             <td><?php 
+                            $numbers =  explode(",", $userdetails['contact_number']);
+                           foreach ($numbers as $number)
+                           {
+                             ?>
+                             <div class="badge badge-primary"><?=$number?></div>
+                             <?php 
+                           }
+
+                        ?></td>
            </tr>
            <tr>
              <td> <b>Address</b> </td>

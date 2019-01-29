@@ -576,7 +576,9 @@ code {
 
 .dropdown-item {
   padding: 6px 1.5rem;
+
 }
+
 
 .dropdown-menu-lg {
   width: 270px;
@@ -3416,3 +3418,8 @@ File: Responsive
   }
 }
 /*# sourceMappingURL=style.css.map */
+
+
+.required{
+  color: red;
+}

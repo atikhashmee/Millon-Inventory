@@ -55,7 +55,27 @@
                   </div>
                   <div class="form-group">
                      <label for="email">Contact Number:</label>
-                     <input class="form-control" id="number" name="number" required="required" value="<?=$userdata['contact_number']?>" type="number">
+                     <?php 
+                            $numbers =  explode(",", $userdata['contact_number']);
+                           foreach ($numbers as $number)
+                           {
+                             ?>
+                             <input class="form-control" id="number" name="number[]" required="required" value="<?=$number?>" type="number">
+                             <?php 
+                           }
+
+                        ?>
+                     
+                  </div>
+                   <div class="form-group">
+                     <label for="email">Add More:</label>
+                     <div id="contactNumberContainer" class="d-inline-block">
+                     <input class="form-control"  id="number" name="number[]"  type="text">  
+                     </div>
+                     <div class="d-inline-block">
+                        <button type="button" id="mybutton" class="btn btn-outline-primary"><i class="fa fa-plus"></i></button>
+                     </div>
+                     
                   </div>
                   <div class="form-group">
                      <label for="email">Address:</label>
@@ -79,7 +99,7 @@
             'name' => $_POST['name'], 
             'password' => md5("123456"), 
             'email' => $_POST['email'], 
-            'contact_number' => $_POST['number'], 
+            'contact_number' => implode(",", $_POST['number']), 
             'address' => $_POST['address'], 
             'employeetype' => empty($_POST['emtype'])?$userdata['employeetype']:$_POST['emtype'], 
             'opening_balance' => $_POST['openingbalance'], 
@@ -122,6 +142,22 @@
            formshow.style.display = 'none';
        }
    }
+
+    document.getElementById("mybutton").addEventListener("click", (function(){
+                 let incr =0;
+                 
+               return ()=>{
+                incr ++;
+                $("#contactNumberContainer").append('<div class="d-inline-block" id="remdiv_'+incr+'"><input class="form-control"  id="number_'+incr+'" name="number[]" type="text"></div><div class="d-inline-block"><button type="button" id="rem_'+incr+'" onclick="removeitem('+incr+')" ><i class="fa fa-times text-danger"></i></span></div>');
+               } 
+
+        })() ,false);
+
+
+         function removeitem(item){
+            $("#rem_"+item).remove();
+            $("#remdiv_"+item).remove();
+         }
    
    
 </script>
