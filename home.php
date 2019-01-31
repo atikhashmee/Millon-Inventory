@@ -165,7 +165,7 @@ section .section-title {
             <?php 
             
                $i=0;
-               $sum = (int)$previus;
+               $sum = doubleval($previus);
                   foreach ($data as $val) 
                   { 
                      $i++;

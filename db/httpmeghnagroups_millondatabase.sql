@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 29, 2019 at 12:30 AM
+-- Generation Time: Jan 31, 2019 at 05:19 PM
 -- Server version: 10.2.17-MariaDB
 -- PHP Version: 7.0.32
 
@@ -102,7 +102,10 @@ INSERT INTO `banktransfer` (`transferid`, `transerdate`, `to`, `from`, `amounts`
 (15, '2019-01-25', '5', '4', '6000', 'milon', '36', 'ct_Cash_4_5'),
 (16, '2019-01-26', '5', '4', '1000', 'milon', '36', 'ct_Cash_4_5'),
 (17, '2019-01-27', '4', '5', '425400', 'milon', '36', 'ct_Cash_5_4'),
-(18, '2019-01-27', '5', '4', '62500', 'Milon', '36', 'ct_Cash_4_5');
+(18, '2019-01-27', '5', '4', '62500', 'Milon', '36', 'ct_Cash_4_5'),
+(19, '2019-01-28', '4', '5', '7500', 'milon', '36', 'ct_Cash_5_4'),
+(20, '2019-01-28', '5', '4', '592500', 'IMRAN', '36', 'ct_Cash_4_5'),
+(21, '2019-01-29', '4', '5', '189000', 'milon', '36', 'ct_Cash_5_4');
 
 -- --------------------------------------------------------
 
@@ -287,7 +290,19 @@ INSERT INTO `expenditure` (`expenseid`, `expendituredate`, `expensecatid`, `acco
 (39, '2019-01-27', '', '4', '100', '45', '4', '', 'stuff__45'),
 (40, '2019-01-27', '14', '4', '150', '-1', '0', '36', 'expense_14'),
 (41, '2019-01-27', '3', '4', '80', '-1', '0', '36', 'expense_3'),
-(42, '2019-01-27', '4', '4', '2800', '-1', '0', '36', 'expense_4');
+(42, '2019-01-27', '4', '4', '2800', '-1', '0', '36', 'expense_4'),
+(43, '2019-01-28', '13', '<br />\r\n<b>Notice</b>:  Undefined index: charts_id in <b>/home/httpmeghnagroups/public_html/expenditure.php</b> on line <b>91</b><br />\r\n', '100', '45', '4', '36', 'stuff_13_45'),
+(44, '2019-01-28', '3', '<br />\r\n<b>Notice</b>:  Undefined index: charts_id in <b>/home/httpmeghnagroups/public_html/expenditure.php</b> on line <b>91</b><br />\r\n', '80', '-1', '0', '36', 'expense_3'),
+(45, '2019-01-28', '3', '<br />\r\n<b>Notice</b>:  Undefined index: charts_id in <b>/home/httpmeghnagroups/public_html/expenditure.php</b> on line <b>91</b><br />\r\n', '100', '-1', '0', '36', 'expense_3'),
+(47, '2019-01-28', '10', '<br />\r\n<b>Notice</b>:  Undefined index: charts_id in <b>/home/httpmeghnagroups/public_html/expenditure.php</b> on line <b>91</b><br />\r\n', '5000', '-1', '0', '36', 'expense_10'),
+(48, '2019-01-28', '8', '<br />\r\n<b>Notice</b>:  Undefined index: charts_id in <b>/home/httpmeghnagroups/public_html/expenditure.php</b> on line <b>91</b><br />\r\n', '12500', '-1', '0', '36', 'expense_8'),
+(49, '2019-01-28', '10', '<br />\r\n<b>Notice</b>:  Undefined index: charts_id in <b>/home/httpmeghnagroups/public_html/expenditure.php</b> on line <b>91</b><br />\r\n', '5000', '', '', '36', 'stuff_10_'),
+(50, '2019-01-28', '4', '<br />\r\n<b>Notice</b>:  Undefined index: charts_id in <b>/home/httpmeghnagroups/public_html/expenditure.php</b> on line <b>91</b><br />\r\n', '1300', '-1', '0', '36', 'expense_4'),
+(51, '2019-01-29', '3', '<br />\r\n<b>Notice</b>:  Undefined index: charts_id in <b>/home/httpmeghnagroups/public_html/expenditure.php</b> on line <b>91</b><br />\r\n', '160', '-1', '0', '36', 'expense_3'),
+(52, '2019-01-29', '4', '<br />\r\n<b>Notice</b>:  Undefined index: charts_id in <b>/home/httpmeghnagroups/public_html/expenditure.php</b> on line <b>91</b><br />\r\n', '3500', '-1', '0', '36', 'expense_4'),
+(53, '2019-01-29', '13', '<br />\r\n<b>Notice</b>:  Undefined index: charts_id in <b>/home/httpmeghnagroups/public_html/expenditure.php</b> on line <b>91</b><br />\r\n', '100', '45', '4', '36', 'stuff_13_45'),
+(54, '2019-01-29', '5', '<br />\r\n<b>Notice</b>:  Undefined index: charts_id in <b>/home/httpmeghnagroups/public_html/expenditure.php</b> on line <b>91</b><br />\r\n', '12600', '-1', '0', '36', 'expense_5'),
+(55, '2019-01-29', '15', '<br />\r\n<b>Notice</b>:  Undefined index: charts_id in <b>/home/httpmeghnagroups/public_html/expenditure.php</b> on line <b>91</b><br />\r\n', '200', '-1', '0', '36', 'expense_15');
 
 -- --------------------------------------------------------
 
@@ -408,12 +423,12 @@ CREATE TABLE `product_info` (
 
 INSERT INTO `product_info` (`p_id`, `pro_id`, `product_cat`, `brand_id`, `size_id`, `unit`, `opening_stock`, `purchase_price`, `selling_price`, `re_order_warning`, `description`, `created_at`) VALUES
 (18, 'P1944', '2', '8', '', 2, '74', '408', '430', '100', '', '2019-01-28'),
-(19, 'P1923', '2', '6', '', 2, '155', '391', '420', '100', '', '2019-01-28'),
+(19, 'P1923', '2', '6', '', 2, '154', '391', '420', '100', '', '2019-01-29'),
 (20, 'P1934', '1', '5', '23', 1, '399.5', '62', '64', '500', '', '2019-01-28'),
 (21, 'P1926', '1', '5', '25', 1, '00', '62', '64', '500', '', '2019-01-27'),
 (22, 'P1941', '1', '5', '26', 1, '223', '62', '64', '500', '', '2019-01-27'),
 (23, 'P1928', '1', '5', '27', 1, '213', '62', '64', '500', '', '2019-01-27'),
-(24, 'P1957', '2', '20', '', 1, '60', '9', '10', '10', '', '2018-12-20'),
+(24, 'P1957', '2', '20', '', 1, '60', '9', '10', '10', '', '2019-01-29'),
 (25, 'P2639', '2', '1', '', 2, '0', '470', '470', '100', '', '2019-01-28'),
 (26, 'P2643', '1', '5', '24', 1, '386', '62', '64', '100', '', '2019-01-28'),
 (27, 'P2644', '2', '9', '', 2, '0', '420', '430', '100', '', '2019-01-28'),
@@ -455,7 +470,11 @@ INSERT INTO `purchase` (`purchaseid`, `billchallan`, `purchasedate`, `supplier`,
 (31, '201912882039', '2019-01-26', '42', 'P1944', '200', '446', '', '0', '', '89200', 'Cash', '', '', '36', 'p_Cash'),
 (32, '2019128161955', '2019-01-27', '42', 'P1944', '200', '446', '', '0', '', '0', 'Cash', '', '', '36', 'p_Cash'),
 (33, '2019128162210', '2019-01-27', '42', 'P2644', '100', '456', '', '0', '', '0', 'Cash', '', '', '36', 'p_Cash'),
-(34, '2019128205247', '2019-01-28', '100', 'P1920', '1001.4', '55.2', '163', '', '', '0', 'Cash', '', '', '36', 'p_Cash');
+(34, '2019128205247', '2019-01-28', '100', 'P1920', '1001.4', '55.2', '163', '', '', '0', 'Cash', '', '', '36', 'p_Cash'),
+(35, '201913011149', '2019-01-29', '43', 'P1934', '2969', '62', '', '0', '', '0', 'Cash', '', '', '36', 'p_Cash'),
+(36, '201913011425', '2019-01-29', '43', 'P1926', '1019', '62', '', '0', '', '0', 'Cash', '', '', '36', 'p_Cash'),
+(37, '20191301157', '2019-01-29', '43', 'P1941', '3031', '62', '', '0', '', '0', 'Cash', '', '', '36', 'p_Cash'),
+(38, '201913011910', '2019-01-29', '43', 'P1928', '2981', '62', '', '0', '', '0', 'Cash', '', '', '36', 'p_Cash');
 
 -- --------------------------------------------------------
 
@@ -585,7 +604,11 @@ INSERT INTO `recevecollection` (`recol_id`, `recievedate`, `cusotmer_id`, `amoun
 (16, '2019-01-28', '86', '12900', 'robiul', '', '36', 'rac_Cash'),
 (17, '2019-01-28', '139', '39000', 'robiul', '', '36', 'rac_Cash'),
 (18, '2019-01-28', '140', '400000', 'robiul', '', '36', 'rac_Cash'),
-(19, '2019-01-28', '131', '11400', 'robiul', '', '36', 'rac_Cash');
+(19, '2019-01-28', '131', '11400', 'robiul', '', '36', 'rac_Cash'),
+(20, '2019-01-29', '23', '4300', 'robiul', '', '36', 'rac_Cash'),
+(21, '2019-01-29', '134', '20200', 'robiul', '', '36', 'rac_Cash'),
+(22, '2019-01-29', '142', '1600', 'milon', '', '36', 'rac_Cash'),
+(23, '2019-01-29', '96', '200000', 'ashraf', '', '36', 'rac_Cash');
 
 -- --------------------------------------------------------
 
@@ -688,14 +711,38 @@ INSERT INTO `sell` (`sellid`, `selldate`, `billchallan`, `customerid`, `producti
 (102, '2019-01-27', '2019128122833', '33', 'P1923', '4', '420', '', '40', '', '1720', 'Cash', '', '', '78', 's_Cash', 36),
 (103, '2019-01-27', '2019128123053', '33', 'P1923', '10', '420', '', '0', '', '4200', 'Cash', '', '', '78', 's_Cash', 36),
 (104, '2019-01-28', '2019128162954', '96', 'P2644', '100', '408', '', '0', '', '0', 'Cash', '', '', '44', 's_Cash', 36),
-(106, '2019-01-28', '2019128195916', '58', 'P1923', '6', '450', '', '60', '', '2760', 'Cash', '', '', '78', 's_Cash', 36),
 (107, '2019-01-28', '2019128201414', '33', 'P1923', '4', '420', '', '0', '', '1680', 'Cash', '', '', '78', 's_Cash', 36),
 (108, '2019-01-28', '2019128201726', '33', 'P1923', '5', '420', '', '0', '', '2100', 'Cash', '', '', '78', 's_Cash', 36),
 (109, '2019-01-28', '2019128203322', '136', 'P1944', '20', '430', '', '200', '', '11350', 'Cash', '', '', '78', 's_Cash', 36),
-(110, '2019-01-28', '2019128203853', '98', 'P1944', '10', '430', '', '100', '', '4400', 'Cash', '', '', '78', 's_Cash', 36),
 (111, '2019-01-28', '2019128205621', '33', 'P1944', '2', '430', '', '20', '', '880', 'Cash', '', '', '78', 's_Cash', 36),
-(112, '2019-01-28', '2019128232023', '33', 'P1944', '1', '430', '', '0', '', '430', 'Cash', '', '', '78', 's_Cash', 36),
-(113, '2019-01-28', '2019128232023', '33', 'P1944', '1', '430', '', '0', '', '430', 'Cash', '', '', '78', 's_Cash', 36);
+(114, '2019-01-28', '2019128203853', '98', 'P1944', '10', '430', '', '100', '', '0', 'Cash', '', '', '78', 's_Cash', 36),
+(115, '2019-01-28', '2019128195916', '58', 'P1923', '6', '450', '', '60', '', '0', 'Cash', '', '', '78', 's_Cash', 36),
+(116, '2019-01-28', '2019128232023', '33', 'P1944', '1', '430', '', '0', '', '430', 'Cash', '', '', '78', 's_Cash', 36),
+(117, '2019-01-28', '201912984434', '23', 'P1944', '10', '420', '', '100', '', '0', 'Cash', '', '', '78', 's_Cash', 36),
+(118, '2019-01-28', '2019129183140', '49', 'P1920', '616', '58', '112', '500', '', '100000', 'Cash', '', '', '78', 's_Cash', 36),
+(119, '2019-01-28', '2019129183224', '33', 'P1923', '10', '430', '', '0', '', '4300', 'Cash', '', '', '78', 's_Cash', 36),
+(120, '2019-01-29', '2019130115156', '139', 'P1934', '297', '64', '', '472', '', '0', 'Cash', '', '', '78', 's_Cash', 36),
+(121, '2019-01-29', '2019130115156', '139', 'P1926', '305', '64', '', '472', '', '0', 'Cash', '', '', '78', 's_Cash', 36),
+(122, '2019-01-29', '2019130115629', '33', 'P1923', '3', '420', '', '0', '', '1260', 'Cash', '', '', '78', 's_Cash', 36),
+(123, '2019-01-29', '201913012252', '23', 'P1944', '10', '420', '', '164', '', '0', 'Cash', '', '', '78', 's_Cash', 36),
+(124, '2019-01-29', '201913012252', '23', 'P1920', '192', '58', '', '164', '', '0', 'Cash', '', '', '78', 's_Cash', 36),
+(125, '2019-01-29', '201913012651', '127', 'P1944', '2', '430', '', '20', '', '0', 'Cash', '', '', '78', 's_Cash', 36),
+(126, '2019-01-29', '2019130121326', '95', 'P1944', '10', '425', '', '100', '', '0', 'Cash', '', '', '78', 's_Cash', 36),
+(127, '2019-01-29', '2019130121642', '33', 'P1944', '1', '430', '', '0', '', '430', 'Cash', '', '', '78', 's_Cash', 36),
+(128, '2019-01-29', '2019130121834', '33', 'P1923', '4', '420', '', '0', '', '1680', 'Cash', '', '', '78', 's_Cash', 36),
+(129, '2019-01-29', '2019130122344', '86', 'P1941', '339', '63', '', '318', '', '0', 'Cash', '', '', '78', 's_Cash', 36),
+(130, '2019-01-29', '2019130122344', '86', 'P1928', '115', '63', '', '318', '', '0', 'Cash', '', '', '78', 's_Cash', 36),
+(131, '2019-01-29', '201913012280', '33', 'P1923', '5', '420', '', '0', '', '2100', 'Cash', '', '', '78', 's_Cash', 36),
+(132, '2019-01-29', '2019130122940', '33', 'P1934', '67', '65', '', '85', '', '8500', 'Cash', '', '', '78', 's_Cash', 36),
+(133, '2019-01-29', '2019130122940', '33', 'P1926', '64', '65', '', '85', '', '8500', 'Cash', '', '', '78', 's_Cash', 36),
+(134, '2019-01-29', '2019130123519', '33', 'P1944', '1', '430', '', '0', '', '430', 'Cash', '', '', '78', 's_Cash', 36),
+(135, '2019-01-29', '201913012390', '33', 'P1944', '1', '430', '', '0', '', '430', 'Cash', '', '', '78', 's_Cash', 36),
+(136, '2019-01-29', '2019130125737', '143', 'P1923', '4', '420', '', '0', '', '00', 'Cash', '', '', '78', 's_Cash', 36),
+(137, '2019-01-30', '2019131131613', '33', 'P1944', '1', '430', '', '0', '', '430', 'Cash', '', '', '78', 's_Cash', 36),
+(138, '2019-01-30', '2019131131826', '33', 'P1944', '1', '430', '', '0', '', '430', 'Cash', '', '', '78', 's_Cash', 36),
+(139, '2019-01-30', '201913113211', '33', 'P1923', '4', '420', '', '0', '', '1680', 'Cash', '', '', '78', 's_Cash', 36),
+(140, '2019-01-30', '201913113211', '33', 'P1923', '4', '420', '', '0', '', '1680', 'Cash', '', '', '78', 's_Cash', 36),
+(141, '2019-01-30', '201913113211', '33', 'P1923', '4', '420', '', '0', '', '1680', 'Cash', '', '', '78', 's_Cash', 36);
 
 -- --------------------------------------------------------
 
@@ -764,9 +811,15 @@ CREATE TABLE `supplierpayment` (
 --
 
 INSERT INTO `supplierpayment` (`pay_id`, `pay_date`, `sup_id`, `amnts`, `carier`, `adjument`, `inputby`, `status`) VALUES
+(11, '2019-01-28', '28', '90000', 'IMRAN', NULL, '36', 'pts_Cash'),
+(10, '2019-01-28', '28', '90000', 'IMRAN', NULL, '36', 'pts_Cash'),
 (9, '2019-01-27', '42', '155000', 'ASHRAF', NULL, '36', 'pts_Cash'),
 (8, '2019-01-27', '43', '320000', 'IMRAN', NULL, '36', 'pts_Cash'),
-(7, '2019-01-25', '100', '100300', 'titu', NULL, '36', 'pts_Cash');
+(7, '2019-01-25', '100', '100300', 'titu', NULL, '36', 'pts_Cash'),
+(12, '2019-01-29', '100', '55440', 'milon', NULL, '36', 'pts_Cash'),
+(13, '2019-01-29', '100', '55440', 'milon', NULL, '36', 'pts_Cash'),
+(14, '2019-01-29', '42', '289000', 'ashraf', NULL, '36', 'pts_Cash'),
+(15, '2019-01-29', '42', '289000', 'ashraf', NULL, '36', 'pts_Cash');
 
 -- --------------------------------------------------------
 
@@ -846,7 +899,7 @@ INSERT INTO `users` (`u_id`, `user_role`, `name`, `password`, `email`, `contact_
 (22, '1', 'sahajahan (parish)', 'e10adc3949ba59abbe56e057f20f883e', 'm@gmail.com', '0', 'JOGONNATHPUR, VHATARA, DHAKA', '0', '128500', '2019-01-26'),
 (23, '1', 'HAJI NURUDDIN ', 'e10adc3949ba59abbe56e057f20f883e', 'm@gmail.com', '0', 'jogonnathpur, VHATARA, DHAKA', '0', '104300', '2019-01-26'),
 (26, '2', 'FRESH', 'e10adc3949ba59abbe56e057f20f883e', 'mohimanul.akash@gmail.com', '0', 'GULSHAN', 'Choose option', '0', '2019-01-28'),
-(28, '2', 'SUPERCRETE', 'e10adc3949ba59abbe56e057f20f883e', 'supercreate@gmail.com', '0166666666', 'GULSHAN', '0', '0', '2018-12-25'),
+(28, '2', 'SUPERCRETE', 'e10adc3949ba59abbe56e057f20f883e', 'supercreate@gmail.com', '0166666666,', 'GULSHAN', '0', '-10150', '2019-01-29'),
 (29, '1', 'ALI HOSSAIN', 'e10adc3949ba59abbe56e057f20f883e', 'pongta_virus@yahoo.com', '0', 'HAREZ ROAD, VHATARA, DHAKA', 'Choose option', '193570', '2019-01-28'),
 (30, '1', 'ABDUL HAFIZ', 'e10adc3949ba59abbe56e057f20f883e', 'mohimanul.akash@gmail.com', '0', 'BASUNDHARA', 'Choose option', '30000', '2019-01-20'),
 (31, '1', 'ADOBI BUILDERS, ARISH', 'e10adc3949ba59abbe56e057f20f883e', 'n@gmail.com', '01819494622', '17/1,pollobi,mirpur-12, DHAKA', '0', '822791', '2019-01-26'),
@@ -861,17 +914,17 @@ INSERT INTO `users` (`u_id`, `user_role`, `name`, `password`, `email`, `contact_
 (46, '4', 'rasel', 'e10adc3949ba59abbe56e057f20f883e', 'rasel@gmail.com', '01824562145', 'bastola', '4', '0', '2018-12-14'),
 (47, '1', 'ABDUL HAI', 'e10adc3949ba59abbe56e057f20f883e', 'milon@gmail.com', '01682409301', 'jogonnathur, vhatara, dhaka', '0', '4400', '2019-01-26'),
 (48, '1', 'MUKUL VAI', 'e10adc3949ba59abbe56e057f20f883e', 'milon@gmail.com', '01718305050', 'Aziz road,jogonnathpur, vhatara, dhaka', '0', '-7000', '2019-01-26'),
-(49, '1', 'JOSIM DHALI', 'e10adc3949ba59abbe56e057f20f883e', 'm@gmail.com', '01681864703', 'dhalibari kaca bazar, mosque roar, vhatara, dhaka', '0', '306600', '2019-01-26'),
+(49, '1', 'JOSIM DHALI', 'e10adc3949ba59abbe56e057f20f883e', 'm@gmail.com', '01681864703,', 'dhalibari kaca bazar, mosque roar, vhatara, dhaka', '0', '303600', '2019-01-29'),
 (50, '1', 'ADOBI BUILDERS(dhanondi)', 'e10adc3949ba59abbe56e057f20f883e', 'milon@gmail.com', '01819494622', 'dhanmondi,star kabab, Dhaka', '0', '329285', '2019-01-26'),
 (51, '1', 'Engr.kamrul islam', 'e10adc3949ba59abbe56e057f20f883e', 'no@gmail.com', '01711145967', 'plot-12,road-15,block-G,basundhara,dhaka', '0', '118000', '2019-01-26'),
 (52, '1', 'AMINUL HAQUE', 'e10adc3949ba59abbe56e057f20f883e', 'm@gmail.com', '0', 'plot- ,road-13,block-G,basundhara,dhaka', '0', '36150', '2018-12-14'),
-(53, '1', 'monowar ali', 'e10adc3949ba59abbe56e057f20f883e', 'n@gmail.com', '0171157666501741331989', 'plot-112,road-03,block-J,basundhara,dhaka', '0', '35900', '2019-01-26'),
+(53, '1', 'monowar ali', 'e10adc3949ba59abbe56e057f20f883e', 'n@gmail.com', '01711576665,01741331989', 'plot-112,road-03,block-J,basundhara,dhaka', '0', '35900', '2019-01-29'),
 (54, '1', 'ENGE. MASUD VAI', 'e10adc3949ba59abbe56e057f20f883e', 'm@gmail.com', '01711627140', 'jogonnathpur, basundhara road,dhaka', '0', '117800', '2019-01-26'),
 (55, '1', 'SOUTH VISSION', 'e10adc3949ba59abbe56e057f20f883e', 'm@gmail.com', '0', 'jogonnnathpur,vhatara,dhaka', '0', '93634', '2019-01-26'),
 (56, '1', 'NOYON VAI', 'e10adc3949ba59abbe56e057f20f883e', 'm@gmail.com', '0', 'JOGONNATHPUR,VHATARA,DHAKA', '0', '7028', '2019-01-26'),
 (57, '1', 'KHALEK DHALI', 'e10adc3949ba59abbe56e057f20f883e', 'm@gmail.com', '01817035364', 'jogonnathpur,vhatara,dhaka', '0', '18000', '2019-01-26'),
 (58, '1', 'SAHAJAHAN GAZI', 'e10adc3949ba59abbe56e057f20f883e', 'M@GMAIL.COM', '0', 'jogonnathpur,vhatara,dhaka', '0', '215300', '2019-01-28'),
-(61, '1', 'RONJONA KASEM', 'e10adc3949ba59abbe56e057f20f883e', 'no@yahoo.com', '0171206960101812202202', 'Plot-.road-06,block-I, Bosundhara', '0', '36900', '2019-01-26'),
+(61, '1', 'RONJONA KASEM', 'e10adc3949ba59abbe56e057f20f883e', 'no@yahoo.com', '01712069601,01812202202', 'Plot-.road-06,block-I, Bosundhara', '0', '36900', '2019-01-29'),
 (62, '1', 'BADOL VAI', 'e10adc3949ba59abbe56e057f20f883e', 'pongta_virus@yahoo.com', '0', 'JOGONNATHPUR', '0', '0', '2018-12-18'),
 (63, '1', 'MIZAN VAI (BEAI)', 'e10adc3949ba59abbe56e057f20f883e', 'pongta_virus@yahoo.com', '01345267651', 'JOGONNATHPUR', '0', '1760', '2018-12-18'),
 (64, 'Choose option', 'GAZI ENGH', 'e10adc3949ba59abbe56e057f20f883e', 'pongta_virus@yahoo.com', '0', 'JOGONNATHPUR', '0', '11400', '2018-12-18'),
@@ -943,7 +996,9 @@ INSERT INTO `users` (`u_id`, `user_role`, `name`, `password`, `email`, `contact_
 (137, '1', 'DELIGHT HOME', 'e10adc3949ba59abbe56e057f20f883e', 'NO@gmail.com', '0', 'P-388,R-04,B-I,BASUNDHARA,DHAKA', '0', '26600', '2019-01-28'),
 (138, '1', 'MONJO VAI', 'e10adc3949ba59abbe56e057f20f883e', 'pongta_virus@yahoo.com', '0', 'BLOCK-A,BASUNDHRA  DHAKA.', '0', '900', '2019-01-28'),
 (139, '1', 'RAJBARI', 'e10adc3949ba59abbe56e057f20f883e', 'pongta_virus@yahoo.com', '0', 'BASUNDHARA DHAKA.', '0', '0', '2019-01-28'),
-(140, '1', 'ABU SAYED', 'e10adc3949ba59abbe56e057f20f883e', 'NO@gmail.com', '0', 'Aziz road jogonnathpur', '0', '0', '2019-01-28');
+(140, '1', 'ABU SAYED', 'e10adc3949ba59abbe56e057f20f883e', 'NO@gmail.com', '0', 'Aziz road jogonnathpur', '0', '0', '2019-01-28'),
+(142, '1', 'farhad', 'e10adc3949ba59abbe56e057f20f883e', '', '0', 'basundhara', '0', '1600', '2019-01-30'),
+(143, '1', 'joynal kaka', 'e10adc3949ba59abbe56e057f20f883e', '', '0', 'Aziz road, jogonnathpur, vhatara, Dhaka', '0', '0', '2019-01-30');
 
 --
 -- Indexes for dumped tables
@@ -1131,7 +1186,7 @@ ALTER TABLE `access_privilige`
 -- AUTO_INCREMENT for table `banktransfer`
 --
 ALTER TABLE `banktransfer`
-  MODIFY `transferid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `transferid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `cateogory`
@@ -1167,7 +1222,7 @@ ALTER TABLE `employeetype`
 -- AUTO_INCREMENT for table `expenditure`
 --
 ALTER TABLE `expenditure`
-  MODIFY `expenseid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `expenseid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `expensecat`
@@ -1203,7 +1258,7 @@ ALTER TABLE `product_info`
 -- AUTO_INCREMENT for table `purchase`
 --
 ALTER TABLE `purchase`
-  MODIFY `purchaseid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `purchaseid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `purchase_return`
@@ -1227,7 +1282,7 @@ ALTER TABLE `p_size`
 -- AUTO_INCREMENT for table `recevecollection`
 --
 ALTER TABLE `recevecollection`
-  MODIFY `recol_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `recol_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `role_base_access_system`
@@ -1239,7 +1294,7 @@ ALTER TABLE `role_base_access_system`
 -- AUTO_INCREMENT for table `sell`
 --
 ALTER TABLE `sell`
-  MODIFY `sellid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+  MODIFY `sellid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
 
 --
 -- AUTO_INCREMENT for table `sell_return`
@@ -1257,7 +1312,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `supplierpayment`
 --
 ALTER TABLE `supplierpayment`
-  MODIFY `pay_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `pay_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `target`
@@ -1275,7 +1330,7 @@ ALTER TABLE `units`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
+  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

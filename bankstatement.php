@@ -26,14 +26,14 @@
                 </div>
                 <!-- end page title end breadcrumb -->
      <div class="row">
-       <div class="col">
+       <div class="col-xl-12">
          <div class="card card-body">
           <form action="" method="post">
             <div class="row">
-              <div class="col-md-3">
+              <div class="col">
                 <div class="form-group">
                   <label for="">Accounts Name</label>
-                    <select name="" id="" class="form-control">
+                    <select name="banknames" id="banknames" class="form-control">
                       <option value="">Select an Option</option>
                         <?php    
                            $accounthead = $db->selectAll("charts_accounts","chart_name != 'Cash'")->fetchAll();
@@ -43,18 +43,20 @@
                            ?>
                     </select>
                 </div>
+                </div>
+                <div class="col">
                 <div class="form-group">
                   <label for="">Select a start Date</label>
                   <input type="text" class="form-control" name="startdate" id="startdate">
                 </div>
               </div>
-              <div class="col-md-3">
+              <div class="col">
                 <div class="form-group">
                   <label for="">Select an end Date</label>
                 <input type="text" class="form-control" name="endate" id="endate">
                 </div>
               </div>
-              <div class="col-md-3">
+              <div class="col">
                 <div class="form-group">
           <div class="custom-control custom-checkbox" style="top: 30px;">
             <input type="checkbox" class="custom-control-input"  id="customCheck"
@@ -65,7 +67,7 @@
                </div>
             </div>
               </div>
-              <div class="col-md-3">
+              <div class="col">
                
                   <button type="submit" name="datesearch" style="position: absolute; top: 29px;"  class="btn btn-outline-primary">  Search <i class="fa fa-search"></i> </button> 
                
@@ -85,39 +87,59 @@
 
    <div class="col">
       <?php
-      $sql  =  cashRawQuery();
+      $sql  =  "SELECT * FROM `cheque` where approve='1'";
+      $sum =0;
+
+      $bname = "";
        
-      $opening_balance  =  $db->joinQuery("SELECT `opening_balance` FROM `charts_accounts` WHERE `chart_name`='Cash'")->fetch(PDO::FETCH_ASSOC);
-       $sum = $opening_balance['opening_balance'];
+        
          if (isset($_POST['datesearch'])) 
          {
-             if (!empty($_POST['startdate']) && empty($_POST['endate'])) 
+            $bankname = $_POST['banknames'];
+            $startdate = $_POST['startdate'];
+            $endate = $_POST['endate'];
+           
+             if (!empty($bankname) && empty($startdate) && empty($endate)) 
              {
-                $sql  =  cashRawQuery($_POST['startdate']);
+                $sql  =  "SELECT * FROM `cheque` where approve='1' AND bankname='{$bankname}'";
+                $bname ="of ".$bankname;
              }
 
-             if (!empty($_POST['startdate']) && !empty($_POST['endate'])) 
+             if (!empty($bankname) && !empty($_POST['startdate']) && !empty($_POST['endate'])) 
              {
-                $sql  =  cashRawQuery($_POST['startdate'],$_POST['endate']);
+               $sql  =  "SELECT * FROM `cheque` where approve='1' AND bankname='{$bankname}' AND expiredate Between '{$startdate}' AND '{$endate}'";
              }
+           if (isset($_POST['customCheck'])) 
+             {  
+                if (trim($_POST['customCheck'])=="Yes" && !empty($bankname)) {
+                 
 
-             if (isset($_POST['customCheck']) && $_POST['customCheck'] == "Yes") 
-             {
-               $sum = $opening_balance['opening_balance'];
+                   $opening_balance  =  $db->joinQuery("SELECT `opening_balance` FROM `charts_accounts` WHERE `charts_id`='{$bankname}'")->fetch(PDO::FETCH_ASSOC);
+                   
+                   $sum = intval($opening_balance['opening_balance']);
+               }
+               else{
+                echo "Sorry you have not chosen any bank Name";
+               }
              }
-             else
-             {
-               $sum = 0;
-             }
+              
+             
+               
+             
+             
 
          }
+         echo "<pre>";
+         echo $sql;
+         echo "</pre>";
         
          $data = $db->joinQuery($sql)->fetchAll();
 
          
          ?>
        <div class="card card-body">
-        <h4>Cash Statement</h4>
+        <h4>Statements <?=$bname?> </h4>
+        <small>(default data in the table may not be appropriate, to get the exact data you have to select a bank name at least)</small>
         <hr>
       <table class="table table-hover table-bordered" id="datatable-buttons" >
          <thead>
@@ -146,23 +168,25 @@
                   foreach ($data as $val) {  $i++;
                     $i++;
                    
-                     $tkn     =  trim($val['token']);
-                     $amounts =  trim($val['payment_taka']);
-                     $sign    =  getMoneyToken($tkn,$amounts);
-                    
-                     $td1     =  (substr($sign, 0,1)   !="-")?$amounts:" ";
-                     $td2     =  (substr($sign, 0,1)   =="-")?$amounts:" ";
-
-                     $detail  =  detailsOfAction($tkn,trim($val['customerid']));
-
-                     $sum    +=  getMoneyToken($tkn,$amounts);
+                      $token =  explode("_", $val['parent_table_id']);
+                      $details  = "";
+                      if ($token[0] == "p") 
+                      {
+                        $details = "Payment on Purchase <a href='#'>Deatils<?=$token[1]?></a>";
+                      }
+                      else if($token == "pts")
+                      {
+                        $details = "Purchase Payment to supplier<a href='#'><?=$token[1]?></a>";
+                      }
+                      $td1 = " ";
+                      $td2 = $val['amount'];
                
                     
                    ?>
             <tr>
                <td><?=$i?></td>
-               <td><?=$val['selldate']?></td>
-               <td><?=$detail?></td>
+               <td><?=$val['expiredate']?></td>
+               <td><?=$details?></td>
                <td><?=$td1?></td>
                <td><?=$td2?></td>
                <td><?=$sum?></td>

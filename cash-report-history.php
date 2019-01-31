@@ -107,7 +107,7 @@
        <div class="card card-body">
         <h4>Cash Statement</h4>
         <hr>
-      <table class="table table-hover table-bordered" id="datatable-buttons" >
+      <table border="1" style="width: 100%" id="datatable-buttons" >
          <thead>
             <tr>
                <th>#</th>

@@ -39,43 +39,35 @@
                         <div class="form-group">
                           <label  for="name"> Date <span class="required">*</span>
                            </label>
-                           <input id="treansferdate" class="form-control" name="treansferdate"  required="required" type="date">
+                           <input id="treansferdate" class="form-control mydate" name="treansferdate"  required="required" type="text">
                         </div>
                      </div>
                      <div class="col">
-                        <div class="form-group">
-                          <label  for="name">From  <span class="required">*</span>
-                           </label>
-                           <select class="form-control" name="from">
-                              <option value="">Choose option</option>
-                              <?php 
-                                 $cat  =  $db->joinQuery("SELECT * FROM `charts_accounts`")->fetchAll();
-                                 foreach ($cat as $cater) { ?>
-                              <option value="<?=$cater['charts_id']?>"><?=$cater['chart_name']?></option>
-                              <?php
-                                 }
-                                 
-                                 ?>
-                           </select>
-                        </div>
+                       <div class="form-group">
+                          <label for="">Transfar Type</label>
+                          <select name="ttype" id="ttype" class="form-control">
+                             <option value="out">----Out----</option>
+                             <option value="in">----In----</option>
+                          </select>
+                       </div>
                      </div>
                      <div class="col">
                         <div class="form-group">
-                           <label  for="name">To <span class="required">*</span>
+                          <label  for="name"> Bank Account <span class="required">*</span>
                            </label>
-                           <select class="form-control" name="to">
+                           <select class="form-control" name="bankaccount">
                               <option value="">Choose option</option>
-                              <?php 
-                                 $cat  =  $db->joinQuery("SELECT * FROM `charts_accounts`")->fetchAll();
-                                 foreach ($cat as $cater) { ?>
-                              <option value="<?=$cater['charts_id']?>"><?=$cater['chart_name']?></option>
-                              <?php
-                                 }
-                                 
-                                 ?>
+                               <?php    
+                           $accounthead = $db->selectAll("charts_accounts","chart_name != 'Cash'")->fetchAll();
+                           foreach ($accounthead as $ah) { ?>
+                        <option value="<?=$ah['charts_id']?>"><?=$ah['chart_name']?></option>
+                        <?php }
+                           ?>
+
                            </select>
                         </div>
                      </div>
+                     
                   </div>
                   <div class="row">
                      <div class="col">
@@ -87,42 +79,14 @@
                      </div>
                      <div class="col">
                         <div class="form-group">
-                           <label  for="name">Carrier
+                           <label  for="name">Carrier  <span class="required">*</span>
                            </label>
                            <input id="carrier" class="form-control" name="carrier"  type="text">
                         </div>
                      </div>
-                     <div class="col">
-                        <div class="form-group" style="position: relative; top:20px">
-                           <div class="custom-control custom-radio">
-                              <input type="radio" id="customRadio1" name="customRadio" value="no" onchange="chequeoptioncheck()" class="custom-control-input" checked="">
-                              <label class="custom-control-label" for="customRadio1">Cash</label>
-                           </div>
-                           <div class="custom-control custom-radio">
-                              <input type="radio" id="customRadio2" name="customRadio" value="yes" onchange="chequeoptioncheck()" class="custom-control-input">
-                              <label class="custom-control-label" for="customRadio2">Cheque</label>
-                           </div>
-                        </div>
-                     </div>
+                    
                   </div>
-                  <div id="chequeoption" style="display: none;">
-                     <div class="row">
-                        <div class="col">
-                           <div class=" form-group">
-                              <label  for="name"> Cheque  No
-                              </label>
-                              <input id="chequeno" class="form-control" name="chequeno"   type="text">
-                           </div>
-                        </div>
-                        <div class="col">
-                           <div class="form-group">
-                              <label  for="name"> Issue Date
-                              </label>
-                              <input id="issuedate" class="form-control" name="issuedate"  type="date">
-                           </div>
-                        </div>
-                     </div>
-                  </div>
+                  
                   <div class="form-group">
                      
                         <button type="submit" class="btn btn-outline-danger ">Cancel <i class="fa fa-times"></i></button>
@@ -130,67 +94,79 @@
                     
                   </div>
                </form>
+               <?php 
+
+                  
+
+                      if (isset($_POST['savetransfer'])) 
+                      {
+                      
+                      try{
+                            $date        = $_POST['treansferdate'];
+                            $bankaccount = $_POST['bankaccount'];
+                            $ttype       = $_POST['ttype'];
+                            $amnt        = $_POST['amount'];
+                            $carrier     = $_POST['carrier'];
+
+                              $from = $to = "";
+                              if ($ttype == "out") 
+                              {
+                                 $from = "4";
+                                 $to = $bankaccount;
+                              }
+                              else if($ttype == "in") 
+                              {
+                                  $to="4";
+                                  $from = $bankaccount;
+                              }
+
+                              if (empty($from) || empty($to)) 
+                                throw new Exception("Select Transfar Type", 1);
+                             else if (empty($bankaccount)) 
+                              throw new Exception("Account Field is required", 1);
+                            else  if (empty($amnt))
+                              throw new Exception("Amount field is required", 1);
+                            else  if (empty($carrier))
+                              throw new Exception("Carrier Field is required", 1);
+                          else if (empty($date))
+                              throw new Exception("Date Field is required", 1);
+                            else
+                            {
+
+                                   $data = array(
+                               'transerdate' => $date, 
+                               'to' => $to, 
+                               'from' => $from, 
+                               'amounts' => $amnt, 
+                               'carreier' => $carrier,
+                               'addedby' => $_SESSION['u_id'],
+                               'bycashcheque' => "ct_Cash_".$from."_".$to
+                             );
+                        $msg =  $ttype == "out" ? "withdrawn" : " Refill";
+                             if ($db->insert("banktransfer",$data)) 
+                             {
+
+                                   
+                               echo "<h6 style='color:blue'> Money has been {$msg} successfully</h6>";
+                               
+                             }else {
+                               throw new Exception("Data saving problem", 1);
+                               
+                             }
+                           }
+                       }
+                       catch(Exception $e)
+                       {
+                        echo "<h6 style='color:red'>Notice ! ".$e->getMessage()."</h6>";
+                       }
+                       
+                      }
+
+               ?>
             </div>
          </div>
          <?php 
-            if (isset($_POST['savetransfer'])) {
-
-
-               //validation start from here
-              if (empty($_POST['treansferdate'])) {
-                 echo "<h1 style='color:red'>Date field can not be empty</h1>";
-              }else if (empty($_POST['from'])) {
-                echo "<h1 style='color:red'>From field can not be empty</h1>";
-              }else if (empty($_POST['to'])) {
-                echo "<h1 style='color:red'>to field can not be empty</h1>";
-              }else if (empty($_POST['amount'])) {
-                echo "<h1 style='color:red'>Amount ID field can not be empty</h1>";
-              }else if (empty($_POST['carrier'])) {
-                echo "<h1 style='color:red'>Carrier ID field can not be empty</h1>";
-              }else {
-
-
-               if ($_POST['customRadio']=="yes") {
-                  $chquedata = array(
-                    'accountno' =>$_POST['chequeno'],
-                    'bankname' => $_POST['from'],
-                    'expiredate' => $_POST['issuedate'],
-                    'amount' => $_POST['amount'],
-                    'userid' => $_SESSION['u_id'],
-                    'fromtable' => "default"
-                  );
-                  if ($db->insert("cheque",$chquedata)) {
-                   echo "<h1 style='color:blue'>Cheque has been saved</h1>";
-                 }
-                  
-                }
-
-            $chequecash = ($_POST['customRadio']=="yes")?"Cheque":"Cash";
-                 $data = array(
-                   'transerdate' => $_POST['treansferdate'], 
-                   'to' => $_POST['to'], 
-                   'from' => $_POST['from'], 
-                   'amounts' => $_POST['amount'], 
-                   'carreier' => $_POST['carrier'],
-                   'addedby' => $_SESSION['u_id'],
-                   'bycashcheque' => "ct_".$chequecash."_".$_POST['from']."_".$_POST['to']
-
-                 );
             
-                 if ($db->insert("banktransfer",$data)) {
-            
-                   echo "<h1 style='color:blue'> Money has been transferrrd</h1>";
-                   
-                 }else {
-                   echo "<h1 style='color:red'> There is a problem</h1>";
-                 }
-                    /* echo "<pre>";
-                      print_r($data);
-                     echo "</pre>";*/
-                   }
-            
-                   
-            }
             
             
             ?>
@@ -214,8 +190,8 @@
                <tr>
                   <th>SL</th>
                   <th>Transfar Date</th>
-                  <th>To</th>
                   <th>From</th>
+                  <th>To</th>
                   <th>Amount</th>
                   
                   <th>Carriar</th>
@@ -252,8 +228,8 @@
                <tr>
                   <th><?=$i?></th>
                   <td><?=$val['transerdate']?></td>
-                  <td><?=$fn->Chartsaccounta($val['to'])?></td>
                   <td><?=$fn->Chartsaccounta($val['from'])?></td>
+                  <td><?=$fn->Chartsaccounta($val['to'])?></td>
                   <td><?=number_format($val['amounts'])?></td>
                   <td><?=$val['carreier']?></td>
                  
@@ -294,16 +270,3 @@
    </div>
 </div>
 <?php include 'files/footer.php'; ?>
-<script>
-   // check the radio button to show the cheque payment method
-   /*function chequeoptioncheck(){
-     var divid  = document.getElementById('chequeoption');
-    var radio  =  document.getElementById('customRadio2');
-     if (radio.checked === true){
-       divid.style.display = 'inline-block';
-     }else {
-       divid.style.display = 'none';
-     }
-   
-   }*/
-</script>

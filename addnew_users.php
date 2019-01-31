@@ -83,7 +83,7 @@
                     <div class="d-inline-block">
                       
                     <label>Employee Type <span class="required">*</span></label>
-                    <select class="form-control" name="emtype" id="emtype" required="true">
+                    <select class="form-control" name="emtype" id="emtype">
 
                         <option value="">Employee type</option>
                         <?=$dm->getEmployeeType()?>

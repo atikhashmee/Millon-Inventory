@@ -24,6 +24,8 @@ if (isset($_GET['del-id']))
 
 
  ?>
+ 
+
 <div class="container">
    <div class="row">
                     <div class="col-sm-12">
@@ -52,24 +54,7 @@ if (isset($_GET['del-id']))
                         <div class="form-group">
                           <label  for="name"> Date <span class="required">*</span>
                            </label>
-                           <input id="paymentdat" class="form-control" name="paymentdat"  required="required" type="date">
-                        </div>
-                     </div>
-                     <div class="col">
-                        <div class="form-group">
-                           <label for="name">Accounts  <span class="required">*</span>
-                           </label>
-                           <select class="form-control" name="accounts_id">
-                              <option value="">Choose option</option>
-                              <?php 
-                                 $cat  =  $db->joinQuery("SELECT * FROM `charts_accounts`")->fetchAll();
-                                 foreach ($cat as $cater) { ?>
-                              <option value="<?=$cater['charts_id']?>"><?=$cater['chart_name']?></option>
-                              <?php
-                                 }
-                                 
-                                 ?>
-                           </select>
+                           <input id="paymentdat" class="form-control mydate" name="paymentdat"  required="required" type="text">
                         </div>
                      </div>
                      <div class="col">
@@ -89,8 +74,6 @@ if (isset($_GET['del-id']))
                            </select>
                         </div>
                      </div>
-                  </div>
-                  <div class="row">
                      <div class="col">
                         <div class="form-group">
                            <label  for="name">Amount <span class="required">*</span>
@@ -98,6 +81,9 @@ if (isset($_GET['del-id']))
                            <input id="amount" class="form-control" name="amount"  required="required" type="number">
                         </div>
                      </div>
+                  </div>
+                  <div class="row">
+                     
                      <div class="col">
                         <div class="form-group">
                            <label  for="name">Carrier
@@ -105,8 +91,9 @@ if (isset($_GET['del-id']))
                            <input id="carrier" class="form-control" name="carrier"   type="text">
                         </div>
                      </div>
+                      
                      <div class="col">
-                        <div class="form-group" style="position: relative; top:20px">
+                        <div class="form-group" id="payoption" style="position: relative; top:20px;">
                            <div class="custom-control custom-radio">
                               <input type="radio" id="customRadio1" name="customRadio" value="no" onchange="chequeoptioncheck()" class="custom-control-input" checked="">
                               <label class="custom-control-label" for="customRadio1">Cash</label>
@@ -121,22 +108,24 @@ if (isset($_GET['del-id']))
                   <div id="chequeoption" style="display: none;">
                      <div class="row">
                       <div class="col">
-                           <div class="form-group">
-                              <label for="">Bank Name</label>
-                              <select class="form-control" name="accounts" id="accounts">
-                      <option value=""> Select option</option>
-                        <?php    
+                        <div class="form-group">
+                           <label for="name">Accounts <span class="required">*</span>
+                           </label>
+                           <select class="form-control" name="accounts_id" onchange="chageCashOption(this)">
+                              <option value="" selected disabled hidden>Choose option</option>
+                              <?php    
                            $accounthead = $db->selectAll("charts_accounts","chart_name != 'Cash'")->fetchAll();
                            foreach ($accounthead as $ah) { ?>
                         <option value="<?=$ah['charts_id']?>"><?=$ah['chart_name']?></option>
                         <?php }
                            ?>
-                     </select>
+                           </select>
                         </div>
-                      </div>
+                     </div>
+                    
                         <div class="col">
                            <div class="form-group">
-                              <label  for="name"> Cheque/Account Number
+                              <label  for="name"> Cheque Number
                              
                               </label>
                               <input id="chequeno" class="form-control" name="chequeno"   type="text">
@@ -153,10 +142,10 @@ if (isset($_GET['del-id']))
                      </div>
                   </div>
                   <div class="form-group">
-                     <div class="col-md-6 col-md-offset-3">
+                     
                         <button type="submit" class="btn btn-outline-danger">Cancel</button>
                         <button id="savepayument" name="savepayument" type="submit" class="btn btn-outline-primary">Saved <i class="fa fa-floppy-o"></i></button>
-                     </div>
+                    
                   </div>
                </form>
             </div>
@@ -174,7 +163,7 @@ if (isset($_GET['del-id']))
               {
                 echo "<h1 style='color:red'>Supplier ID field can not be empty</h1>";
               }
-              else if (empty($_POST['accounts_id'])) 
+              else if  ( (isset($_POST['customRadio']) && $_POST['customRadio'] =="yes") && empty($_POST['accounts_id'])) 
               {
                 echo "<h1 style='color:red'>Accounts ID field can not be empty</h1>";
               }
@@ -225,7 +214,7 @@ if (isset($_GET['del-id']))
                             'parent_table_id' => "pts_".$parentid,
                             'accountno' => $_POST['chequeno'],
                             'customerid' => $_POST['suppliername'],
-                            'bankname' => $_POST['accounts'],
+                            'bankname' => $_POST['accounts_id'],
                             'expiredate' => $_POST['issuedate'],
                             'amount' => $_POST['amount'],
                             'carrier' => $_POST['carrier'],
@@ -367,8 +356,14 @@ if (isset($_GET['del-id']))
 </div>
 <?php include 'files/footer.php'; ?>
 <link href="assets/plugins/alertify/css/alertify.css" rel="stylesheet" type="text/css">
+
 <script src="assets/plugins/alertify/js/alertify.js"></script>
+
+
 <script>
+ 
+      
+ 
  
    // check the radio button to show the cheque payment method
    function chequeoptioncheck(){
@@ -384,6 +379,8 @@ if (isset($_GET['del-id']))
 
      var supplier = <?=json_encode($suppliersb);?>;
       document.getElementById("suppliername").addEventListener("change",function(ev){
-           alertify.alert("<h3 class='font-18'>Supplier due</h3><hr><p> "+supplier[ev.target.value]+"</p>");
+           alertify.alert("<h3 class='font-18'>Supplier Balance</h3><hr><p> "+supplier[ev.target.value]+"</p>");
       });
+
+      
 </script>

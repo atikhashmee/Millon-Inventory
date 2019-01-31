@@ -51,7 +51,7 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
                         <div class="form-group">
                            <label for="name"> Date <span class="required">*</span>
                            </label>
-                           <input id="recievedate" class="form-control" name="recievedate"  required="required" type="date">
+                           <input id="recievedate" class="form-control mydate" name="recievedate"  required="required" type="text">
                         </div>
                      </div>
                      <div class="col">

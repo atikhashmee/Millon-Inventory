@@ -22,7 +22,7 @@
 
        $sql[7] = "SELECT `transerdate`, `to`, `amounts`, `bycashcheque` FROM `banktransfer`"; 
 
-       $sql[7] = "SELECT `paydate`, `employee_id`, `pament`, `token` FROM `target` WHERE token='comisn_paid'";
+       $sql[8] = "SELECT `paydate`, `employee_id`, `pament`, `token` FROM `target` WHERE token='comisn_paid'";
 
          $dateext = [];
          $dateext[0] =" AND `selldate`";
@@ -33,11 +33,11 @@
          $dateext[5] =" WHERE `payment_date`";
          $dateext[6] =" AND `purchasedate`";
          $dateext[7] =" WHERE `transerdate`";
-         $dateext[7] =" AND `paydate`";
+         $dateext[8] =" AND `paydate`";
 
        if (!empty($start) && empty($end)) 
        {
-         for ($i=0; $i <8 ; $i++) 
+         for ($i=0; $i <9 ; $i++) 
          { 
            $sql[$i] .= $dateext[$i]." ='{$start}'";
          }
@@ -45,14 +45,14 @@
 
        if (!empty($start) && !empty($end)) 
        {
-         for ($i=0; $i <8 ; $i++) 
+         for ($i=0; $i <9 ; $i++) 
          { 
            $sql[$i] .= $dateext[$i]." BETWEEN '{$start}' AND '{$end}'";
          }
        }
 
        $query = implode(" UNION ", $sql);
-      // echo $query;
+       //echo $query;
 
        return $query;
     }
@@ -60,6 +60,7 @@
    function cashReport($date)
 	 {
 	        	$sql =  cashRawQuery($date);
+                        
             $data = $GLOBALS['db']->joinQuery($sql)->fetchAll();
             return  $data;
 	 }
@@ -142,7 +143,8 @@
                     else if (substr($tkn,0,7) == "ct_Cash") 
                     {
                       $tkens = explode("_", $tkn);
-                      if ($tkens[2] == 1) 
+
+                      if ($GLOBALS['fn']->Chartsaccounta($tkens[2]) == "Cash") 
                       {
                             return -$amounts;
                       }
@@ -166,19 +168,19 @@
          $str = "No caption";
                    if ($tkn == "pts_Cash") 
                     {
-                      $str = '<p class="description">Payment Paid to supplier <a href="#">'.$GLOBALS['fn']->getUserName($customerid).'</a></p>';
+                      $str = '<p class="description">Payment Paid to supplier <a href="supplier-history-1.php?supid='.$customerid.'">'.$GLOBALS['fn']->getUserName($customerid).'</a></p>';
                     }
                    else  if ($tkn == "rac_Cash") 
                     {
-                      $str = '<p class="description">Payment collection from customer <a href="#">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
+                      $str = '<p class="description">Payment collection from customer <a href="customer-history.php?cusid='.$customerid.'">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
                     }
                    else  if ($tkn == "s_Cash") 
                     {
-                      $str = '<p class="description">Product sold payment from customer <a href="#">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
+                      $str = '<p class="description">Product sold payment from customer <a href="customer-history.php?cusid='.$customerid.'">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
                     }
                     else if ($tkn == "p_Cash") 
                     {
-                      $str = '<p class="description">Purchase Payment to supplier <a href="#">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
+                      $str = '<p class="description">Purchase Payment to supplier <a href="supplier-history-1.php?supid='.$customerid.'">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
                     }
                     else if ($tkn == "add") 
                     {
