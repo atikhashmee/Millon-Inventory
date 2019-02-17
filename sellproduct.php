@@ -210,8 +210,8 @@ $rbas->setPageName(4)->run(); ?>
                            <label for="">Grand Total</label>
                            <input type="text" class="form-control" id="grandtotalaftercommision">
                         </div>
-                        <button type="button" class="btn btn-lg btn-outline-primary" name="savepurchaseinfo" id="savepurchaseinfo" onclick="savePurchaseinfo()">Save <i class="fa fa-floppy-o"></i> </button>
-            <button class="btn btn-lg btn-outline-primary">Print Invoice <i class="fa fa-print"></i></button>
+                        <button type="button" class="btn btn-lg btn-outline-primary" name="savepurchaseinfo" id="savepurchaseinfo" onclick="savePurchaseinfo()">Save & print <i class="fa fa-floppy-o"></i> </button>
+            
                      </div>
                   </div>
                </div>
@@ -474,7 +474,7 @@ $rbas->setPageName(4)->run(); ?>
                if (Object.keys(item)[0]  === "success") 
                {
                   msg(Object.values(item)[0],'su',1);
-                  //window.location.reload();
+                  window.location.href = "product-sale-view-details.php?invo="+$("#billchallan").val();
                }
                else if (Object.keys(item)[0] === "err") 
                {
@@ -487,9 +487,6 @@ $rbas->setPageName(4)->run(); ?>
                   //window.location.reload();
                }
             });
-
-           
-             
             
          
           })
@@ -623,6 +620,10 @@ $rbas->setPageName(4)->run(); ?>
         
          document.getElementById("quntity").value = prodd[e.target.value];
       });
+
+
+
+     
 
       
 

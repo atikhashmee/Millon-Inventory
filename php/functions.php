@@ -8,6 +8,35 @@
 				    	parent::__construct();
 				    }
 
+
+				    public function adjustmentAmount($vendorid,$type)
+				    {
+				    	$sql = "";
+				    	if ($type == "cus")
+				    	{
+				    		 $sql = "SELECT  `recievedate` as paydate, `adjustment`as adjus FROM `recevecollection` WHERE `cusotmer_id`='{$vendorid}'";
+				    	}
+				    	else if ($type == "sup")
+				    	{
+				    		$sql = "SELECT  `pay_date` as paydate, `adjument` as adjus FROM `supplierpayment` `sup_id`='{$vendorid}'";
+				    	}
+				    	$lists = $this->joinQuery($sql)->fetchAll();
+				    	$sum = 0;
+				    	$detailsdate = [];
+ 						foreach ($lists as $list) 
+ 						{
+ 							$sum += (int)$list['adjus'];
+ 							array_push($detailsdate, [
+ 								"date" => $list['paydate'],
+ 								"amount" => $list['adjus']
+ 							]);
+ 						}
+				    	return [
+                            "totalbil" => $sum,
+                            "details" => $detailsdate
+				    	];
+				    }
+
 				    public function getName($tablename,$whereclause,$colname)
 				    {
 				    	$qry =  $this->selectAll($tablename,$whereclause);

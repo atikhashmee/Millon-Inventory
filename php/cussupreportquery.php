@@ -266,7 +266,7 @@
 							"sellamount"    => $amount,
 							"sellreturn"    => 0,
 							"payamount"     => $othe[1],
-							"descrip"       => "Product Sold out <a href='sale_invoice_info.php?invo={$othe[0]}'>See details</a>"
+							"descrip"       => "Product Sold out <a href='sale_invoice_info.php?invo={$othe[0]}'>{$othe[0]}</a>"
 						];
 						
 					}
@@ -296,7 +296,7 @@
 							"sellamount"    => 0,
 							"sellreturn"    => $amount,
 							"payamount"     => 0,
-							"descrip"       => "Product Return <a href='sale_invoice_info.php?invo={$others}'>See details</a>"
+							"descrip"       => "Product Return <a href='sale_invoice_info.php?invo={$others}'>{$others}</a>"
 						];
 					}
 				}

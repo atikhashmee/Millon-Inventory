@@ -34,7 +34,7 @@
                      <div class="form-group">
                         <label for="name">Date of Sell <span class="required">*</span>
                         </label>
-                        <input type="date" id="dapurchase" name="dapurchase" class="form-control col-md-7 col-xs-12" onchange="changedatitem()">
+                        <input type="text" id="dapurchase" name="dapurchase" class="form-control mydate" onchange="changedatitem()">
                      </div>
                   </div>
                   <div class="col-md-4">
@@ -309,10 +309,11 @@ var prod =  <?php echo  json_encode($dm->getProListByIds());?>;
         if (productn.length === " ") {
             alert("product length is zero");
         }else {
-            sum += parseInt($("#returnedamount").val());
+            var totalbillamount  = ($("#productq").val() * $("#singleamount").val());
+            sum += parseInt(totalbillamount);
             $("#tot").val(sum);
 
-             $("#confirmdatalist").append("<tr class='domclass'> <td id='memes'>"+ $("#memonofordbs").val()+"</td> <td id='proname'>" + $("#productn").val() + "</td> <td id='quntity'>" + $("#productq").val() + "</td> <td id='price'>" + $("#singleamount").val() + "</td><td>" + $("#returnedamount").val() + "</td> </tr>");
+             $("#confirmdatalist").append("<tr class='domclass'> <td id='memes'>"+ $("#memonofordbs").val()+"</td> <td id='proname'>" + $("#productn").val() + "</td> <td id='quntity'>" + $("#productq").val() + "</td> <td id='price'>" + $("#singleamount").val() + "</td><td>" +   totalbillamount+ "</td> </tr>");
         }
 
    }
@@ -423,9 +424,9 @@ var prod =  <?php echo  json_encode($dm->getProListByIds());?>;
    }
 
     function updategrndtotal() {
-        var wa =  parseInt($("#weightamount").val());
+        var wa =  parseInt( $("#weightamount").val());
         var ta =  parseInt( $("#transportamount").val());
         var to =  parseInt( $("#tot").val());
-        $("#grndtot").val(wa || 0 + ta || 0 + to||0);
+        $("#grndtot").val(( to ) - (wa  + ta  ) );
     }
 </script>

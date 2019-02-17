@@ -176,10 +176,12 @@
 
         <div class="d-print-none mo-mt-2">
         <div class="pull-right">
-        <a href="#" class="btn btn-danger waves-effect waves-light">Delete <i class="fa fa-minus-square-o"></i></a>
-        <a href="product-sale-edit.php?invo=<?=$_GET['invo']?>" class="btn btn-warning waves-effect waves-light">Update <i class="fa fa-external-link"></i></a>
-        <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light">Print <i class="fa fa-print"></i></a>
-        <a href="#" class="btn btn-primary waves-effect waves-light">Mail</a>
+          
+        <a href="product-return.php?invoice=<?=$_GET['invo']?>&isEnabled=true&token=sell" class="btn btn-outline-info waves-effect waves-light">Return <i class="fa fa-minus-square-o"></i></a>
+        <a href="#" class="btn btn-outline-danger waves-effect waves-light">Delete <i class="fa fa-trash"></i></a>
+        <a href="product-sale-edit.php?invo=<?=$_GET['invo']?>" class="btn btn-outline-warning waves-effect waves-light">Update <i class="fa fa-external-link"></i></a>
+        <a href="javascript:window.print()" class="btn btn-outline-success waves-effect waves-light">Print <i class="fa fa-print"></i></a>
+        <a href="#" class="btn btn-outline-primary waves-effect waves-light">Mail</a>
                                                     </div>
                                                 </div>
                                             </div>

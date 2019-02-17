@@ -189,8 +189,9 @@
                            </div>
                            <div class="d-print-none mo-mt-2">
                               <div class="pull-right">
-                                 <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light">Print <i class="fa fa-print"></i></a>
-                                 <a href="#" class="btn btn-primary waves-effect waves-light">Mail</a>
+                                <a href="product-return.php?invoice=<?=$_GET['invo']?>&isEnabled=true&token=purchase" class="btn btn-outline-info waves-effect waves-light">Return <i class="fa fa-external-link"></i></a>
+                                 <a href="javascript:window.print()" class="btn btn-outline-success waves-effect waves-light">Print <i class="fa fa-print"></i></a>
+                                 <a href="#" class="btn btn-outline-primary waves-effect waves-light">Mail</a>
                               </div>
                            </div>
                         </div>

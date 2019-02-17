@@ -113,7 +113,7 @@
                     }
                     else if ($tkn== "p_Cash") 
                     {
-                      return -$amounts;
+                      return -(double)$amounts;
                     }
                     else if ($tkn == "add") 
                     {

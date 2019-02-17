@@ -15,6 +15,12 @@
 						
 							if ($name == $data['name'] && $pass == $data['password']) {
 
+								   if (isset($_POST['rememberme'])) 
+								   {
+								    setcookie("username",$name,time()+86400*7,"/");
+								    setcookie("password",$pass,time()+86400,"/");
+								   }
+
 								session_start();
 								$_SESSION['username'] = $name;
 								$_SESSION['role']     =  $data['user_role'];

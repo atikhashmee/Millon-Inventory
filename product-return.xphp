@@ -1,0 +1,348 @@
+<?php include 'files/header.php'; ?>
+<?php include 'files/menu.php';?>
+<style type="text/css">
+   
+   @import url('https://fonts.googleapis.com/css?family=PT+Serif');
+   .product-return{
+    font-family: 'PT Serif', serif;
+   }
+   address{
+    line-height: 2px;
+   }
+  
+   .promptform{
+     padding: 20px;
+     border:2px solid #424858;
+     background-color: white;
+   }
+   .promptform>form>.form-group{
+       margin-right: 21px;
+   }
+   .promptform>form>.form-group>label{
+    padding: 6px;
+    color: white;
+    background-color: rgba(66, 72, 88,0.8);
+   }
+   .promptform>form>.form-group>input:focus{
+        border:1px solid #f00;
+        background-color: rgba(0,0,0,0.2);
+   }
+
+
+
+   /*overlay on the other part while focus on form*/
+   
+     .overlay{
+       position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.5);
+      }
+
+      #concoltable>tr{
+         margin-bottom: 2px;
+      }
+      .quantity{
+        border: none;
+        width: 200px;
+      }
+      .quantity-container{
+        height: auto;width: auto; 
+        border: 2px solid #4e4a4a75;
+      }
+      .quantity-container>input{
+        border: none;
+      }
+
+
+
+</style>
+
+<?php
+
+     
+        $elements = null;
+
+        if (isset($_GET['isEnabled']) && $_GET['isEnabled'] == true)
+        {
+
+            if ($_GET['token'] == "purchase") {
+                   $sql ="SELECT * FROM `purchase` WHERE `billchallan`='".$_GET['invoice']."'";
+            }else if ($_GET['token'] == "sell") {
+                 $sql ="SELECT * FROM `sell` WHERE `billchallan`='".$_GET['invoice']."'";
+            }
+                  
+            $elements = $db->joinQuery($sql)->fetchAll();
+            /*echo "<pre>";
+             print_r($elements);
+            echo "</pre>";*/
+        }
+        else
+        {
+            echo "You have not proper URL Redirected";
+        }
+
+ ?>
+ 
+<div class="container product-return">
+   <div class="row">
+      <div class="col-sm-12">
+         <div class="page-title-box">
+            <div class="btn-group pull-right">
+               <ol class="breadcrumb hide-phone p-0 m-0">
+                  <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+                  <li class="breadcrumb-item"><a href="#">Products</a></li>
+                  <li class="breadcrumb-item active">Products Return</li>
+               </ol>
+            </div>
+            <h4 class="page-title">Product Return</h4>
+         </div>
+      </div>
+   </div>
+   <!-- end page title end breadcrumb --> 
+        
+         <?php 
+
+            if ($elements != null) { 
+
+                   $date = "";
+                   $invoice = "";
+                   $vendorname = "";
+                   $weight = "";
+                   $transfort = "";
+
+                    if ($_GET['token'] == "purchase") 
+                        {
+                             $date = $elements[0]['purchasedate'];
+                             $invoice = $elements[0]['billchallan'];
+                             $vendorname = $elements[0]['supplier'];
+                             $weight = $elements[0]['weight'];
+                             $transfort = $elements[0]['transport'];
+                        }
+                        else if ($_GET['token'] == "sell") {
+                             $date = $elements[0]['selldate'];
+                             $invoice = $elements[0]['billchallan'];
+                             $vendorname = $elements[0]['customerid'];
+                             $weight = $elements[0]['weight'];
+                             $transfort = $elements[0]['transport'];
+                        }
+
+             ?>
+                     
+                    <div class="card card-body">
+                    <div class="overlay" style="display: none;"></div>
+              <div class="row">
+                 <div class="col">
+                      <address>
+                  <p> <strong> Order Date :  </strong> <?=$date?>  </p>
+                  <p> <strong> Invoice No :  </strong> <?=$invoice?> </p>
+                  <p> <strong> Vendor Name : </strong> <?=$vendorname?> </p>
+                      </address>
+                 </div>
+              </div>
+              <div class="row promptform" style="opacity: 0;" id="myprompt">
+                 <form action="" class="form-inline">
+                       <div class="form-group">
+                        <label for="">Product Name</label>
+                        <input type="text" class="form-control" id="productid" readonly>
+                      </div>
+                      <div class="form-group">
+                        <label for="">Quantity</label>
+                        <div class="quantity-container">
+                         <span id="totalquantity"></span>-
+                        <input type="text" class="form-control" id="quantity"> <span id="updatedquantity">0</span>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="">Price</label>
+                        <input type="text" class="form-control" id="price">
+                      </div>
+                      <input type="hidden" id="idholder">
+                      <button type="button" id="updatebtn" class="btn btn-outline-secondary">Update</button>
+                      <button type="button" id="hideform" class="btn btn-outline-danger">X</button>
+                 </form>
+              </div>
+              <div class="row">
+                  <table class="table table-striped table-inverse"  width="100%">
+                       <thead class="thead-inverse">
+                          <tr>
+                             <th>#</th>
+                             <th>Product Name</th>
+                             <th>Quantity</th>
+                             <th>Price</th>
+                             <th>Total</th>
+                             <th>Action</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                             <?php 
+                             $i = 0;
+                             $sum = 0;
+                                 foreach ($elements as $ele) 
+                                 {
+                                  $i++;
+                                  $sum += (int) ($ele['quantity']*$ele['price']);
+                                    ?>
+                                    <tr>
+                                      <td scope="row"><?=$i?></td>
+                                      <td id="productid_<?=$i?>"><?=$ele['productid']?></td>
+                                      <td id="quantity_<?=$i?>"><?=$ele['quantity']?></td>
+                                      <td id="price_<?=$i?>"><?=$ele['price']?></td>
+                                      <td id="total_<?=$i?>"><?=($ele['quantity']*$ele['price'])?></td>
+                                      <td>
+                                <button class="btn btn-outline-secondary editbutton" id="<?=$i?>">Edit</button>
+                                      </td>
+                                      
+                                   </tr>
+                                    <?php
+                                 }
+                             ?>
+                          </tbody>
+                    </table>
+
+
+              </div>
+              <div class="row">
+                <div class="col-md-4"></div>
+
+                <div class="col-md-4">
+                     <form action="">
+                      <table id="concoltable">
+                        <tr>
+                          <td><label for="">Sub Total </label></td>
+                          <td><input type="text" readonly class="form-control" value="<?=$sum?>" ></td>
+                        </tr>
+
+                        <tr>
+                          <td><label for="">Transport</label></td>
+                          <td><input type="text" class="form-control" value="<?=$transfort?>" ></td>
+                        </tr>
+                        <tr>
+                          <td><label for="">Weight</label></td>
+                          <td><input type="text" class="form-control" value="<?=$weight?>" ></td>
+                        </tr>
+                        <tr>
+                      <?php
+                          $grandtotal = $sum + (int) $weight + (int) $transfort;
+                      ?>
+                          <td><label for="">Grand Total</label></td>
+                          <td><input type="text" class="form-control" readonly value="<?=$grandtotal?>"></td>
+                        </tr>
+                        <tr>
+                           <td></td>
+                          <td>
+                            
+                        <button style="width: 100%" class="btn btn-lg btn-outline-secondary">Save <i class="fa fa-floppy-o"></i> </button>
+                          </td>
+                        </tr>
+                        
+                         </table>
+                     </form>
+                </div>
+                <div class="col-md-4"></div>
+              </div>
+       </div>
+
+       <?php     }
+
+         ?>
+
+       
+   
+
+</div>
+<?php include 'files/footer.php'; ?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        
+<script>
+     
+   jQuery(document).ready(function($) {
+
+          // on edit button effect
+
+        $(".editbutton").click(function(event) {
+          event.preventDefault();
+          //alert(event.target.id);
+          var indexid  = parseInt(event.target.id);
+          $("#myprompt").css({
+            "opacity": '1',
+            "transition": 'all .6s linear',
+            "zIndex": '99999'
+          });
+
+          $(".overlay").css("display","block");
+          $(".editbutton").each(function(index, el) {
+             $(this).attr("disabled","true");
+          });
+
+          $("#productid").val($("#productid_"+indexid).text());
+          $("#totalquantity").text($("#quantity_"+indexid).text());
+          //$("#quantity").val($("#quantity_"+indexid).text());
+          $("#price").val($("#price_"+indexid).text());
+          $("#idholder").val(indexid);
+         
+        });
+
+        // on cancel button effect
+
+        $("#hideform").click(function(event) {
+          /* Act on the event */
+           event.preventDefault();
+
+           $("#myprompt").css({
+            "opacity": '0',
+            "transition": 'all .6s linear'
+          });
+          $(".overlay").css("display","none");
+         
+          $(".editbutton").each(function(index, el) {
+            $(this).removeAttr('disabled');
+            
+          });
+
+        });
+
+        // on update button effect
+
+        $("#updatebtn").click(function(event) {
+          event.preventDefault();
+
+             $("#myprompt").css({
+            "opacity": '0',
+            "transition": 'all .6s linear'
+          });
+              $(".editbutton").each(function(index, el) {
+            $(this).removeAttr('disabled');
+
+            $(".overlay").css("display","none");
+              var indexid = $("#idholder").val();
+              $("#productid_"+indexid).text($("#productid").val());
+              $("#quantity_"+indexid).text($("#quantity").val());
+              $("#price_"+indexid).text($("#price").val());
+              $("#total_"+indexid).text(parseInt($("#price").val()) * parseInt($("#quantity").val()));
+            
+          });
+
+
+
+        });
+
+
+        $("#quantity").keyup(function(event) {
+
+            event.preventDefault();
+            var tquantity =  parseInt($("#totalquantity").text());
+            var curquanitity = parseInt(event.target.value);
+            $("#updatedquantity").text((tquantity-curquanitity)|| 0 );
+
+        });
+
+
+
+
+   });
+
+</script>

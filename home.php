@@ -2,7 +2,11 @@
 <?php 
  include 'files/header.php';
  include 'files/menu.php';
+   
 
+   /*echo "<pre>";
+    print_r($_COOKIE);
+    echo "</pre>";*/
 
 
 ?>

@@ -310,9 +310,22 @@
                         <td ><?=$paymentsum?></td>
                      </tr>
                      <tr>
+                        <td  class="text-right">Adjustments</td>
+                        <td ><?php
+                              if (isset($_GET['cusid'])) 
+                             {
+                            echo "<a href='adjustment-details.php?details=". json_encode($fn->adjustmentAmount($_GET['cusid'],"cus")['details']) ."'>".$fn->adjustmentAmount($_GET['cusid'],"cus")['totalbil']."</a>";
+                           }else if (isset($_POST['customerid'])) 
+                             {
+                            echo "<a href='adjustment-details.php?details=". json_encode($fn->adjustmentAmount($_POST['customerid'],"cus")['details']) ."'>".$fn->adjustmentAmount($_POST['customerid'],"cus")['totalbil']."</a>";
+                           }
+                        ?></td>
+                     </tr>
+                     <tr>
                         <td  class="text-right">Total Return</td>
                         <td ><?=$return?></td>
                      </tr>
+                     
                      <tr>
                         <td class="text-right">Balance</td>
                         <td ><?=$sum?></td>

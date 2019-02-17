@@ -84,13 +84,17 @@ $rbas->setPageName(9)->run();
             <div class="form-group">
                <label  for="name">Accounts  <span class="required">*</span>
                </label>
-               <select class="form-control" name="accountsid" required="true" readonly>
+               <select class="form-control" name="accountsid" required="true">
                 <?php 
-                     $cat  =  $db->joinQuery("SELECT chart_name FROM `charts_accounts` WHERE chart_name='Cash'")->fetch(PDO::FETCH_ASSOC);  ?>
-                    
-               <option value="<?=$cat['charts_id']?>"><?=$cat['chart_name']?></option>
-                 
-                  
+                    $acc  =  $db->joinQuery("SELECT chart_name FROM `charts_accounts` ")->fetchAll(); 
+                      foreach ($acc  as $cat) 
+                      {
+                         ?>
+                         <option value="<?=$cat['charts_id']?>"><?=$cat['chart_name']?></option>
+                         <?php
+                      }
+
+                      ?>
                   
                </select>
             </div>
@@ -278,7 +282,6 @@ $rbas->setPageName(9)->run();
                   <th>#</th>
                   <th>Date</th>
                   <th>Expense Details</th>
-                  
                   <th>Amount</th>
                   <th>Action</th>
                </tr>
@@ -294,11 +297,11 @@ $rbas->setPageName(9)->run();
                       $detailss =  explode("_", $val['token']);
                       if (trim($detailss[0]) != "stuff") 
                       {
-                         $details = "Expense for <a href='#'>".$fn->expenseCategory($val['expensecatid'])."</a>";
+                         $details = "Expense for <a href='expense-details.php?cat=".$val['expensecatid']."'>".$fn->expenseCategory($val['expensecatid'])."</a>";
                       }
                       else
                       {
-                        $details = "Expense for <a  href='#'>".$fn->expenseCategory($val['expensecatid'])."</a> to stuff <a href='#'>".$fn->getUserName(trim($val['employeeid']))."</a>";
+                        $details = "Expense for <a  href='expense-details.php?cat=".$val['expensecatid']."'>".$fn->expenseCategory($val['expensecatid'])."</a> to stuff <a href='expense-details.php?em=".$val['employeeid']."'>".$fn->getUserName(trim($val['employeeid']))."</a>";
                       }
 
                       ?>
