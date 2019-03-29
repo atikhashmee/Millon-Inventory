@@ -73,7 +73,8 @@
   <div class="dropdown-menu">
     
      <a href="pay_salery.php?eid=<?=$val['u_id']?>" class="dropdown-item">Pay salery</a>
-      <a class="dropdown-item" href="salerysetup.php?eid=<?=$val['u_id']?>">Setup Salery</a>
+      <a class="dropdown-item" href="salerysetup.php?eid=<?=$val['u_id']?>">Setup Salery</a> 
+      <a class="dropdown-item" href="salery-history.php?eid=<?=$val['u_id']?>"> Salery History</a>
     
   </div>
 </div>

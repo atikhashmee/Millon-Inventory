@@ -1,3 +1,18 @@
+<style>
+  .app-notify-style{
+      transform: translate3d(-181px, 58px, 0px) !important;
+      width: 400px;
+}
+.app-style-list{
+  border: none;
+    box-shadow: -1px 2px 3px 7px #ddd;
+}
+.app-card-body{
+  padding: 10px 5px;
+}
+</style>
+
+
 <!-- Navigation Bar-->
 <header id="topnav">
    <div class="topbar-main">
@@ -34,7 +49,7 @@
                   <i class="mdi mdi-bell-outline noti-icon"></i>
                   <span class="badge badge-danger noti-icon-badge" id="cnt">0</span>
                   </a>
-                  <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg" id="notify">
+                  <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg app-notify-style" id="notify">
                      <!-- item-->
                      
                      <!-- item-->
@@ -261,9 +276,9 @@
   .done(function(res) {
     //console.log(res);
     var data =  JSON.parse(res);
-    var text = '<div class="card"><div class="card-header">Notification</div><div class="card-body" style="height:300px; overflow: auto;">';
+    var text = '<div class="card"><div class="card-header">Notification</div><div class="card-body app-card-body" style="height:300px; overflow: auto;">';
     for (var i = 0; i <data.length; i++) {
-      text += '<a href="purchase.php"  class="list-group-item border-bottom"><b>Product Stock is out</b><small> Product = '+data[i].productsid+' Quantity = '+data[i].proquantity+'</small></a>';
+      text += '<a href="purchase.php"  class="list-group-item app-style-list"><b>Product Stock is out</b><small> Product = '+data[i].productsid+' Quantity = '+data[i].proquantity+'</small></a>';
      
     } 
     text += "</div><div class='card-footer'>See ALL</div></div>";

@@ -21,7 +21,19 @@
        // check what are the basic fund has been taken by the employee 
        $usersalerykeys  =  $db->joinQuery("SELECT * FROM `employeesalerlist` WHERE `employeeid`='".$_GET['eid']."'")->fetchAll();
    
-   
+        
+
+            if (isset($_GET['del-id'])) {
+                    
+                     $del = $db->joinQuery("DELETE FROM `e_payment_salery` WHERE `payment_id`='".$_GET['del-id']."'");
+                     if ($del) {
+                       ?>
+                       <script>
+                         window.location.href='pay_salery.php?eid='+<?=$_GET['eid']?>;
+                       </script>
+                       <?php
+                     }
+              }
    
    
    
@@ -54,7 +66,7 @@
           <?php 
             if (count($usersalerykeys) == 0)
              {
-                echo "<p style='color:red'>No salery has been set yet. <a href='salerysetup.php?eid=".$_GET['eid']."'>Set up now</a> </p>";
+                echo "<p style='color:red'>No salery has been set yet. <a href='salerysetup.php?eid=".$_GET['eid']."'>Set it up now</a> </p>";
              }
           ?>
          <table class="table table-bordered">
@@ -112,7 +124,7 @@
         </div>
         <div class="form-group">
           <label for="">Total</label>
-          <input type="text" class="form-control" id="totalsum" readonly>
+          <input type="text" class="form-control" id="totalsum" name="totalsum" readonly>
         </div>
 
         <div class="form-group">
@@ -133,25 +145,30 @@
       </div>
     </div>
   </form>
-  </div>
-  <?php
+   <?php
 
-   		if (isset($_POST['paymentsalery']))
+      if (isset($_POST['paymentsalery']))
        {
           if (empty($_POST['paydate'])) 
           { //if the date is empty
-            echo "Date can not be empty";
-            exit();
-          }
-        
-   			 $data = array(
-   				'payment_date' => $_POST['paydate'],
-   				'amount_pay'   => $_POST['payamount'],
-   				'payment_due'  => $_POST['due'],
+            echo "<h5 style='color:red'>Date can not be empty</h5>";
+            
+          }else if ($_POST['payamount'] == 0) {
+             echo "<h5 style='color:red'>The payment amount is empty</h5>";
+
+          }else if ($_POST['totalsum'] == 0) {
+             echo "<h5 style='color:red'>This employee seems to have no salery set up</h5>";
+
+          }else{
+
+            $data = array(
+          'payment_date' => $_POST['paydate'],
+          'amount_pay'   => $_POST['payamount'],
+          'payment_due'  => $_POST['due'],
           'employeeid'   => $_GET['eid'],
-   				'token'        => "salerypayment"
-   				 );
-   		if ($db->insert("e_payment_salery",$data)) 
+          'token'        => "salerypayment"
+           );
+      if ($db->insert("e_payment_salery",$data)) 
          {     ?>
               <script>
               alert("Payment has been successfully done");
@@ -167,9 +184,62 @@
              <?php
 
       }
-   		}
+
+          }
+        
+         
+      }
 
    ?>
+  </div>
+
+
+   <div class="row" style="margin-top: 20px;">
+     <div class="col">
+       <div class="card">
+         <div class="card-body">
+           <table class="table table-bordered">
+               <thead>
+                 <tr>
+                   <th>#SL</th>
+                   <th>Date</th>
+                   <th>Amount</th>
+                   <th>Action</th>
+                 </tr>
+               </thead>
+               <tbody>
+                <?php 
+
+                    $allsaleries = $db->joinQuery("SELECT * FROM `e_payment_salery` WHERE `employeeid`='".$_GET['eid']."'")->fetchAll();
+                    /*echo "<pre>";
+                    print_r($allsaleries);
+                    echo "</pre>";*/
+                    $i=0;
+                    $sum = 0;
+                    foreach ($allsaleries as $eachsalery) {
+                      $i++;
+                      $sum += doubleval($eachsalery['amount_pay']);
+                             ?>
+                              <tr>
+                   <td><?=$i?></td>
+                   <td><?=$eachsalery['payment_date']?></td>
+                   <td><?=$eachsalery['amount_pay']?></td>
+                   <td> <a href="pay_salery.php?eid=<?=$_GET['eid']?>&del-id=<?=$eachsalery['payment_id']?>"> <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');" type="button"><i class="fa fa-times"></i></button></a> </td>
+                 </tr>
+                             <?php
+                    }
+                ?>
+                <tr>
+                  <td colspan="2" class="text-right">Total</td>
+                  <td colspan="2" class="text-left"><?=$sum?></td>
+                </tr>
+
+               </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
+   </div>
 </div>
 <?php include 'files/footer.php'; ?>
 

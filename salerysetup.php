@@ -268,7 +268,9 @@
                if ($cnnt == count($_POST['checkbox']))
                {
                    ?>
-                   <script> alert("Data has been Updated") </script>
+                   <script> alert("Data has been Updated");
+                   window.location.href='salerysetup.php?eid='+<?=$_GET['eid']?>;
+                 </script>
                     <?php 
                }
                else
@@ -303,7 +305,11 @@
             
                if ($cnnt == count($_POST['checkbox']))
                 {     ?>
-                   <script> alert("Data has been saved") </script>
+                   <script> alert("Data has been saved");
+
+                    window.location.href='salerysetup.php?eid='+<?=$_GET['eid']?>;
+
+                 </script>
                     <?php  
                }
                else
