@@ -23,13 +23,12 @@
          <input type="hidden" name="atik">
          <div class="row">
             <div class="col">
-               <div class="form-group">
-                <label for="name">supplierName<span class="required">*</span></label>
-                  <select class="form-control" name="suppliername" id="suppliername">
-                     <option value="">Choose option</option>
-                     <?=$dm->getUsersByRole(2)?>
-                  </select>
-               </div>
+                    <div class="form-group">
+                                 <label  for="name">Supplier Name <span class="required">*</span>
+                                    <input type="hidden" name="suppliername" id="suppliername">
+                                 <input type="text" class="form-control" id="suppliernnname" name="suppliernnname">
+                              </div>
+              
             </div>
             <div class="col"></div>
             <div class="col">
@@ -465,10 +464,10 @@
       }
 
       /*supplier balance calculation here*/
-      var supplier = <?=json_encode($suppliersb);?>;
+     /* var supplier = <?=json_encode($suppliersb);?>;
       document.getElementById("suppliername").addEventListener("change",function(ev){
            alertify.alert("<h3 class='font-18'>Supplier due</h3><hr><p> "+supplier[ev.target.value]+"</p>");
-      });
+      });*/
 
       /*update product quantity*/
       var prodd = <?=json_encode($prod);?>;
@@ -477,5 +476,23 @@
         
          document.getElementById("quntity").value = prodd[e.target.value];
       });
+
+
+
+       /*  start  fetch data for autocomplete  */
+   var suppliers = <?=json_encode($dm->getUsersByR(2));?>;
+   //console.log(customers);
+    /*fetching customer dues by their ID */
+   var sup = <?=json_encode($suppliersb);?>;
+   $("#suppliernnname").autocomplete({
+      source : suppliers,
+      change : function(event,ui)
+      {
+         document.getElementById(event.target.id).value = ui.item.label;
+         document.getElementById('suppliername').value = ui.item.value;
+           alertify.alert("<h3 class='font-18'>Customer due</h3><hr><p> "+sup[ui.item.value]+"</p>");
+      }
+   });
+   /*end of autocomplete */
    
 </script>

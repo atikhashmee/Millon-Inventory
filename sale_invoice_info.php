@@ -143,7 +143,7 @@
                                        
                                        
                                        $selextra = new Bc();
-                                       $selextra->setAmount($saleamountbyproduct);
+                                      $selextra->setAmount($saleamountbyproduct);
                                        $selextra->setWeight($weight);
                                        $selextra->setTransport($transport);
                                        $selextra->setVat($vat);

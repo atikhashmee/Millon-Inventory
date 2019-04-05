@@ -56,8 +56,6 @@
               <div class="col">
                
                   <button type="submit" name="datesearch" style="position: absolute; top: 29px;"  class="btn btn-outline-primary">  Search <i class="fa fa-search"></i> </button> 
-               
-                
               </div>
             </div>
           </form>
@@ -99,6 +97,9 @@
              }
 
          }
+         /*echo "<pre-wrap>";
+           print_r($sql);
+         echo "</pre-wrap>";*/
         
          $data = $db->joinQuery($sql)->fetchAll();
 

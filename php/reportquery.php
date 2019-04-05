@@ -39,7 +39,13 @@
        {
          for ($i=0; $i <9 ; $i++) 
          { 
-           $sql[$i] .= $dateext[$i]." ='{$start}'";
+            if ($i == 0 ) {
+                 $sql[$i] .= $dateext[$i]." ='{$start}'";
+                 $sql[$i] .= "GROUP BY `billchallan`";
+             } else {
+               $sql[$i] .= $dateext[$i]." ='{$start}'"; 
+             }
+           
          }
        }
 
@@ -47,11 +53,18 @@
        {
          for ($i=0; $i <9 ; $i++) 
          { 
-           $sql[$i] .= $dateext[$i]." BETWEEN '{$start}' AND '{$end}'";
+            if ($i == 0) {
+
+              $sql[$i] .= $dateext[$i]." BETWEEN '{$start}' AND '{$end}'";
+              $sql[$i] .= "GROUP BY `billchallan`";
+            }else{
+               $sql[$i] .= $dateext[$i]." BETWEEN '{$start}' AND '{$end}'";
+            }
+          
          }
        }
 
-       $query = implode(" UNION ", $sql);
+       $query = implode("UNION ALL ", $sql);
        //echo $query;
 
        return $query;
@@ -90,6 +103,7 @@
       {
          $sum += getMoneyToken(trim($val['token']),trim($val['payment_taka']));
       }
+
     return $sum;
   }
 

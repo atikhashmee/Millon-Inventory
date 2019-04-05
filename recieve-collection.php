@@ -55,21 +55,12 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
                         </div>
                      </div>
                      <div class="col">
-                        <div class="form-group">
-                           <label class="control-label" for="name">Customer Name  <span class="required">*</span>
-                           </label>
-                           <select class="form-control" name="customerid" id="customerid">
-                              <option value="">Choose option</option>
-                              <?php 
-                                 $cat  =  $db->joinQuery("SELECT * FROM `users` WHERE `user_role` ='3' OR user_role = '1'")->fetchAll();
-                                 foreach ($cat as $cater) { ?>
-                              <option value="<?=$cater['u_id']?>"><?=$cater['name']?></option>
-                              <?php
-                                 }
-                                 
-                                 ?>
-                           </select>
-                        </div>
+                      <div class="form-group">
+                                 <label  for="name">Customer Name<span class="required">*</span>
+                                    <input type="hidden" name="customerid" id="customerid">
+                                 <input type="text" class="form-control" id="cusidnadname" name="cusidnadname">
+                              </div>
+                       
                      </div>
                      <div class="col">
                         <div class="form-group">
@@ -350,10 +341,20 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
    
       }
 
-      /*customers calculation done here*/
-        var customers = <?=json_encode($customersb);?>;
-      document.getElementById("customerid").addEventListener("change",function(ev){
-           alertify.alert("<h3 class='font-18'>Customer due</h3><hr><p> "+customers[ev.target.value]+"</p>");
-      });
+     
+
+      /*fetching customer dues by their ID */
+   var cus = <?=json_encode($customersb);?>;
+    var customers = <?=json_encode($dm->getUsersByR(1));?>;
+   $("#cusidnadname").autocomplete({
+      source : customers,
+      change : function(event,ui)
+      {
+         document.getElementById(event.target.id).value = ui.item.label;
+         document.getElementById('customerid').value = ui.item.value;
+           alertify.alert("<h3 class='font-18'>Customer due</h3><hr><p> "+cus[ui.item.value]+"</p>");
+      }
+   });
+   /*end of autocomplete */
    
 </script>

@@ -21,6 +21,8 @@
 				    private  $s_goupby  = "GROUP BY `billchallan`";
 					private	$sr_goupby = "GROUP BY `memono`";
 					private	$orderby   = "ORDER BY selldate ASC";
+
+
 					
 				 public function queryEnquery($customerid="",$start="",$end="")
 				 {
@@ -338,6 +340,9 @@
                     $bc->setComission($sell[0]['comission']);
 					return $bc->getResult();
 				}
+
+
+				
 			}
 				
 

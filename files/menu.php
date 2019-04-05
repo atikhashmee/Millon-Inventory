@@ -206,6 +206,9 @@
                            <li>
                           <a  href="supplier-history-1.php">Supplier History </a>
                           </li>
+                          <li>
+                          <a  href="employee_wise_customer_report.php">Employee wise customer report </a>
+                          </li>
                         </ul>
                      </li>
                      <li>
@@ -216,7 +219,7 @@
                             <li><a  href="employee_target_report.php">Target Report</a></li>
                            <li><a  href="labour_payment_statement.php"> See the labour payment</a></li>
                            <li><a  href="employee_report.php">Employee Report</a></li>
-                           <li><a  href="gross-profit.php">Gross Profit</a></li>
+                           <li><a href="gross-profit.php">Gross Profit</a></li>
                         </ul>
                      </li>
                   </ul>

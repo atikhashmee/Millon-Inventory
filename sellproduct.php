@@ -401,13 +401,12 @@ $rbas->setPageName(4)->run(); ?>
      $("#mycartlists").append('<tr id="trcontent_'+incr+'"> <td>'+prod[pname]+'</td>  <td>'+quantity+'</td>   <td>'+price+'</td> <td class="totatlbalnceshow" id="multiplyprice_'+incr+'">'+price*quantity+'</td> <td><button type="button" data-pr="'+pname+'" data-inc="'+incr+'" class="btn btn-outline-danger" onclick="removeitem(this)">X</button></td> </tr>');
        totalsum += parseInt((price*quantity));
      $("#subtotalbeforecommsion").val(totalsum); // value gets updated everytime a new item get added to the cart
+     $("#grandtotalaftercommision").val(totalsum);
    }else {
      msg("This product is already in the cart",'al');
    }
 
    }
-   
-     
      
    }
    

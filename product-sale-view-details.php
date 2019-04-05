@@ -2,31 +2,11 @@
 <?php include 'files/menu.php';
 
 
+
+ $salehistory = $db->joinQuery('SELECT DISTINCT `selldate`,`billchallan`,`customerid` FROM `sell` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
  ?>
 
 
-
-<?php 
-   if (isset($_GET['del-id']))
-    {
-           if ($db->delete("sell","billchallan = '".$_GET['del-id']."'")) {?>
-<script> alert('Data has been deleted'); window.location.href='sellproduct.php'; </script>
-<?php   }
-   }
-
-
-
-
-   $salehistory = $db->joinQuery('SELECT DISTINCT `selldate`,`billchallan`,`customerid` FROM `sell` WHERE `billchallan`="'.$_GET['invo'].'"')->fetch(PDO::FETCH_ASSOC);
-
-  /* echo "<pre>";
-   print_r($salehistory);
-   echo "</pre>";*/
-
-   
-   
-   
-   ?>
 <div class="container">
    <div class="row">
                     <div class="col-sm-12">
@@ -77,11 +57,20 @@
                                     <div class="col-12">
                                         <div class="panel panel-default">
                                             <div class="p-2">
-                                                <h3 class="panel-title font-20"><strong>Order summary</strong></h3>
+                                                <h3 class="panel-title font-20">
+                                                  <strong>Order summary</strong></h3>
                                             </div>
                                             <div class="">
                        <div class="table-responsive">
-                      <table class="table">
+                        <style>
+                          table.content-table>thead tr td{
+                            border-top:2.5px solid #000;
+
+                        }table.content-table>tbody tr:last-child{
+                            border-bottom:2.5px solid #000;
+                            
+                        } </style>
+                      <table class="table content-table">
                       <thead>
                       <tr>
                     <td><strong>Item</strong></td>
@@ -131,56 +120,93 @@
                             }
 
                           ?>  
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <td class="text-right"> <strong>Total</strong> </td>
-                            <td class="text-right"><?=number_format((float)$sum)?></td>
-                          </tr>
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <td class="text-right"> <strong>Weight</strong> </td>
-                          <td class="text-right"><?=number_format((float)$weight)?></td>
-                          </tr> 
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <td class="text-right"> <strong>Transport</strong> </td>
-                            <td class="text-right"><?=number_format((float)$transport)?></td>
-                          </tr> 
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <td class="text-right"> <strong>Subtotal</strong> </td>
-                            <td class="text-right"><?=number_format(
-                             ((float)$transport+(float)$weight+(float)$sum))?></td>
-                          </tr>
-                          <hr>
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <td class="text-right"> <strong>Vat</strong> </td>
-                            <td class="text-right"><?=number_format((float)$vat)?></td>
-                          </tr>
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <td class="text-right"><strong>Grand Total</strong> </td>
-                            <td class="text-right"><?=number_format(
-                              ((float)$transport+(float)$weight+(float)$sum) + ( ((float)$vat/100) * ((float)$transport+(float)$weight+(float)$sum)))?></td>
-                          </tr>                      
+                                             
                        </tbody>
                                                     </table>
+
+                                  
+
+                                                  <div style="float: right;">
+                                                    <style>
+                                                      table.down-table tr td{
+                                                            margin: 2px;
+                                                padding: 5px 52px;
+                                                border-bottom: 2px solid #0000008c;
+                                                      }
+                                                      table.down-table tr td:last-child{
+                                                        text-align: right;
+                                                         padding-right: 0px;
+                                                      }
+
+                                                    </style>
+                                                      <table  class="down-table">
+                                                           <tr>
+                                                             <td>Total</td>
+                                                             <td><?=number_format((float)$sum)?></td>
+                                                           </tr>
+                                                           <tr>
+                                                             <td>V+T+W</td>
+                                                             <td><?=number_format((float)$vat)?>+<?=number_format((float)$transport)?>+<?=number_format((float)$weight)?></td>
+                                                           </tr>
+                                                           <tr>
+                                                             <td>C/D</td>
+                                                             <td>1/0</td>
+                                                           </tr>
+                                                           <tr>
+                                                             <td>Grand Total</td>
+                                                             <td><?=number_format(
+                              ((float)$transport+(float)$weight+(float)$sum) + ( ((float)$vat/100) * ((float)$transport+(float)$weight+(float)$sum)))?></td>
+                                                           </tr>
+                                                           <tr>
+                                                             <td>Paid</td>
+                                                             <td>132</td>
+                                                           </tr>
+                                                           <tr>
+                                                             <td>Due</td>
+                                                             <td>0</td>
+                                                           </tr>
+                                                      </table>
+                                                  </div>
+
+
+
+
+                                                </div>
+                                                  <style>
+                                                    @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+                                                    .footer-style{
+                                                     margin-top: 345px !important;
+
+                                                        font-family: 'Source Sans Pro', sans-serif;
+                                                    }
+                                                    .left-conent{
+                                                      
+                                                      text-align: center;
+                                                      line-height: 10px;
+                                                      font-size: 19px;
+                                                   
+                                                    }
+                                                  </style>
+                                                <!--  invoice style  -->
+                                  <div class="card card-body d-flex justify-content-center align-items-center flex-column footer-style">
+                                                <h1>Thank you</h1>
+                                                <div><div class="left-conent">
+                                                        
+                                                        <p> <strong> Janata Steel Corporation </strong></p>
+                                                        <p> Ka-24/1, Sohid Abdul Aziz Road, Jagannathpur, vatara, Dhaka 1229 </p>
+                                                        <p>+88 01554327812,+88 01682409301,+88 01912 541124</p>
+                                                    </div></div>
                                                 </div>
 
         <div class="d-print-none mo-mt-2">
         <div class="pull-right">
           
         <a href="product-return.php?invoice=<?=$_GET['invo']?>&isEnabled=true&token=sell" class="btn btn-outline-info waves-effect waves-light">Return <i class="fa fa-minus-square-o"></i></a>
-        <a href="#" class="btn btn-outline-danger waves-effect waves-light">Delete <i class="fa fa-trash"></i></a>
+        <a href="#" 
+        onclick="deleteItem('product-sale-history','<?=$_GET['invo']?>')"
+         class="btn btn-outline-danger waves-effect waves-light">Delete <i class="fa fa-trash"></i></a>
         <a href="product-sale-edit.php?invo=<?=$_GET['invo']?>" class="btn btn-outline-warning waves-effect waves-light">Update <i class="fa fa-external-link"></i></a>
-        <a href="javascript:window.print()" class="btn btn-outline-success waves-effect waves-light">Print <i class="fa fa-print"></i></a>
+        <a href="javascript:window.print()" class="btn btn-outline-success waves-effect waves-light">Print Invoice <i class="fa fa-print"></i></a><a href="challan_print.php?invo=<?=$_GET['invo']?>" class="btn btn-outline-secondary waves-effect waves-light">Print Challan <i class="fa fa-print"></i></a>
         <a href="#" class="btn btn-outline-primary waves-effect waves-light">Mail</a>
                                                     </div>
                                                 </div>

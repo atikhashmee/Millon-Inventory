@@ -2,60 +2,7 @@
 <?php 
  include 'files/header.php';
  include 'files/menu.php';
-   
-
-   /*echo "<pre>";
-    print_r($_COOKIE);
-    echo "</pre>";*/
-
-
 ?>
-
-
-
-<style>
-    /* homepage style css codes are written here */
-
-    .description{
-        font-size: 15px;
-    }
-    /* Tabs*/
-section {
-    padding: 60px 0;
-}
-
-section .section-title {
-    text-align: center;
-    color: #007b5e;
-    margin-bottom: 50px;
-    text-transform: uppercase;
-}
-#tabs{
-    background: #007b5e;
-    color: #eee;
-}
-#tabs h6.section-title{
-    color: #eee;
-}
-
-#tabs .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
-    color: #f3f3f3;
-    background-color: transparent;
-    border-color: transparent transparent #f3f3f3;
-    border-bottom: 4px solid !important;
-    font-size: 20px;
-    font-weight: bold;
-}
-#tabs .nav-tabs .nav-link {
-    border: 1px solid transparent;
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
-    color: #eee;
-    font-size: 20px;
-}
-</style>
-
-       
             <div class="container">
 
                 <!-- Page-Title -->
@@ -140,8 +87,35 @@ section .section-title {
                                   // echo $df->format("Y-m-d");
                          $data = cashReport($df->format('Y-m-d'));
 
-                         // previous date cash
-                         $previus = datewiseCashBalance($df->sub(new DateInterval('P1D'))->format('Y-m-d'));  ?>
+                         $last50 = array();
+                         $last_balance = 0;
+                         $openingbalance = $db->joinQuery("SELECT `opening_balance` FROM `charts_accounts` WHERE `charts_id`='4'")->fetch(PDO::FETCH_ASSOC);
+                         $k=0;
+                         while (true) {
+                            
+                             $k++;
+                             $d =  new DateTime('now', new DateTimezone('Asia/Dhaka'));
+                              $di = $d->sub(new DateInterval('P'.$k.'D'))->format('Y-m-d');
+                              $last_balance = datewiseCashBalance($di);
+                              if ($last_balance  > 0) {
+                                  break;
+                              }
+                         }
+
+                         $prev = doubleval($openingbalance['opening_balance'])+$last_balance;
+                        
+                          // datewise check by array lists
+                     /*    for ($i=0; $i < 10; $i++) { 
+                            
+                              $d =  new DateTime('now', new DateTimezone('Asia/Dhaka'));
+                              $di = $d->sub(new DateInterval('P'.$i.'D'))->format('Y-m-d');
+                              $last50[$di] = datewiseCashBalance($di);
+                              
+                         }
+                       */
+                    
+                        
+                         ?>
                                     </div>
                                     <div class="col"></div>
                                 </div>
@@ -163,13 +137,13 @@ section .section-title {
                 <td></td>
                 <td></td>
                 <td>Pre cash</td>
-                <td><?=$previus?></td>
+                <td><?=$prev?></td>
             </tr>
             
             <?php 
             
                $i=0;
-               $sum = doubleval($previus);
+               $sum = doubleval($prev);
                   foreach ($data as $val) 
                   { 
                      $i++;
