@@ -91,13 +91,23 @@
                           $transport = 0;
                           $vat = 0;
 
+                          $commision = 0;
+                          $discount = 0;
+
+
+                          $paidamount = 0;
+
 
                             foreach ($invoiceinfo as $inv) 
                             {
+                              $paidamount = $inv['payment_taka'];
                               $sum += ($inv['price']*$inv['quantity']);
                               $weight = $inv['weight'];
                               $transport = $inv['transport'];
                               $vat = $inv['vat'];
+                              $commision = $inv['comission'];
+                              $discount = $inv['discount'];
+
                               ?>
                               <tr>
                                 <td>
@@ -118,6 +128,14 @@
                         
                               <?php
                             }
+
+                            $bc = new Bc();
+                      $bc->setAmount($sum);
+                      $bc->setWeight($weight);
+                      $bc->setTransport($transport);
+                      $bc->setVat($vat);
+                      $bc->setDiscount($discount);
+                      $bc->setComission($commision);
 
                           ?>  
                                              
@@ -146,24 +164,25 @@
                                                            </tr>
                                                            <tr>
                                                              <td>V+T+W</td>
-                                                             <td><?=number_format((float)$vat)?>+<?=number_format((float)$transport)?>+<?=number_format((float)$weight)?></td>
+                                                             <td><?=number_format((float)$vat)?> (%) + <?=number_format((float)$transport)?>+<?=number_format((float)$weight)?></td>
                                                            </tr>
                                                            <tr>
                                                              <td>C/D</td>
-                                                             <td>1/0</td>
+                                                             <td><?=(float)$commision?> (%) /<?=(float)$discount?></td>
                                                            </tr>
                                                            <tr>
                                                              <td>Grand Total</td>
-                                                             <td><?=number_format(
-                              ((float)$transport+(float)$weight+(float)$sum) + ( ((float)$vat/100) * ((float)$transport+(float)$weight+(float)$sum)))?></td>
+                                                             <td><?php 
+                                                             $grand_total =$bc->getResult();
+                                                             echo number_format($grand_total)?></td>
                                                            </tr>
                                                            <tr>
                                                              <td>Paid</td>
-                                                             <td>132</td>
+                                                             <td><?=$paidamount?></td>
                                                            </tr>
                                                            <tr>
                                                              <td>Due</td>
-                                                             <td>0</td>
+                                                             <td><?= number_format($grand_total-$paidamount,0,0,2) ?></td>
                                                            </tr>
                                                       </table>
                                                   </div>
@@ -201,10 +220,10 @@
         <div class="d-print-none mo-mt-2">
         <div class="pull-right">
           
-        <a href="product-return.php?invoice=<?=$_GET['invo']?>&isEnabled=true&token=sell" class="btn btn-outline-info waves-effect waves-light">Return <i class="fa fa-minus-square-o"></i></a>
-        <a href="#" 
+       <!--  <a href="product-return.php?invoice=<?=$_GET['invo']?>&isEnabled=true&token=sell" class="btn btn-outline-info waves-effect waves-light">Return <i class="fa fa-minus-square-o"></i></a> -->
+        <!-- <a href="#" 
         onclick="deleteItem('product-sale-history','<?=$_GET['invo']?>')"
-         class="btn btn-outline-danger waves-effect waves-light">Delete <i class="fa fa-trash"></i></a>
+         class="btn btn-outline-danger waves-effect waves-light">Delete <i class="fa fa-trash"></i></a> -->
         <a href="product-sale-edit.php?invo=<?=$_GET['invo']?>" class="btn btn-outline-warning waves-effect waves-light">Update <i class="fa fa-external-link"></i></a>
         <a href="javascript:window.print()" class="btn btn-outline-success waves-effect waves-light">Print Invoice <i class="fa fa-print"></i></a><a href="challan_print.php?invo=<?=$_GET['invo']?>" class="btn btn-outline-secondary waves-effect waves-light">Print Challan <i class="fa fa-print"></i></a>
         <a href="#" class="btn btn-outline-primary waves-effect waves-light">Mail</a>

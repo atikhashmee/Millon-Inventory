@@ -399,7 +399,7 @@ $rbas->setPageName(4)->run(); ?>
        $("#productpricehideen").val(price);
        purchaseitem.push(new productobj(cutomername,pcategory,pname,quantity,price)); //pushing every item to the cart so that i can retrive and modified in the cart 
      $("#mycartlists").append('<tr id="trcontent_'+incr+'"> <td>'+prod[pname]+'</td>  <td>'+quantity+'</td>   <td>'+price+'</td> <td class="totatlbalnceshow" id="multiplyprice_'+incr+'">'+price*quantity+'</td> <td><button type="button" data-pr="'+pname+'" data-inc="'+incr+'" class="btn btn-outline-danger" onclick="removeitem(this)">X</button></td> </tr>');
-       totalsum += parseInt((price*quantity));
+       totalsum += parseFloat((price*quantity));
      $("#subtotalbeforecommsion").val(totalsum); // value gets updated everytime a new item get added to the cart
      $("#grandtotalaftercommision").val(totalsum);
    }else {
@@ -430,7 +430,7 @@ $rbas->setPageName(4)->run(); ?>
    
    
    function gettotalpric(){  // get the product price tlst after putting the quntoty and producdt price
-       $("#totallprice").val(parseInt($("#quntity").val()) * parseInt($("#price").val()))
+       $("#totallprice").val( ( parseFloat($("#quntity").val()) *  parseFloat($("#price").val()) ).toFixed(2) );
    }
    
    
@@ -593,7 +593,7 @@ $rbas->setPageName(4)->run(); ?>
                   sum  += ((valu/100)*totalprice);
                   sum  -= ((comssion/100) * totalprice);
            }
-           $("#grandtotalaftercommision").val(sum);
+           $("#grandtotalaftercommision").val(sum.toFixed(2));
 
      },true);
 

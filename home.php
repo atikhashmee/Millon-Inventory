@@ -97,7 +97,7 @@
                              $d =  new DateTime('now', new DateTimezone('Asia/Dhaka'));
                               $di = $d->sub(new DateInterval('P'.$k.'D'))->format('Y-m-d');
                               $last_balance = datewiseCashBalance($di);
-                              if ($last_balance  > 0) {
+                              if ($last_balance  > 0 ||  $k <500) {
                                   break;
                               }
                          }
