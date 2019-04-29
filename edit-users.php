@@ -57,10 +57,18 @@
                      <label for="email">Contact Number:</label>
                      <?php 
                             $numbers =  explode(",", $userdata['contact_number']);
+							$incr = 0;
                            foreach ($numbers as $number)
                            {
+						   $incr++;
                              ?>
-                             <input class="form-control" id="number" name="number[]" required="required" value="<?=$number?>" type="number">
+							 <div class="d-inline-block" id="remdiv_<?=$incr?>">
+							 <input class="form-control"  id="number_<?=$incr?>" name="number[]" type="text"  value="<?=$number?>">
+							 </div>
+							 <div class="d-inline-block">
+							 <button type="button" id="rem_<?=$incr?>" onclick="removeitem(<?=$incr?>)" ><i class="fa fa-times text-danger"></i></span>
+							 </div>
+                             
                              <?php 
                            }
 
@@ -111,6 +119,7 @@
                         
                <script>
                  alert("data has been submitted");
+				 window.location.href="addnew_users.php";
                </script>
              <a href='addnew_users.php'>Go to user list</a>
             
@@ -144,7 +153,7 @@
    }
 
     document.getElementById("mybutton").addEventListener("click", (function(){
-                 let incr =0;
+                 let incr =<?=$incr?>;
                  
                return ()=>{
                 incr ++;

@@ -44,6 +44,11 @@
 				    	return ($qry->rowCount()==0)?"Not found":$names[$colname];
 				    }
 
+				    public function getBankName($bank_id){
+				    	 $prod =  $this->selectAll("charts_accounts","charts_id='".$bank_id."'");
+				       $bankname = $prod->fetch(PDO::FETCH_ASSOC);
+				       return ($prod->rowCount()==0)?"Not found":$bankname['chart_name'];
+				    }
 				 public function getBrandName($brandid)
 				   {
 				       

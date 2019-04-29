@@ -145,7 +145,9 @@ window.location.href='product-sale-history.php'; </script>
                   <tr>
                     <td><?=$i?></td>
                     <td><?=$sel['selldate']?></td>
-                    <td><a href='sale_invoice_info.php?invo=<?=$sel['billchallan']?>'><?=$sel['billchallan']?></a></td>
+					
+					<!--sale_invoice_info.php?invo=<?=$sel['billchallan']?> -->
+                    <td><a href="product-sale-view-details.php?invo=<?=$sel['billchallan']?>"><?=$sel['billchallan']?></a></td>
                     <td><a href='customer-history.php?cusid=<?=$sel['customerid']?>'><?=$fn->getUserName($sel['customerid'])?></a></td>
                     <td><?=$sel['total_taka']?></td>
                     <td><?=$fn->getUserName($sel['sellby'])?></td>
@@ -169,7 +171,7 @@ window.location.href='product-sale-history.php'; </script>
   <div class="dropdown-menu">
     <?php 
          if ($rbas->getView()) {
-              echo '<a class="dropdown-item" href="product-sale-view-details.php?invo='.$sel['billchallan'].'">View <i class="fa fa-eye"></i></a>';
+              echo '<a class="dropdown-item" href="#">View <i class="fa fa-eye"></i></a>';
          }
          if ($rbas->getUpdate()) {
               echo '<a class="dropdown-item" href="product-sale-edit.php?invo='.$sel['billchallan'].'">Edit <i class="fa fa-pencil"></i></a>';

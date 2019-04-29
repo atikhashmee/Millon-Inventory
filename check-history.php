@@ -175,6 +175,8 @@
                        <th>Date</th>
                        <th>Bank Name</th>
                        <th>Account Number</th>
+                       <th>Details</th>
+
                        <th>Status</th>
                        <th>Amount</th>
                        <th>Balance</th>
@@ -184,7 +186,7 @@
                    
                     <?php
                        $i=0;
-                       $purchasesum = 0;
+                         $purchasesum = 0;
                            $untouched = 0;
                            $honored =0;
                            $dishonored = 0;
@@ -241,8 +243,18 @@
                     <tr>
                        <td><?=$i?></td>
                        <td><?=$val['expiredate']?></td>
-                       <td><?=$val['bankname']?></td>
+                       <td><?php if(is_numeric($val['bankname']) )
+                       {
+                              echo $fn->getBankName($val['bankname']);
+                       }else echo $val['bankname'];
+                        ?></td>
                        <td><?=$val['accountno']?></td>
+                       <td><?php 
+                        if (!is_null($val['parent_table_id']) && substr($val['parent_table_id'], 1,3) == "pts" ) {
+                              echo "payment to supplier";
+                        }
+                       $val['accountno']?></td>
+
                        <td><?=$des?></td>
                        <td><?=$val['amount']?></td>
                        <td><?=$sum?></td>

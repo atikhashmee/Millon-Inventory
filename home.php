@@ -81,7 +81,6 @@
                                         <h4>Bismillahir Rahmanir Rahim</h4>
                                         <h5>Today : <?=date('l',strtotime(date('Y-m-d')))?> </h5>
                                         <h5>Date : <?=$df->format('F j, Y, g:i a')?></h5>
-
                                         <?php 
 
                                   // echo $df->format("Y-m-d");
@@ -94,25 +93,36 @@
                          while (true) {
                             
                              $k++;
-                             $d =  new DateTime('now', new DateTimezone('Asia/Dhaka'));
+                              $d =  new DateTime('now', new DateTimezone('Asia/Dhaka'));
                               $di = $d->sub(new DateInterval('P'.$k.'D'))->format('Y-m-d');
                               $last_balance = datewiseCashBalance($di);
-                              if ($last_balance  > 0 ||  $k <500) {
-                                  break;
+                              //echo $last_balance." </br>";
+                              if ($last_balance  > 0 || $k>=500) {
+                                 $k=0;
+                                 break;
                               }
+
+                             /* if ($k>=500) {
+                                  echo "Sorry ! the script has been running for long";
+                                  break;
+                              }*/
                          }
 
-                         $prev = doubleval($openingbalance['opening_balance'])+$last_balance;
+                         $prev =  (double) $openingbalance['opening_balance']+ (double)$last_balance;
                         
                           // datewise check by array lists
-                     /*    for ($i=0; $i < 10; $i++) { 
+                        /* for ($i=0; $i < 20; $i++) { 
                             
                               $d =  new DateTime('now', new DateTimezone('Asia/Dhaka'));
                               $di = $d->sub(new DateInterval('P'.$i.'D'))->format('Y-m-d');
                               $last50[$di] = datewiseCashBalance($di);
                               
                          }
-                       */
+
+                         echo "<pre>";
+                         print_r($last50);
+                         echo "</pre>";*/
+                       
                     
                         
                          ?>
