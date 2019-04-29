@@ -96,6 +96,7 @@
 
 
                           $paidamount = 0;
+                          $payment_type = "";
 
 
                             foreach ($invoiceinfo as $inv) 
@@ -107,7 +108,7 @@
                               $vat = $inv['vat'];
                               $commision = $inv['comission'];
                               $discount = $inv['discount'];
-
+                              $payment_type = $inv['payment_status'];
                               ?>
                               <tr>
                                 <td>
@@ -136,7 +137,6 @@
                       $bc->setVat($vat);
                       $bc->setDiscount($discount);
                       $bc->setComission($commision);
-
                           ?>  
                                              
                        </tbody>
@@ -179,10 +179,13 @@
                                                            <tr>
                                                              <td>Paid</td>
                                                              <td><?=$paidamount?></td>
+                                                           </tr><tr>
+                                                             <td>Payment Type</td>
+                                                             <td><?=$payment_type?></td>
                                                            </tr>
                                                            <tr>
                                                              <td>Due</td>
-                                                             <td><?= number_format($grand_total-$paidamount,0,0,2) ?></td>
+                                                             <td><?= number_format((double)$grand_total-(double)$paidamount,0,0,2) ?></td>
                                                            </tr>
                                                       </table>
                                                   </div>

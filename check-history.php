@@ -250,10 +250,17 @@
                         ?></td>
                        <td><?=$val['accountno']?></td>
                        <td><?php 
-                        if (!is_null($val['parent_table_id']) && substr($val['parent_table_id'], 1,3) == "pts" ) {
-                              echo "payment to supplier";
+                        if (!is_null($val['parent_table_id']) && substr($val['parent_table_id'], 0,3) == "pts" ) {
+                              echo "payment to supplier <a href=''>".$fn->getUserName($val['customerid'])."</a>";
                         }
-                       $val['accountno']?></td>
+                        else if (!is_null($val['parent_table_id']) && substr($val['parent_table_id'], 0,3) == "rac" ) {
+                              echo "cheque collection from  customer <a href=''>".$fn->getUserName($val['customerid'])."</a>";
+                        } else if (!is_null($val['parent_table_id']) && substr($val['parent_table_id'], 0,1) == "s" ) {
+                              echo "on sale recievable check from customer  <a href=''>".$fn->getUserName($val['customerid'])."</a>";
+                        }else if (!is_null($val['parent_table_id']) && substr($val['parent_table_id'], 0,1) == "p" ) {
+                              echo "on purchase payable check to supplier  <a href=''>".$fn->getUserName($val['customerid'])."</a>";
+                        }
+                       ?></td>
 
                        <td><?=$des?></td>
                        <td><?=$val['amount']?></td>

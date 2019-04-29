@@ -111,7 +111,7 @@
                          $prev =  (double) $openingbalance['opening_balance']+ (double)$last_balance;
                         
                           // datewise check by array lists
-                        /* for ($i=0; $i < 20; $i++) { 
+                         /*for ($i=0; $i < 20; $i++) { 
                             
                               $d =  new DateTime('now', new DateTimezone('Asia/Dhaka'));
                               $di = $d->sub(new DateInterval('P'.$i.'D'))->format('Y-m-d');

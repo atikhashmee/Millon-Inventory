@@ -12,7 +12,7 @@ class Connection extends PDO
 	public static $instance=null;
 	public function __construct()
 	{
-		 parent::__construct("mysql:host=localhost;dbname=mys", "root", "");
+		 parent::__construct("mysql:host=localhost;dbname=millon", "root", "");
 		
 	}
 	public static function getInstance()

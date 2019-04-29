@@ -89,7 +89,9 @@
 
              if (isset($_POST['customCheck']) && $_POST['customCheck'] == "Yes") 
              {
-               $sum = $opening_balance['opening_balance'];
+                $d =  new DateTime($_POST['startdate'], new DateTimezone('Asia/Dhaka'));
+                $di = $d->sub(new DateInterval('P1D'))->format('Y-m-d');
+               $sum = (double) $opening_balance['opening_balance'] + (double)  datewiseCashBalance($di);
              }
              else
              {
@@ -97,6 +99,10 @@
              }
 
          }
+
+                              
+                           
+                              /*$last_balance = datewiseCashBalance($di);*/
          /*echo "<pre-wrap>";
            print_r($sql);
          echo "</pre-wrap>";*/
@@ -126,7 +132,7 @@
              <td></td>
              <td></td>
              <td></td>
-             <td>Cash Start </td>
+             <td>Previous Cash </td>
              <td><?=$sum?></td>
            </tr>
             <?php 
