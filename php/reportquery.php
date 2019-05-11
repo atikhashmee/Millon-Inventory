@@ -240,11 +240,11 @@
                     }
                     else  if ($tkn == "s_Cash") 
                     {
-                       return +(int)$amounts;
+                       return +$amounts;
                     }
                     else if ($tkn== "p_Cash") 
                     {
-                      return -(double)$amounts;
+                      return -$amounts;
                     }
                     else if ($tkn == "add") 
                     {
