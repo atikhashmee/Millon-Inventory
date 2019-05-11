@@ -84,45 +84,9 @@
                                         <?php 
 
                                   // echo $df->format("Y-m-d");
-                         $data = cashReport($df->format('Y-m-d'));
+                                $data = cashReport($df->format('Y-m-d'));
 
-                         $last50 = array();
-                         $last_balance = 0;
-                         $openingbalance = $db->joinQuery("SELECT `opening_balance` FROM `charts_accounts` WHERE `charts_id`='4'")->fetch(PDO::FETCH_ASSOC);
-                         $k=0;
-                         while (true) {
-                            
-                             $k++;
-                              $d =  new DateTime('now', new DateTimezone('Asia/Dhaka'));
-                              $di = $d->sub(new DateInterval('P'.$k.'D'))->format('Y-m-d');
-                              $last_balance = datewiseCashBalance($di);
-                              //echo $last_balance." </br>";
-                              if ($last_balance  > 0 || $k>=500) {
-                                 $k=0;
-                                 break;
-                              }
-
-                             /* if ($k>=500) {
-                                  echo "Sorry ! the script has been running for long";
-                                  break;
-                              }*/
-                         }
-
-                         $prev =  (double) $openingbalance['opening_balance']+ (double)$last_balance;
-                        
-                          // datewise check by array lists
-                         /*for ($i=0; $i < 20; $i++) { 
-                            
-                              $d =  new DateTime('now', new DateTimezone('Asia/Dhaka'));
-                              $di = $d->sub(new DateInterval('P'.$i.'D'))->format('Y-m-d');
-                              $last50[$di] = datewiseCashBalance($di);
-                              
-                         }
-
-                         echo "<pre>";
-                         print_r($last50);
-                         echo "</pre>";*/
-                       
+                                $prev = previCash();
                     
                         
                          ?>

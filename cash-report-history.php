@@ -20,7 +20,6 @@
                                 </ol>
                             </div>
                             <h4 class="page-title"> Bank Statement</h4>
-                            
                         </div>
                     </div>
                 </div>
@@ -48,7 +47,7 @@
             <input type="checkbox" class="custom-control-input"  id="customCheck"
               value="Yes" name="customCheck">
               <label class="custom-control-label" for="customCheck">
-                Include Cash Opening Balance
+                Previous Cash
                </label>
                </div>
             </div>
@@ -74,7 +73,7 @@
       $sql  =  cashRawQuery();
        
       $opening_balance  =  $db->joinQuery("SELECT `opening_balance` FROM `charts_accounts` WHERE `chart_name`='Cash'")->fetch(PDO::FETCH_ASSOC);
-       $sum = $opening_balance['opening_balance'];
+       $sum = (float) $opening_balance['opening_balance'];
          if (isset($_POST['datesearch'])) 
          {
              if (!empty($_POST['startdate']) && empty($_POST['endate'])) 
@@ -91,7 +90,7 @@
              {
                 $d =  new DateTime($_POST['startdate'], new DateTimezone('Asia/Dhaka'));
                 $di = $d->sub(new DateInterval('P1D'))->format('Y-m-d');
-               $sum = (double) $opening_balance['opening_balance'] + (double)  datewiseCashBalance($di);
+                $sum = (double)  previCash($di);
              }
              else
              {
@@ -133,7 +132,7 @@
              <td></td>
              <td></td>
              <td>Previous Cash </td>
-             <td><?=$sum?></td>
+             <td><?= number_format($sum,2,'.','')?></td>
            </tr>
             <?php 
                $i=0;
@@ -150,7 +149,7 @@
 
                      $detail  =  detailsOfAction($tkn,trim($val['customerid']));
 
-                     $sum    +=  getMoneyToken($tkn,$amounts);
+                     $sum    +=  (float) getMoneyToken($tkn,$amounts);
                
                     
                    ?>
@@ -160,7 +159,7 @@
                <td><?=$detail?></td>
                <td><?=$td1?></td>
                <td><?=$td2?></td>
-               <td><?=$sum?></td>
+               <td><?= number_format($sum,2,'.','') ?></td>
                </tr>
             <?php   }
                ?>
