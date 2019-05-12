@@ -159,6 +159,51 @@
                     </div>
                 </div>
              <!-- end of cash report -->
+              
+             <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-body">
+                        <h4>
+                          Last 50 days Cash History
+                        </h4>
+                       <table class="table table-bordered">
+                           <thead>
+                             <tr>
+                               <th>#</th>
+                               <th>Date</th>
+                               <th>Details</th>
+                             </tr>
+                           </thead>
+                           <tbody>
+                             <?php 
+                              
+                                 $balances = calculatePreviCash()['p_objs'];
+                                /* echo "<pre>";
+                                 print_r($balances);
+                                 echo "</pre>";*/
+                                  for($i=0; $i<count($balances); $i++){
+                                     ?>
+                                       <tr>
+                                         <td><?=$i?></td>
+                                         <td><?=$balances[$i]->date?></td>
+                                         <td>
+                                               <div class="line-height-10">
+                                                  <p> Cash Start : <?=$balances[$i]->starting?>  </p>
+                                                  <p> Cash Amount : <?=$balances[$i]->amount?>  </p>
+                                                  <p> Last Cash  : <?=$balances[$i]->ending?>  </p>
+                                               </div>
+                                              
+                                         </td>
+                                       </tr>
+                                     <?php 
+                                  }
+
+                             ?>
+                           </tbody>
+                       </table>
+                    </div>
+                </div>
+             </div>
 
             </div> <!-- end container -->
        

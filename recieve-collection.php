@@ -178,7 +178,9 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
                            $parentid = $db->getInsertId('recol_id');
 
                            ?>
-                           <script>alert("Money Has been Collected")</script>
+                           <script>
+                            alert("Money Has been Collected");
+                         </script>
                            <?php 
                          
                        }
@@ -211,6 +213,10 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
                         }
                         
                       }
+
+                       ?> <script>
+                           window.location.href='money-reciept.php?item-id='+<?=$parentid?>;
+                       </script> <?php 
 
                     }
                    
@@ -290,6 +296,7 @@ $pagetitle = (isset($_GET['edit-id']))?"Update":"Add";
     <i class="fa fa-gear"></i>
   </button>
   <div class="dropdown-menu">
+       <a href="money-reciept.php?item-id=<?=$val['recol_id']?>" class="dropdown-item"> Print <i class="fa fa-print"></i>  </a>
     <?php 
          if ($rbas->getView()) {
               echo '<a class="dropdown-item" href="#">View <i class="fa fa-eye"></i></a>';

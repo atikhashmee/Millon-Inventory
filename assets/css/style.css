@@ -3423,3 +3423,11 @@ File: Responsive
 .required{
   color: red;
 }
+ .font-12{
+   font-size: 12px;
+ }
+.line-height-0{
+  line-height: 0px;
+ }.line-height-10{
+  line-height: 10px;
+ }

@@ -111,9 +111,10 @@
                               $this->amount = $amount;
                            }
                          }
-  function previCash($todate=""){
-      
-             $openingbalance =  $GLOBALS['db']->joinQuery("SELECT `opening_balance` FROM `charts_accounts` WHERE `charts_id`='4'")->fetch(PDO::FETCH_ASSOC);
+
+              function calculatePreviCash(){
+
+                    $openingbalance =  $GLOBALS['db']->joinQuery("SELECT `opening_balance` FROM `charts_accounts` WHERE `charts_id`='4'")->fetch(PDO::FETCH_ASSOC);
               $last50 = array();
               for ($i=0; $i < 50; $i++) { 
                         $d =  new DateTime('now', new DateTimezone('Asia/Dhaka'));
@@ -138,11 +139,20 @@
                                   $balances[$last50[$j]->date]   = $last50[$j]->ending;
                                   $openingblance =   $last50[$j]->ending;
                             }
+                            return [
+                                  "p_objs" => $last50,
+                                  "p_arrays" => $balances
+                            ];
+
+              }
+  function previCash($todate=""){
+      
+                    $balances = calculatePreviCash()['p_arrays'];
 
 
                             /*echo "<pre>";
                             print_r($balances);
-                            print_r( array_values(array_slice($balances, -2, 1))[0] );
+                            print_r( array_values(array_slice($balances, -1, 1))[0] );
                             echo "</pre>";*/
 
                             //show output results
