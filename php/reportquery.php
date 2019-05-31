@@ -42,7 +42,12 @@
             if ($i == 0 ) {
                  $sql[$i] .= $dateext[$i]." ='{$start}'";
                  $sql[$i] .= "GROUP BY `billchallan`";
-             } else {
+             }
+             else if ($i == 6) {
+                 $sql[$i] .= $dateext[$i]." ='{$start}'";
+                 $sql[$i] .= "GROUP BY `billchallan`";
+             }
+              else {
                $sql[$i] .= $dateext[$i]." ='{$start}'"; 
              }
            
@@ -57,7 +62,11 @@
 
               $sql[$i] .= $dateext[$i]." BETWEEN '{$start}' AND '{$end}'";
               $sql[$i] .= "GROUP BY `billchallan`";
-            }else{
+            } else if ($i == 6) {
+                 $sql[$i] .=  $dateext[$i]." BETWEEN '{$start}' AND '{$end}'";
+                 $sql[$i] .= "GROUP BY `billchallan`";
+             }
+            else{
                $sql[$i] .= $dateext[$i]." BETWEEN '{$start}' AND '{$end}'";
             }
           
@@ -330,10 +339,10 @@
                       /*echo "<pre>";
                       print_r( $productdetails);
                       echo "</pre>";*/
-                      $str .="<ol>";
+                      $str .="<ol> <a href='#'>{$cus_id[0]}</a> <br>";
                       foreach ($productdetails as $p_details) {
-                         $str .="<li class='mb-1'><button type='button' class='btn btn-default'>
-  ".$GLOBALS['fn']->getProductName($p_details['pro_id'])." <span class='badge badge-light'>".$p_details['quantity']."</span></li>";
+                         $str .="<li><div>
+  ".$GLOBALS['fn']->getProductName($p_details['pro_id'])." <span class='badge badge-danger'>".$p_details['quantity']."</span></div> </li>";
                       }
                       $str .="</ol>";
                     }
