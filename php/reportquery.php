@@ -6,7 +6,7 @@
     function cashRawQuery($start="",$end="")
     {
       $sql = [];
-       $sql[0] = "SELECT `selldate`, `customerid`, `payment_taka`, `token` FROM `sell` WHERE `token` = 's_Cash'";
+       $sql[0] = "SELECT `selldate`, CONCAT_WS('__',`billchallan`,`customerid`) as customerid, `payment_taka`, `token` FROM `sell` WHERE `token` = 's_Cash'";
 
        $sql[1] =  "SELECT `recievedate`, `cusotmer_id`, `amounts`, `bycashcheque` FROM `recevecollection` WHERE `bycashcheque` = 'rac_Cash'";
 
@@ -20,7 +20,7 @@
 
        $sql[6] =  "SELECT `purchasedate`, `supplier`, `payment_taka`, `token` FROM `purchase` where `token` = 'p_Cash'";
 
-       $sql[7] = "SELECT `transerdate`, `to`, `amounts`, `bycashcheque` FROM `banktransfer`"; 
+       $sql[7] = "SELECT `transerdate`, `to_account`, `amounts`, `bycashcheque` FROM `banktransfer`"; 
 
        $sql[8] = "SELECT `paydate`, `employee_id`, `pament`, `token` FROM `target` WHERE token='comisn_paid'";
 
@@ -65,7 +65,11 @@
        }
 
        $query = implode("UNION ALL ", $sql);
-       //echo $query;
+      /* echo "<pre>";
+       echo $query;
+       echo "</pre>";*/
+
+       
 
        return $query;
     }
@@ -242,44 +246,44 @@
              
                    if ($tkn == "pts_Cash") 
                     {
-                       return  -$amounts;
+                       return  -(int)$amounts;
                     }
                     else if ($tkn == "rac_Cash") 
                     {
-                       return +$amounts;
+                       return +(int)$amounts;
                     }
                     else  if ($tkn == "s_Cash") 
                     {
-                       return +$amounts;
+                       return +(int)$amounts;
                     }
                     else if ($tkn== "p_Cash") 
                     {
-                      return -$amounts;
+                      return -(int)$amounts;
                     }
                     else if ($tkn == "add") 
                     {
-                       return +$amounts;
+                       return +(int)$amounts;
                     } 
                     else if (substr($tkn, 0,7) == "expense") 
                     {
-                       return -$amounts;
+                       return -(int)$amounts;
                     }
                     else if (substr($tkn, 0,5) == "stuff") 
                     {
-                       return -$amounts;
+                       return -(int)$amounts;
                     }
                     
                     else if ($tkn == "minus") 
                     {
-                       return -$amounts;
+                       return -(int)$amounts;
                     }
                     else if ($tkn == "salerypayment") 
                     {
-                       return -$amounts;
+                       return -(int)$amounts;
                     }
                     else if ($tkn == "comisn_paid") 
                     {
-                       return -$amounts;
+                       return -(int)$amounts;
                     }
                     else if (substr($tkn,0,7) == "ct_Cash") 
                     {
@@ -287,11 +291,11 @@
 
                       if ($GLOBALS['fn']->Chartsaccounta($tkens[2]) == "Cash") 
                       {
-                            return -$amounts;
+                            return -(int)$amounts;
                       }
                       else 
                       {
-                             return +$amounts;  
+                             return +(int)$amounts;  
                       }
                       
                     }
@@ -306,18 +310,32 @@
 
   function detailsOfAction($tkn,$customerid)
   {
-         $str = "No caption";
+                   $str = "No caption";
                    if ($tkn == "pts_Cash") 
                     {
                       $str = '<p class="description">Payment Paid to supplier <a href="supplier-history-1.php?supid='.$customerid.'">'.$GLOBALS['fn']->getUserName($customerid).'</a></p>';
                     }
                    else  if ($tkn == "rac_Cash") 
                     {
-                      $str = '<p class="description">Payment collection from customer <a href="customer-history.php?cusid='.$customerid.'">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
+                      $str = '<p class="description">Payment colle/ction from customer <a href="customer-history.php?cusid='.$customerid.'">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
                     }
                    else  if ($tkn == "s_Cash") 
                     {
-                      $str = '<p class="description">Product sold payment from customer <a href="customer-history.php?cusid='.$customerid.'">'.$GLOBALS['fn']->getUserName($customerid).'</a> </p>';
+                      $cus_id = explode("__", $customerid);
+                          /*echo "<pre>";
+                          print_r($cus_id[1]);
+                          echo "</pre>";*/
+                      $str = '<p class="description">Product sold payment from customer <a href="customer-history.php?cusid='.$cus_id[1].'">'.$GLOBALS['fn']->getUserName($cus_id[1]).'</a> </p>';
+                      $productdetails =   $GLOBALS['rp']->productsDetailsByInvoice($cus_id[0]);
+                      /*echo "<pre>";
+                      print_r( $productdetails);
+                      echo "</pre>";*/
+                      $str .="<ol>";
+                      foreach ($productdetails as $p_details) {
+                         $str .="<li class='mb-1'><button type='button' class='btn btn-default'>
+  ".$GLOBALS['fn']->getProductName($p_details['pro_id'])." <span class='badge badge-light'>".$p_details['quantity']."</span></li>";
+                      }
+                      $str .="</ol>";
                     }
                     else if ($tkn == "p_Cash") 
                     {

@@ -87,27 +87,28 @@
 
    <div class="col">
       <?php
-      $sql  =  "SELECT * FROM `cheque` where approve='1'";
-      $sum =0;
+      $sql  =  "SELECT * FROM `banktransfer`";
+      $sum = 0;
 
       $bname = "";
        
         
          if (isset($_POST['datesearch'])) 
          {
-            $bankname = $_POST['banknames'];
-            $startdate = $_POST['startdate'];
-            $endate = $_POST['endate'];
+            $bankname   = $_POST['banknames'];
+            $startdate  = $_POST['startdate'];
+            $endate     = $_POST['endate'];
            
              if (!empty($bankname) && empty($startdate) && empty($endate)) 
              {
-                $sql  =  "SELECT * FROM `cheque` where approve='1' AND bankname='{$bankname}'";
-                $bname ="of ".$bankname;
+                $sql  .=  "where from_account ='{$bankname}' OR to_account ='{$bankname}'";
+                $bname = $bankname;
              }
 
              if (!empty($bankname) && !empty($_POST['startdate']) && !empty($_POST['endate'])) 
              {
-               $sql  =  "SELECT * FROM `cheque` where approve='1' AND bankname='{$bankname}' AND expiredate Between '{$startdate}' AND '{$endate}'";
+               $sql  .= " where  ( from_account='{$bankname}' OR to_account ='{$bankname}' )  AND transerdate Between '{$startdate}' AND '{$endate}'";
+               $bname = $bankname;
              }
            if (isset($_POST['customCheck'])) 
              {  
@@ -129,9 +130,9 @@
              
 
          }
-         echo "<pre>";
+        /* echo "<pre>";
          echo $sql;
-         echo "</pre>";
+         echo "</pre>";*/
         
          $data = $db->joinQuery($sql)->fetchAll();
 
@@ -146,10 +147,9 @@
             <tr>
                <th>#</th>
                <th>Date</th>
-               
                <th>Descrioption</th>
-               <th>Credit</th>
                <th>Debit</th>
+               <th>Credit</th>
                <th>Total</th>
             </tr>
          </thead>
@@ -167,25 +167,30 @@
               
                   foreach ($data as $val) {  $i++;
                     $i++;
-                   
-                      $token =  explode("_", $val['parent_table_id']);
-                      $details  = "";
-                      if ($token[0] == "p") 
-                      {
-                        $details = "Payment on Purchase <a href='#'>Deatils<?=$token[1]?></a>";
-                      }
-                      else if($token == "pts")
-                      {
-                        $details = "Purchase Payment to supplier<a href='#'><?=$token[1]?></a>";
-                      }
                       $td1 = " ";
-                      $td2 = $val['amount'];
+                      $td2 = " ";
+
+                      $token =  explode("_", $val['bycashcheque']);
+                      $details  = "";
+                      if ($token[2] == $bname ) 
+                      {
+                        $details = "Transfarred to  <a href='#'>".$fn->Chartsaccounta($token[3])."</a>";
+                        $td1  =  $val['amounts'];
+                        $sum -= intval($val['amounts']);
+                      }
+                      else if($token[3] == $bname)
+                      {
+                        $details = "Deposited from <a href='#'>".$fn->Chartsaccounta($token[2])."</a>";
+                         $td2  =  $val['amounts'];
+                         $sum += intval($val['amounts']);
+                      }
+                      
                
                     
                    ?>
             <tr>
                <td><?=$i?></td>
-               <td><?=$val['expiredate']?></td>
+               <td><?=$val['transerdate']?></td>
                <td><?=$details?></td>
                <td><?=$td1?></td>
                <td><?=$td2?></td>
@@ -197,7 +202,7 @@
          </tbody>
             <tr>
                
-               <td colspan="4" class="text-right"> <h5>Total Cash Balance</h5> </td>
+               <td colspan="4" class="text-right"> <h5>Total Account  Balance</h5> </td>
                <td> <strong><?=number_format((float)$sum,2,'.',',')?></strong></td>
              </tr>
       </table>

@@ -342,6 +342,19 @@
 				}
 
 
+				public function productsDetailsByInvoice($invoice){
+					$sell = $GLOBALS['db']->selectAll("sell","billchallan='".$invoice."'")->fetchAll();
+					$result = array();
+					foreach ($sell as $s) {
+						array_push($result, [
+                          'pro_id' => $s['productid'],
+                          'quantity' => $s['quantity']
+						]);
+					}
+                 return $result;
+				}
+
+
 				
 			}
 				

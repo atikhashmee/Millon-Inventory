@@ -135,8 +135,8 @@
 
                                    $data = array(
                                'transerdate' => $date, 
-                               'to' => $to, 
-                               'from' => $from, 
+                               'to_account' => $to, 
+                               'from_account' => $from, 
                                'amounts' => $amnt, 
                                'carreier' => $carrier,
                                'addedby' => $_SESSION['u_id'],
@@ -228,8 +228,8 @@
                <tr>
                   <th><?=$i?></th>
                   <td><?=$val['transerdate']?></td>
-                  <td><?=$fn->Chartsaccounta($val['from'])?></td>
-                  <td><?=$fn->Chartsaccounta($val['to'])?></td>
+                  <td><?=$fn->Chartsaccounta($val['from_account'])?></td>
+                  <td><?=$fn->Chartsaccounta($val['to_account'])?></td>
                   <td><?=number_format($val['amounts'])?></td>
                   <td><?=$val['carreier']?></td>
                  

@@ -131,7 +131,7 @@ SELECT `memono`, `return_date`,`token`,`productid`,`quntity`  FROM `purchase_ret
                           <th><?=$i?></th>
                           <td><?=$qu['billchallan']?></td>
                           <td><?=$qu['selldate']?></td>
-                          <td><?=$qu['productid']?></td>
+                          <td><?=$fn->getProductName($qu['productid'])?></td>
 
                           <td><?php 
                          if (trim($qu['token']) =="p_Cash" || trim($qu['token'])=="p_Cheque") 
